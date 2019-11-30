@@ -1,5 +1,6 @@
 ﻿using AnkurPrathisthan.Entity;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+//using Newtonsoft.JSON;
 //using System.Text.Encoding;
 
 namespace AnkurPrathisthan
@@ -29,7 +31,7 @@ namespace AnkurPrathisthan
             }
          //   string result = "";
             DataSet ds = new DataSet();
-            clsGeneral objGeneral = new clsGeneral();
+            clsAuthentication objGeneral = new clsAuthentication();
             
             userdetailsEntity entity = new userdetailsEntity();
             //   UserID,  FirstName,  LastName,   RoleName,
@@ -78,7 +80,7 @@ namespace AnkurPrathisthan
         public string UserLogout(string EmailID)
         {
             DataSet ds = new DataSet();
-            clsGeneral objGeneral = new clsGeneral();
+            clsAuthentication objGeneral = new clsAuthentication();
             string result = "";
             try
             {
@@ -110,33 +112,33 @@ namespace AnkurPrathisthan
             return result;
         }
 
-        public userdetailsEntity UserRegister(string FirstName,string LastName,string EmailID, string Password, string DOB, string MobileNo,string RoleName)
+        public userdetailsEntity UserRegister(string FirstName,string LastName,string EmailID, string Password, string DOB, string MobileNo) //,string RoleName)
         {
             DataSet ds = new DataSet();
-            clsGeneral objGeneral = new clsGeneral();
+            clsAuthentication objGeneral = new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();           
             try
             {
-                if (EmailID == null || Password == null || FirstName == null || RoleName == null)
+                if (EmailID == null || Password == null || FirstName == null ) //|| RoleName == null)
                 {
                     WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
                 }
 
                 else
                 {
-                    ds = objGeneral.RegisterUser(FirstName, LastName, EmailID, Password, DOB, MobileNo, RoleName);
+                    ds = objGeneral.RegisterUser(FirstName, LastName, EmailID, Password, DOB, MobileNo); //, RoleName);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            entity.Firstname = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
-                            entity.Lastname = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
-                            entity.EmailId = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                            entity.Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
-                            entity.Dob = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]);
-                            entity.Mobile = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
-                            entity.Rolename = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
-                            //entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                            //entity.Firstname = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                            //entity.Lastname = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                            //entity.EmailId = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                            //entity.Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
+                          //  entity.Dob = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]);
+                          //  entity.Mobile = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                            //; entity.Rolename = Convert.ToString(ds.Tables[0].Rows[i]["RoleName"]);
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
                         }
                     }
 
@@ -146,7 +148,7 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- UserRegistration" + ex.Message, EmailID,Password,FirstName,RoleName);
+                Console.WriteLine("APService----Error in API-- UserRegistration" + ex.Message, EmailID,Password,FirstName); //RoleName);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
             }
             return entity;
@@ -155,7 +157,7 @@ namespace AnkurPrathisthan
         public userdetailsEntity ForgotPassword(string EmailID, string Password)
         {
             DataSet ds = new DataSet();
-            clsGeneral objGeneral = new clsGeneral();
+            clsAuthentication objGeneral = new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
             try
             {
@@ -171,8 +173,9 @@ namespace AnkurPrathisthan
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            entity.EmailId = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                            entity.Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);                           
+                           /* entity.EmailId = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                            entity.Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]); */
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
                         }
                     }
 
@@ -191,21 +194,326 @@ namespace AnkurPrathisthan
 
         //[START] For Book Management
         
-        public BookDetailsEntity GetBooks (string BookName)
+        //API on book management home page
+        public BookDetailsEntity GetBooks()
         {
-            //string result = "";
+            clsBookManagement objbook = new clsBookManagement();
+          //  ArrayList myArrayList = new ArrayList();
             BookDetailsEntity entity = new BookDetailsEntity();
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
             try
-            {
+            {                
+                    ds = objbook.ShowBooks();
 
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);
+                            entity.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]);
+                            entity.Price = Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
+                            entity.Stock = Convert.ToString(ds.Tables[0].Rows[i]["Stock"]);
+                            entity.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                            entity.Language = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]);
+
+                        }
+                    }
+                       
+               // }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
-                throw;
+                Console.WriteLine("APService----Error in API-- GetBoks" + ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";              
             }
             return entity;
         }
         //[END] For Book Management 
+
+        public BookDetailsEntity ManageBooks(string BookName, string cmd, string EmailID, string Price , string Author, string Stock , string CategoryID ,
+        string LanguageID , string PublisherID, string BookID = "")
+         //   public string ManageBooks(string BookName, string cmd, string EmailID, string Price = "", string Author = "", string Stock = "", string CategoryID = "",
+       // string LanguageID = "", string PublisherID = "")
+        {
+            BookDetailsEntity entity = new BookDetailsEntity();
+            DataSet ds = new DataSet();
+            clsBookManagement bm = new clsBookManagement();
+            if (EmailID == null)
+                EmailID = "";
+            if (Price == null)
+                Price = "";
+            if (Author == null) 
+                Author = "";
+            if (Stock == null) Stock = "";
+            if (CategoryID == null)
+                CategoryID = "";
+            if (LanguageID == null)
+                LanguageID = ""; 
+            if (PublisherID == null)
+                PublisherID = "";
+            try
+            {
+                if (BookName ==null || cmd == null )
+                {
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                }                
+
+                else
+                {
+                    ds  =  bm.HandleBooks(BookName,cmd,EmailID,Price,Author,Stock,CategoryID,LanguageID,PublisherID,BookID); 
+ 
+                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);                           
+                            entity.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["Author"]);
+                            entity.Price = Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
+                            entity.Stock = Convert.ToString(ds.Tables[0].Rows[i]["Stock"]);
+                            entity.CategoryID = Convert.ToString(ds.Tables[0].Rows[i]["CategoryID"]);
+                            entity.LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguageID"]);
+                            entity.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);                           
+                            entity.PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]);
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return entity;
+        }   
+ 
+
+        public CategoryDetails ManageCategories (string cmd, string CategoryName, string Email, string CategoryID ="" )
+        {
+            CategoryDetails enitity = new CategoryDetails();
+
+            clsBookManagement bm = new clsBookManagement();
+            DataSet ds = new DataSet();
+            if (Email == null)
+                Email = "";
+            
+            try
+            {
+                if (cmd == null || CategoryName == null )
+                {
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                }
+                else
+                {
+                    ds = bm.HandleCategories(cmd, CategoryName, Email, CategoryID);
+                    //For adding
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        //if (ds.Tables[0].Rows[0]["cmd"].ToString() = "1")
+                        //{
+
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                enitity.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                                enitity.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
+                                enitity.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                                enitity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                            }
+                       // }
+                    }
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ManageCategories" + ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+            }
+
+            return enitity;
+        }
+        public LanguageDetails ManageLanguages(string cmd, string LanguageName, string Email, string LanguageID = "")
+        {
+            LanguageDetails entity = new LanguageDetails();
+            clsBookManagement bm = new clsBookManagement();
+            DataSet ds = new DataSet();
+            if (Email == null)
+                Email = "";
+
+            try
+            {
+                if (cmd == null || LanguageName == null)
+                {
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                }
+                else
+                {
+                    ds = bm.HandleLanguages(cmd,LanguageName,Email,LanguageID);
+                    //For adding
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        //if (ds.Tables[0].Rows[0]["cmd"].ToString() = "1")
+                        //{
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                            entity.LanguageName= Convert.ToString(ds.Tables[0].Rows[i]["LanguageName"]);
+                            entity.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                        }
+                        // }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ManageLanguages" + ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+            }
+
+            return entity;
+        }
+
+        public PublisherDetails ManagePublishers(string cmd, string PublisherName, string Email, string PublisherID = "")
+        {
+            PublisherDetails entity = new PublisherDetails();
+            clsBookManagement bm = new clsBookManagement();
+            DataSet ds = new DataSet();
+            if (Email == null)
+                Email = "";
+
+            try
+            {
+                if (cmd == null || PublisherName == null)
+                {
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                }
+                else
+                {
+                    ds = bm.HandlePublishers(cmd, PublisherName, Email, PublisherID);
+                    //For adding
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        //if (ds.Tables[0].Rows[0]["cmd"].ToString() = "1")
+                        //{
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
+                            entity.PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"]);
+                            entity.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                        }
+                        // }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ManagePublishers" + ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+            }
+
+            return entity;
+        }
+        //[END] For Book Management
+
+
+        //[START] For Cluster Management
+        public ClusterDetailsEntity GetClusters()
+        {
+            clsClusterManagement cm = new clsClusterManagement();
+            DataSet ds = new DataSet();
+            ClusterDetailsEntity entity = new ClusterDetailsEntity();
+            try
+            {
+                ds = cm.ShowClusters();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
+                        entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        entity.Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]);                      
+                        entity.Librarian = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("AP Service---Error in API --GetClusters" +ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                throw;
+            }
+
+            return entity;
+        }
+
+        public ClusterDetailsEntity ManageClusters(string ClusterName,string ClusterCode,string EmailID,string Address, string MobileNo,
+        string LibEmailID,string Members,string AdminEmailID, string cmd,string ClusterID ="")
+
+        {
+            ClusterDetailsEntity entity = new ClusterDetailsEntity();
+            DataSet ds = new DataSet();
+            clsClusterManagement bm = new clsClusterManagement();
+            if (EmailID == null)
+                EmailID = "";
+            if (ClusterName == null)
+                ClusterName = "";
+            if (ClusterCode == null)
+                ClusterCode = "";
+            if (Address == null) Address = "";
+            if (MobileNo == null)
+                MobileNo = "";
+            if (LibEmailID == null)
+                LibEmailID = "";
+            if (Members == null)
+                Members = "";
+            if (AdminEmailID == null)
+                AdminEmailID = "";
+        
+            try
+            {
+                if (ClusterName == null || cmd == null)
+                {
+                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                }
+
+                else
+                {
+                    ds = bm.HandleClusters(ClusterName,ClusterCode,EmailID,Address,MobileNo,LibEmailID, Members, AdminEmailID,cmd,ClusterID ="");
+
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
+                            entity.ClusterCode = Convert.ToString(ds.Tables[0].Rows[i]["ClusterCode"]);
+                            entity.Email = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                            entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                            entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                            entity.Librarian = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"]);
+                            entity.Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]);                      
+                            entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return entity;
+        }
+
+
+        //[END] For CLuster Management
     }
 }

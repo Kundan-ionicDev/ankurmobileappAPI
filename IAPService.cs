@@ -7,20 +7,91 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-
+using System.Data;
+using System.Data.Sql;
+using System.Collections;
 namespace AnkurPrathisthan
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
     public interface IAPService
     {
-       [WebInvoke(Method = "POST",
-       RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-       UriTemplate = "UserLogin")]
-       [OperationContract]
-       userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string isnewapp);
-       
-    }   
+        //[START] For Authentication
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "UserLogin")]
+        [OperationContract]
+        userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string isnewapp);
 
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "UserLogout")]
+        [OperationContract]
+        string UserLogout(string EmailID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "UserRegister")]
+        [OperationContract]
+        userdetailsEntity UserRegister(string FirstName, string LastName, string EmailID, string Password, string DOB,
+       string MobileNo);//, string RoleName);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ForgotPassword")]
+        [OperationContract]
+        userdetailsEntity ForgotPassword(string EmailID, string Password);
+        //[END] Added by ARya For Authentication
+        //[STARt] For Book Management
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetBooks")]
+        [OperationContract]
+        BookDetailsEntity GetBooks();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageBooks")]
+        [OperationContract]
+        BookDetailsEntity ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
+        string LanguageID, string PublisherID, string BookID = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageCategories")]
+        [OperationContract]
+        CategoryDetails ManageCategories(string cmd, string CategoryName, string Email, string CategoryID = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageLanguages")]
+        [OperationContract]
+        LanguageDetails ManageLanguages(string cmd, string LanguageName, string Email, string LanguageID = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManagePublishers")]
+        [OperationContract]
+        PublisherDetails ManagePublishers(string cmd, string PublisherName, string Email, string PublisherID = "");
+        //[END] For Book Management
+
+        //[Start] For Cluster Management
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetClusters")]
+        [OperationContract]
+        ClusterDetailsEntity GetClusters();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageClusters")]
+        [OperationContract]
+        ClusterDetailsEntity ManageClusters(string ClusterName,string ClusterCode,string EmailID,string Address, string MobileNo,
+        string LibEmailID,string Members,string AdminEmailID, string cmd,string ClusterID ="");
+
+        //[END] For Cluster Management
+
+    }
       
 }

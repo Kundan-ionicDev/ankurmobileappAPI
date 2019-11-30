@@ -1,5 +1,4 @@
-﻿using AnkurPrathisthan.Entity;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,41 +10,48 @@ using System.Xml;
 
 namespace AnkurPrathisthan
 {
-    public class clsGeneral
+    public class clsClusterManagement
     {
-        public DataSet GetUserDetails(string EmailID, string Password)
+        public DataSet ShowClusters()
         {
-            DataSet ds = new DataSet();
-           // List<userdetailsEntity> param = new List<userdetailsEntity>();
+            DataSet ds = new DataSet();           
             try
             {
-
-                string ProcName = "proc_persons";
-               
-                SqlParameter[] oParam = null;
-
-                oParam = new SqlParameter[2];
-                oParam[0] = new SqlParameter("@P_EmailID", EmailID);
-                oParam[1] = new SqlParameter("@P_Password", Password);
-
-                //string procName = "uspLogin";
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName);
-
-                //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                //{
-                //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                //    {
-                //        EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                //        Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
-                //    }
-                //}
-
-
+                string ProcName = "uspGetClusters";
+                SqlParameter[] oParam = null;                              
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
             }
             catch (Exception ex)
             {
+                Console.WriteLine("APService----Error in API-- GetClusters" + ex.Message);
+            }
 
-                throw ex;
+            return ds;
+        }
+        public DataSet HandleClusters(string ClusterName,string ClusterCode,string EmailID,string Address, string MobileNo,
+        string LibEmailID,string Members,string AdminEmailID, string cmd,string ClusterID ="")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspManageClusters";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[10];
+                oParam[0] = new SqlParameter("@ClusterName", ClusterName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[2] = new SqlParameter("@ClusterCode", ClusterCode);
+                oParam[3] = new SqlParameter("@EmailID", EmailID);
+                oParam[4] = new SqlParameter("@Address", Address);
+                oParam[5] = new SqlParameter("@Mob", MobileNo);
+                oParam[6] = new SqlParameter("@LibEmailID", LibEmailID);
+                oParam[7] = new SqlParameter("@Members", Members);
+                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
+                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
+                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ManageClusters" + ex.Message);
             }
 
             return ds;
@@ -2668,6 +2674,5 @@ namespace AnkurPrathisthan
             #endregion Parameter Discovery Functions
 
         }
-
     }
 }
