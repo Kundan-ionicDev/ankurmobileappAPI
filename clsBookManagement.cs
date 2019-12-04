@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnkurPrathisthan.Entity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,53 +11,136 @@ using System.Xml;
 
 namespace AnkurPrathisthan
 {
-    public class clsClusterManagement
+    public class clsBookManagement
     {
-        public DataSet ShowClusters()
+        public DataSet ShowBooks()
         {
             DataSet ds = new DataSet();           
             try
             {
-                string ProcName = "uspGetClusters";
-                SqlParameter[] oParam = null;                              
+                string ProcName = "uspGetBooksbyCategory";
+                SqlParameter[] oParam = null;
+              /*  oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@CategoryName", CategoryName);
+                oParam[1] = new SqlParameter("@PublisherName", PublisherName);
+                oParam[2] = new SqlParameter("@Author", AuthorName);
+                oParam[3] = new SqlParameter("@Price", Price);
+                oParam[4] = new SqlParameter("@CategoryName", CategoryName);
+                oParam[5] = new SqlParameter("@LanguageName", Language);
+                oParam[6] = new SqlParameter("@EmailID", EmailID);
+                oParam[7] = new SqlParameter("@Cmd", cmd); */
+
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- GetClusters" + ex.Message);
+                Console.WriteLine("APService----Error in API-- ShowBooks" + ex.Message);
             }
 
             return ds;
         }
+        
+        public DataSet HandleBooks(string BookName, string cmd, string EmailID ="", string Price="" , string Author="", string Stock="" , string CategoryID="" ,
+        string LanguageID="" , string PublisherID="", string BookID="")
+         {
+            DataSet ds = new DataSet(); 
+             try
+            {
+                string ProcName = "uspManageBooks";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[10];
+                oParam[0] = new SqlParameter("@BookName", BookName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[2] = new SqlParameter("@AddedBy", EmailID);
+                oParam[3] = new SqlParameter("@Price", Price);
+                oParam[4] = new SqlParameter("@Author", Author);
+                oParam[5] = new SqlParameter("@Stock", Stock);
+                oParam[6] = new SqlParameter("@CategoryID", CategoryID);
+                oParam[7] = new SqlParameter("@LanguageID", LanguageID);
+                oParam[8] = new SqlParameter("@PublisherID", PublisherID);
+                oParam[9] = new SqlParameter("@BookID", BookID); 
 
-        public DataSet HandleClusters(string ClusterName, string ClusterCode, string cmd, string EmailID = "", string Address = "", string MobileNo = "",
-        string LibEmailID="",string Members="",string AdminEmailID="", string ClusterID ="")
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName,oParam);  
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ShowBooks" + ex.Message);
+            }
+
+            return ds;
+         }
+
+        public DataSet HandleCategories(string cmd, string CategoryName, string EmailId, string CategoryID= "")
+        
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageClusters";
+                string ProcName = "uspManageCategory";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
-                oParam[0] = new SqlParameter("@ClusterName", ClusterName);
-                oParam[2] = new SqlParameter("@ClusterCode", ClusterCode);
-                oParam[1] = new SqlParameter("@cmd", cmd);                
-                oParam[3] = new SqlParameter("@EmailID", EmailID);
-                oParam[4] = new SqlParameter("@Address", Address);
-                oParam[5] = new SqlParameter("@Mob", MobileNo);
-                oParam[6] = new SqlParameter("@LibEmailID", LibEmailID);
-                oParam[7] = new SqlParameter("@Members", Members);
-                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
-                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                oParam = new SqlParameter[4];
+                oParam[0] = new SqlParameter("@CategoryName", CategoryName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[2] = new SqlParameter("@EmailID", EmailId);
+                oParam[3] = new SqlParameter("@CategoryID", CategoryID);
+                
+
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }
+            return ds;
+
+        }
+
+        public DataSet HandleLanguages (string cmd, string LanguageName, string EmailId, string LanguageID= "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspManageLanguages";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[4];
+                oParam[0] = new SqlParameter("@LanguageName", LanguageName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[2] = new SqlParameter("@EmailID", EmailId);
+                oParam[3] = new SqlParameter("@LanguageID", LanguageID);
+
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- ManageClusters" + ex.Message);
+                throw ex;
             }
-
             return ds;
+
         }
+
+        public DataSet HandlePublishers(string cmd, string PublisherName, string EmailId, string PublisherID = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspManagePublishers";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[4];
+                oParam[0] = new SqlParameter("@PublisherName", PublisherName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[2] = new SqlParameter("@EmailID", EmailId);
+                oParam[3] = new SqlParameter("@PublisherID", PublisherID);
+
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+
+        }
+        //[END] For BookManagement
         public sealed class SqlHelper
         {
             public static string ConnectionString(Int16 Type)
@@ -2675,5 +2759,6 @@ namespace AnkurPrathisthan
             #endregion Parameter Discovery Functions
 
         }
+
     }
 }

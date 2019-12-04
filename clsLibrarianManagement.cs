@@ -10,49 +10,20 @@ using System.Xml;
 
 namespace AnkurPrathisthan
 {
-    public class clsClusterManagement
+    public class clsLibrarianManagement
     {
-        public DataSet ShowClusters()
-        {
-            DataSet ds = new DataSet();           
-            try
-            {
-                string ProcName = "uspGetClusters";
-                SqlParameter[] oParam = null;                              
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("APService----Error in API-- GetClusters" + ex.Message);
-            }
-
-            return ds;
-        }
-
-        public DataSet HandleClusters(string ClusterName, string ClusterCode, string cmd, string EmailID = "", string Address = "", string MobileNo = "",
-        string LibEmailID="",string Members="",string AdminEmailID="", string ClusterID ="")
+        public DataSet ShowLibrarians()
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageClusters";
+                string ProcName = "uspGetLibrarians";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
-                oParam[0] = new SqlParameter("@ClusterName", ClusterName);
-                oParam[2] = new SqlParameter("@ClusterCode", ClusterCode);
-                oParam[1] = new SqlParameter("@cmd", cmd);                
-                oParam[3] = new SqlParameter("@EmailID", EmailID);
-                oParam[4] = new SqlParameter("@Address", Address);
-                oParam[5] = new SqlParameter("@Mob", MobileNo);
-                oParam[6] = new SqlParameter("@LibEmailID", LibEmailID);
-                oParam[7] = new SqlParameter("@Members", Members);
-                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
-                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- ManageClusters" + ex.Message);
+                Console.WriteLine("APService----Error in API-- GetLibrarians" + ex.Message);
             }
 
             return ds;

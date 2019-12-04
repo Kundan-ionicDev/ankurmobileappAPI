@@ -87,11 +87,17 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageClusters")]
         [OperationContract]
-        ClusterDetailsEntity ManageClusters(string ClusterName,string ClusterCode,string EmailID,string Address, string MobileNo,
-        string LibEmailID,string Members,string AdminEmailID, string cmd,string ClusterID ="");
+        ClusterDetailsEntity ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
+        string LibEmailID, string Members, string AdminEmailID, string ClusterID = "");
 
         //[END] For Cluster Management
-
+        //[START] For Librarian Management
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetLibrarians")]
+        [OperationContract]
+        LibrarianDetailsEntity GetLibrarians();
+        //[END] For Librarian Management
     }
       
 }

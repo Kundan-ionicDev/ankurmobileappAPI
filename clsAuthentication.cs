@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnkurPrathisthan.Entity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,53 +11,110 @@ using System.Xml;
 
 namespace AnkurPrathisthan
 {
-    public class clsClusterManagement
+    public class clsAuthentication
     {
-        public DataSet ShowClusters()
+        public DataSet GetUserDetails(string EmailID, string Password)
+        {
+            DataSet ds = new DataSet();
+           // List<userdetailsEntity> param = new List<userdetailsEntity>();
+            try
+            {
+
+                string ProcName = "uspLogin";
+               
+                SqlParameter[] oParam = null;
+
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@P_EmailID", EmailID);
+                oParam[1] = new SqlParameter("@P_Password", Password);
+
+                //string procName = "uspLogin";
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+
+                //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                //{
+                //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                //    {
+                //        EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                //        Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
+                //    }
+                //}
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password);
+            }
+
+            return ds;
+        }
+        public DataSet LogoutDetail(string EmailID)
         {
             DataSet ds = new DataSet();           
             try
             {
-                string ProcName = "uspGetClusters";
-                SqlParameter[] oParam = null;                              
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
+                string ProcName = "uspLogout";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);   
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- GetClusters" + ex.Message);
+                Console.WriteLine("APService----Error in API-- UserLogout" + ex.Message, EmailID);
             }
 
             return ds;
         }
 
-        public DataSet HandleClusters(string ClusterName, string ClusterCode, string cmd, string EmailID = "", string Address = "", string MobileNo = "",
-        string LibEmailID="",string Members="",string AdminEmailID="", string ClusterID ="")
+        public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password, string DOB,
+        string MobileNo)//, string RoleName)
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageClusters";
+                string ProcName = "UserRegistration";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
-                oParam[0] = new SqlParameter("@ClusterName", ClusterName);
-                oParam[2] = new SqlParameter("@ClusterCode", ClusterCode);
-                oParam[1] = new SqlParameter("@cmd", cmd);                
-                oParam[3] = new SqlParameter("@EmailID", EmailID);
-                oParam[4] = new SqlParameter("@Address", Address);
-                oParam[5] = new SqlParameter("@Mob", MobileNo);
-                oParam[6] = new SqlParameter("@LibEmailID", LibEmailID);
-                oParam[7] = new SqlParameter("@Members", Members);
-                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
-                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                oParam = new SqlParameter[6];
+                oParam[0] = new SqlParameter("@FirstName", FirstName);
+                oParam[1] = new SqlParameter("@LastName", LastName);
+                oParam[2] = new SqlParameter("@EmailID", EmailID);                
+               // oParam[3] = new SqlParameter("@DOB", DOB);
+                oParam[4] = new SqlParameter("@Password", Password);
+               // oParam[5] = new SqlParameter("@MobileNo", MobileNo);
+                //oParam[6] = new SqlParameter("@RoleName", RoleName);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- ManageClusters" + ex.Message);
+                Console.WriteLine("APService----Error in RegisterUser" + ex.Message, EmailID, LastName, FirstName, Password,
+                DOB, MobileNo); //, RoleName);
             }
 
             return ds;
         }
+
+        public DataSet PasswordReset(string EmailID, string Password)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspForgotPassword";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];                               
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@NewPassword", Password);                
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in ForgotPassword" + ex.Message, EmailID,Password);                
+            }
+
+            return ds;
+        }
+
         public sealed class SqlHelper
         {
             public static string ConnectionString(Int16 Type)
@@ -2675,5 +2733,6 @@ namespace AnkurPrathisthan
             #endregion Parameter Discovery Functions
 
         }
+
     }
 }

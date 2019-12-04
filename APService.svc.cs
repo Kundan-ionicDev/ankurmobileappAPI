@@ -455,8 +455,8 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public ClusterDetailsEntity ManageClusters(string ClusterName,string ClusterCode,string EmailID,string Address, string MobileNo,
-        string LibEmailID,string Members,string AdminEmailID, string cmd,string ClusterID ="")
+        public ClusterDetailsEntity ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
+        string LibEmailID,string Members,string AdminEmailID, string ClusterID ="")
 
         {
             ClusterDetailsEntity entity = new ClusterDetailsEntity();
@@ -487,7 +487,7 @@ namespace AnkurPrathisthan
 
                 else
                 {
-                    ds = bm.HandleClusters(ClusterName,ClusterCode,EmailID,Address,MobileNo,LibEmailID, Members, AdminEmailID,cmd,ClusterID ="");
+                    ds = bm.HandleClusters(ClusterName,ClusterCode,cmd,EmailID,Address,MobileNo,LibEmailID,Members,AdminEmailID,ClusterID);
 
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -515,5 +515,38 @@ namespace AnkurPrathisthan
 
 
         //[END] For CLuster Management
+
+        //[START] For Librarian Management
+        public LibrarianDetailsEntity GetLibrarians()
+        {
+            LibrarianDetailsEntity entity = new LibrarianDetailsEntity();
+            DataSet ds = new DataSet();
+            clsLibrarianManagement lm = new clsLibrarianManagement();
+            try
+            {
+                ds = lm.ShowLibrarians();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        entity.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in API ---GetLibrarians" + ex.Message);
+                throw ex;
+            }
+            return entity;
+        }
+
+        //[END] For Librarian Management
+        
     }
 }

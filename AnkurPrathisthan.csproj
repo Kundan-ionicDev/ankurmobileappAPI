@@ -69,9 +69,11 @@
     <Compile Include="clsBookManagement.cs" />
     <Compile Include="clsAuthentication.cs" />
     <Compile Include="clsClusterManagement.cs" />
+    <Compile Include="clsLibrarianManagement.cs" />
     <Compile Include="clsSQL.cs" />
     <Compile Include="Entity\BookDetailsEntity.cs" />
     <Compile Include="Entity\ClusterDetailsEntity.cs" />
+    <Compile Include="Entity\LibrarianDetailsEntity.cs" />
     <Compile Include="Entity\userdetailsEntity.cs" />
     <Compile Include="IAPService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
