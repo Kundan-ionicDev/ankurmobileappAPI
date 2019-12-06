@@ -9,8 +9,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-//using Newtonsoft.JSON;
-//using System.Text.Encoding;
+
 
 namespace AnkurPrathisthan
 {
@@ -541,6 +540,54 @@ namespace AnkurPrathisthan
             catch (Exception ex)
             {
                 Console.WriteLine("Error in API ---GetLibrarians" + ex.Message);
+                throw ex;
+            }
+            return entity;
+        }
+        public LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterID, string AdminEmailID, string LibrarianID = "")
+        {
+            LibrarianDetailsEntity entity = new LibrarianDetailsEntity();
+            DataSet ds = new DataSet();
+            clsLibrarianManagement lm = new clsLibrarianManagement();
+            if (FirstName == null)
+                FirstName = "";
+            if (LastName == null)
+                LastName = "";
+            if (EmailID == null)
+                EmailID = "";
+            if (Address == null) Address = "";
+            if (MobileNo == null)
+                MobileNo = "";
+            if (AltMobileNo == null)
+                AltMobileNo = "";
+            if (ClusterID == null)
+                ClusterID = "";
+            if (AdminEmailID == null)
+                AdminEmailID = "";
+           
+            try
+            {
+                ds = lm.HandleLibrarians( cmd,  FirstName,  LastName, EmailID,  Address,  MobileNo,  AltMobileNo, ClusterID, AdminEmailID,  LibrarianID);
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        entity.LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                        entity.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        entity.AltMobileNo = Convert.ToString(ds.Tables[0].Rows[i]["AltMobileNo"]);                        
+                        entity.ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]);
+                        entity.AdminEmailID = Convert.ToString(ds.Tables[0].Rows[i]["AdminEmailID"]);
+                        entity.LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in API ---ManageLibrarians" + ex.Message);
                 throw ex;
             }
             return entity;

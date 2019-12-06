@@ -28,6 +28,38 @@ namespace AnkurPrathisthan
 
             return ds;
         }
+
+        public DataSet HandleLibrarians(int cmd, string FirstName, string LastName,string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspManageLibrarians";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[10];
+
+                oParam[0] = new SqlParameter("@cmd", cmd);
+                oParam[1] = new SqlParameter("@FirstName", FirstName);
+                oParam[2] = new SqlParameter("@LastName", LastName);
+                oParam[3] = new SqlParameter("@EmailID", EmailID);
+                oParam[4] = new SqlParameter("@Address", Address);
+                oParam[5] = new SqlParameter("@MobileNo", MobileNo);
+                oParam[6] = new SqlParameter("@AltMobNo", AltMobileNo);
+                oParam[7] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
+                oParam[9] = new SqlParameter("@LibrarianID", LibrarianID);
+
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                Console.WriteLine("APService----Error in API-- GetLibrarians" + ex.Message);
+            }
+
+            return ds;
+        }
         public sealed class SqlHelper
         {
             public static string ConnectionString(Int16 Type)

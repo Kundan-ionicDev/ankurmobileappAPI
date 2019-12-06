@@ -97,6 +97,12 @@ namespace AnkurPrathisthan
         UriTemplate = "GetLibrarians")]
         [OperationContract]
         LibrarianDetailsEntity GetLibrarians();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageLibrarians")]
+        [OperationContract]
+        LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="");
         //[END] For Librarian Management
     }
       
