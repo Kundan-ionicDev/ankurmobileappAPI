@@ -66,16 +66,19 @@
     <Compile Include="APService.svc.cs">
       <DependentUpon>APService.svc</DependentUpon>
     </Compile>
+    <Compile Include="clsApprovals.cs" />
     <Compile Include="clsBookManagement.cs" />
     <Compile Include="clsAuthentication.cs" />
     <Compile Include="clsClusterManagement.cs" />
     <Compile Include="clsLibrarianManagement.cs" />
     <Compile Include="clsMemberManagement.cs" />
+    <Compile Include="clsQRCode.cs" />
     <Compile Include="clsSQL.cs" />
     <Compile Include="Entity\BookDetailsEntity.cs" />
     <Compile Include="Entity\ClusterDetailsEntity.cs" />
     <Compile Include="Entity\LibrarianDetailsEntity.cs" />
     <Compile Include="Entity\MemberDetailsEntity.cs" />
+    <Compile Include="Entity\RequestsDetailsEntity.cs" />
     <Compile Include="Entity\userdetailsEntity.cs" />
     <Compile Include="IAPService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

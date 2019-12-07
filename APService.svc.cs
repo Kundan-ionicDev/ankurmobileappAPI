@@ -544,7 +544,8 @@ namespace AnkurPrathisthan
             }
             return entity;
         }
-        public LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterID, string AdminEmailID, string LibrarianID = "")
+        public LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
+        string AltMobileNo, string ClusterID, string AdminEmailID, string LibrarianID = "")
         {
             LibrarianDetailsEntity entity = new LibrarianDetailsEntity();
             DataSet ds = new DataSet();
@@ -625,7 +626,8 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterID,string DOB, string AdminEmailID,string MemberID = "")
+        public MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo,
+        string AltMobileNo, string ClusterID,string DOB, string AdminEmailID,string MemberID = "")
         {
             MemberDetailsEntity entity = new MemberDetailsEntity();
             DataSet ds = new DataSet();
@@ -672,5 +674,37 @@ namespace AnkurPrathisthan
         }
 
         //[END] For Member Management
+
+        //[START] For Approvals
+        public RequestsDetailsEntity GetRequests()
+        {
+            DataSet ds = new DataSet();
+            RequestsDetailsEntity requests = new RequestsDetailsEntity();
+            clsApprovals app = new clsApprovals();
+            try
+            {
+                ds = app.ShowRequests();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        requests.RequestedFor = Convert.ToString(ds.Tables[0].Rows[i]["Requested For"]);
+                        requests.RequestedDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestedDate "]);
+                        requests.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);
+                        requests.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]);
+                        requests.RequestedBy = Convert.ToString(ds.Tables[0].Rows[i]["Requested By"]);
+                       // requests.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);                       
+                    }
+                }
+            }
+            catch (Exception ex)
+            {                
+                throw ex; 
+            }
+            return requests;
+
+        }
+
+        //[END] For Approvals
     }
 }

@@ -55,7 +55,7 @@ namespace AnkurPrathisthan
             catch (Exception ex)
             {
                 throw ex;
-                Console.WriteLine("APService----Error in API-- GetLibrarians" + ex.Message);
+                //Console.WriteLine("APService----Error in API-- GetLibrarians" + ex.Message);
             }
 
             return ds;

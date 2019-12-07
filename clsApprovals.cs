@@ -10,57 +10,41 @@ using System.Xml;
 
 namespace AnkurPrathisthan
 {
-    public class clsMemberManagement
+    public class clsApprovals
     {
-        public DataSet ShowMembers()
+
+        public DataSet ShowRequests()
         {
             DataSet ds = new DataSet();
+            string ProcName = "uspGetRequests";
+            SqlParameter[] oParam = null;
+            /*oParam = new SqlParameter[11];
+            oParam[0] = new SqlParameter("@cmd", cmd);
+            oParam[1] = new SqlParameter("@FirstName", FirstName);
+            oParam[2] = new SqlParameter("@LastName", FirstName);
+            oParam[3] = new SqlParameter("@Email", EmailID);
+            oParam[4] = new SqlParameter("@Address", Address);
+            oParam[5] = new SqlParameter("@MobileNo", MobileNo);
+            oParam[6] = new SqlParameter("@AltMobNo", AltMobileNo);
+            oParam[7] = new SqlParameter("@DOB", DOB);
+            oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
+            oParam[9] = new SqlParameter("@ClusterID", ClusterID);
+            oParam[10] = new SqlParameter("@MemberID", MemberID);*/
+
+
+            ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+
             try
             {
-                string ProcName = "uspGetMembers";
-                SqlParameter[] oParam = null;
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("APService----Error in API-- GetMembers" + ex.Message);
-            }
 
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
             return ds;
         }
-
-       public DataSet HandleMembers(int cmd, string FirstName,string LastName,string EmailID,string Address,string MobileNo,string AltMobileNo,string ClusterID, string DOB,string AdminEmailID,string MemberID = "")
-        {
-            DataSet ds = new DataSet();
-            try
-            {
-                string ProcName = "uspManageMembers";
-                SqlParameter[] oParam = null;
-                oParam = new SqlParameter[11];
-                oParam[0] = new SqlParameter("@cmd", cmd);
-                oParam[1] = new SqlParameter("@FirstName", FirstName);
-                oParam[2] = new SqlParameter("@LastName", FirstName);
-                oParam[3] = new SqlParameter("@Email", EmailID);
-                oParam[4] = new SqlParameter("@Address", Address);
-                oParam[5] = new SqlParameter("@MobileNo", MobileNo);
-                oParam[6] = new SqlParameter("@AltMobNo", AltMobileNo);
-                oParam[7] = new SqlParameter("@DOB", DOB);
-                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
-                oParam[10] = new SqlParameter("@MemberID", MemberID);
-
-
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return ds;
-
-        }
-
-      
         public sealed class SqlHelper
         {
             public static string ConnectionString(Int16 Type)
