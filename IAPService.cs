@@ -104,6 +104,21 @@ namespace AnkurPrathisthan
         [OperationContract]
         LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="");
         //[END] For Librarian Management
+
+        //[START] For Member Management
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetMembers")]
+        [OperationContract]
+        MemberDetailsEntity GetMembers();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageMembers")]
+        [OperationContract]
+        MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string MemberID = "");
+        //[END] For Member Management
+
     }
       
 }

@@ -595,5 +595,82 @@ namespace AnkurPrathisthan
 
         //[END] For Librarian Management
         
+        // [START] For Member Management
+        public MemberDetailsEntity GetMembers()
+        {
+            MemberDetailsEntity entity = new MemberDetailsEntity();
+            DataSet ds = new DataSet();
+            clsMemberManagement mem = new clsMemberManagement();
+            try
+            {
+                ds = mem.ShowMembers();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        entity.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in API ---GetMembers" + ex.Message);
+                throw ex;
+            }
+            return entity;
+        }
+
+        public MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterID,string DOB, string AdminEmailID,string MemberID = "")
+        {
+            MemberDetailsEntity entity = new MemberDetailsEntity();
+            DataSet ds = new DataSet();
+            clsMemberManagement mem = new clsMemberManagement();
+            if (FirstName == null)
+                FirstName = "";
+            if (LastName == null)
+                LastName = "";
+            if (EmailID == null)
+                EmailID = "";
+            if (Address == null) Address = "";
+            if (MobileNo == null)
+                MobileNo = "";
+            if (AltMobileNo == null)
+                AltMobileNo = "";
+            if (ClusterID == null)
+                ClusterID = "";
+            
+            try
+            {
+                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID,MemberID);
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]);
+                        entity.LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]);
+                        entity.EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
+                        entity.Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]);
+                        entity.MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]);
+                        entity.AltMobileNo = Convert.ToString(ds.Tables[0].Rows[i]["AltMobileNo"]);
+                        entity.ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]);                       
+                        entity.MemberID = Convert.ToString(ds.Tables[0].Rows[i]["MemberID"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in API ---ManageMembers" + ex.Message);
+                throw ex;
+            }
+            return entity;
+        }
+
+        //[END] For Member Management
     }
 }
