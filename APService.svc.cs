@@ -9,6 +9,9 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using Gma.QrCodeNet.Encoding;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 
 namespace AnkurPrathisthan
@@ -194,18 +197,17 @@ namespace AnkurPrathisthan
         //[START] For Book Management
         
         //API on book management home page
-        public BookDetailsEntity GetBooks()
+       // public BookDetailsEntity GetBooks()
+        public string GetBooks()
         {
-            clsBookManagement objbook = new clsBookManagement();
-          //  ArrayList myArrayList = new ArrayList();
-            BookDetailsEntity entity = new BookDetailsEntity();
-            DataSet ds = new DataSet();
-            DataTable dt = new DataTable();
+            clsBookManagement objbook = new clsBookManagement();         
+           // BookDetailsEntity entity = new BookDetailsEntity();
+            DataSet ds = new DataSet();           
             try
             {                
                     ds = objbook.ShowBooks();
 
-                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                   /* if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
@@ -217,7 +219,7 @@ namespace AnkurPrathisthan
                             entity.Language = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]);
 
                         }
-                    }
+                    } */
                        
                // }
             }
@@ -226,18 +228,19 @@ namespace AnkurPrathisthan
                 Console.WriteLine("APService----Error in API-- GetBoks" + ex.Message);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";              
             }
-            return entity;
-        }
-        //[END] For Book Management 
+            string result = JsonConvert.SerializeObject(ds);
+            return result;
+          //  return entity;
+        }       
 
         public BookDetailsEntity ManageBooks(string BookName, string cmd, string EmailID, string Price , string Author, string Stock , string CategoryID ,
-        string LanguageID , string PublisherID, string BookID = "")
-         //   public string ManageBooks(string BookName, string cmd, string EmailID, string Price = "", string Author = "", string Stock = "", string CategoryID = "",
-       // string LanguageID = "", string PublisherID = "")
+        string LanguageID , string PublisherID, string BookID = "")       
         {
             BookDetailsEntity entity = new BookDetailsEntity();
             DataSet ds = new DataSet();
             clsBookManagement bm = new clsBookManagement();
+            clsQRCode  qrc = new clsQRCode();
+            string qrcode = "";
             if (EmailID == null)
                 EmailID = "";
             if (Price == null)
@@ -266,6 +269,7 @@ namespace AnkurPrathisthan
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
+                            //entity.BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]); 
                             entity.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);                           
                             entity.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["Author"]);
                             entity.Price = Convert.ToString(ds.Tables[0].Rows[i]["Price"]);
@@ -276,6 +280,12 @@ namespace AnkurPrathisthan
                             entity.PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]);
                             entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
                         }
+                         if (cmd != null && cmd == "1" )
+                         {
+                            qrcode = qrc.GenerateQRCode(entity.BookID,entity.BookName,entity.AuthorName);                             
+                         }
+
+                         
                     }
                 }
 
@@ -309,17 +319,13 @@ namespace AnkurPrathisthan
                     //For adding
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        //if (ds.Tables[0].Rows[0]["cmd"].ToString() = "1")
-                        //{
-
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 enitity.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                                 enitity.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                                 enitity.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                                 enitity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
-                            }
-                       // }
+                            }                           
                     }
                 }
                
@@ -392,22 +398,18 @@ namespace AnkurPrathisthan
                 }
                 else
                 {
-                    ds = bm.HandlePublishers(cmd, PublisherName, Email, PublisherID);
-                    //For adding
+                    ds = bm.HandlePublishers(cmd, PublisherName, Email, PublisherID);                   
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
-                        //if (ds.Tables[0].Rows[0]["cmd"].ToString() = "1")
-                        //{
-
+                    {  
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             entity.ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]);
                             entity.PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"]);
                             entity.CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]);
                             entity.Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
-                        }
-                        // }
+                        }                       
                     }
+                   
                 }
 
             }
@@ -423,15 +425,16 @@ namespace AnkurPrathisthan
 
 
         //[START] For Cluster Management
-        public ClusterDetailsEntity GetClusters()
+        public string GetClusters()
+         //   public ClusterDetailsEntity GetClusters()
         {
             clsClusterManagement cm = new clsClusterManagement();
             DataSet ds = new DataSet();
-            ClusterDetailsEntity entity = new ClusterDetailsEntity();
+           // ClusterDetailsEntity entity = new ClusterDetailsEntity();
             try
             {
                 ds = cm.ShowClusters();
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+              /*  if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
@@ -442,7 +445,7 @@ namespace AnkurPrathisthan
                         entity.Librarian = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"]);
 
                     }
-                }
+                } */
             }
             catch (Exception ex)
             {
@@ -450,8 +453,8 @@ namespace AnkurPrathisthan
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
                 throw;
             }
-
-            return entity;
+            string result = JsonConvert.SerializeObject(ds);
+            return result;
         }
 
         public ClusterDetailsEntity ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
@@ -516,15 +519,16 @@ namespace AnkurPrathisthan
         //[END] For CLuster Management
 
         //[START] For Librarian Management
-        public LibrarianDetailsEntity GetLibrarians()
+        public string GetLibrarians()
+          //  public LibrarianDetailsEntity GetLibrarians()
         {
-            LibrarianDetailsEntity entity = new LibrarianDetailsEntity();
+           // LibrarianDetailsEntity entity = new LibrarianDetailsEntity();
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
             try
             {
                 ds = lm.ShowLibrarians();
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+               /* if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
@@ -535,14 +539,15 @@ namespace AnkurPrathisthan
                         entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
 
                     }
-                }
+                } */
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error in API ---GetLibrarians" + ex.Message);
                 throw ex;
             }
-            return entity;
+            string result = JsonConvert.SerializeObject(ds);
+            return result;
         }
         public LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
         string AltMobileNo, string ClusterID, string AdminEmailID, string LibrarianID = "")
@@ -597,15 +602,16 @@ namespace AnkurPrathisthan
         //[END] For Librarian Management
         
         // [START] For Member Management
-        public MemberDetailsEntity GetMembers()
+        public string GetMembers()
+            //   public MemberDetailsEntity GetMembers()
         {
-            MemberDetailsEntity entity = new MemberDetailsEntity();
+            //MemberDetailsEntity entity = new MemberDetailsEntity();
             DataSet ds = new DataSet();
             clsMemberManagement mem = new clsMemberManagement();
             try
             {
                 ds = mem.ShowMembers();
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                /*if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
@@ -616,14 +622,15 @@ namespace AnkurPrathisthan
                         entity.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);
 
                     }
-                }
+                } */
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error in API ---GetMembers" + ex.Message);
                 throw ex;
             }
-            return entity;
+            string result = JsonConvert.SerializeObject(ds);
+            return result;
         }
 
         public MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo,
@@ -676,35 +683,61 @@ namespace AnkurPrathisthan
         //[END] For Member Management
 
         //[START] For Approvals
-        public RequestsDetailsEntity GetRequests()
+        public string GetRequests()
         {
             DataSet ds = new DataSet();
-            RequestsDetailsEntity requests = new RequestsDetailsEntity();
+           // RequestsDetailsEntity requests = new RequestsDetailsEntity();
             clsApprovals app = new clsApprovals();
             try
             {
-                ds = app.ShowRequests();
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        requests.RequestedFor = Convert.ToString(ds.Tables[0].Rows[i]["Requested For"]);
-                        requests.RequestedDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestedDate "]);
-                        requests.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);
-                        requests.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]);
-                        requests.RequestedBy = Convert.ToString(ds.Tables[0].Rows[i]["Requested By"]);
-                       // requests.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);                       
-                    }
-                }
+                ds = app.ShowRequests();              
             }
             catch (Exception ex)
             {                
                 throw ex; 
             }
-            return requests;
+            string result = JsonConvert.SerializeObject(ds);
+            return result;
 
         }
 
+        public RequestsDetailsEntity ManageRequests()
+        {
+            RequestsDetailsEntity requests = new RequestsDetailsEntity();
+            DataSet ds = new DataSet();
+            clsApprovals approvals = new clsApprovals();
+            try
+            {
+                ds = approvals.HandleRequests();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+               {
+                   for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                   {
+                       requests.RequestedFor = Convert.ToString(ds.Tables[0].Rows[i]["RequestedFor"]);
+                       requests.RequestedDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestedDate "]);
+                       requests.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);
+                       requests.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]);
+                       requests.RequestedBy = Convert.ToString(ds.Tables[0].Rows[i]["RequestedBy"]);
+                       requests.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);                       
+                   }
+               } 
+            }
+            catch (Exception ex) 
+            {                
+                throw ex;
+            }
+            return requests;
+        }
+
+
         //[END] For Approvals
+        // [START] Test jsonconvert newtonsoft
+        public string Test(string name)
+        {
+           //name = "Arya";
+           string result = JsonConvert.SerializeObject(name);
+           return result;
+        }
+        // [END] Test jsonconvert newtonsoft
     }
 }

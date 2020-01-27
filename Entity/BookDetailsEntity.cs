@@ -21,6 +21,7 @@ namespace AnkurPrathisthan.Entity
         public string CategoryID { get; set; }
         public string BookID { get; set; }
         public string Message { get; set; }
+        public string qrcode { get; set; }
 
     }   
 

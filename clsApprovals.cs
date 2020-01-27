@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using Newtonsoft.Json;
 
 namespace AnkurPrathisthan
 {
@@ -15,33 +16,32 @@ namespace AnkurPrathisthan
 
         public DataSet ShowRequests()
         {
-            DataSet ds = new DataSet();
-            string ProcName = "uspGetRequests";
-            SqlParameter[] oParam = null;
-            /*oParam = new SqlParameter[11];
-            oParam[0] = new SqlParameter("@cmd", cmd);
-            oParam[1] = new SqlParameter("@FirstName", FirstName);
-            oParam[2] = new SqlParameter("@LastName", FirstName);
-            oParam[3] = new SqlParameter("@Email", EmailID);
-            oParam[4] = new SqlParameter("@Address", Address);
-            oParam[5] = new SqlParameter("@MobileNo", MobileNo);
-            oParam[6] = new SqlParameter("@AltMobNo", AltMobileNo);
-            oParam[7] = new SqlParameter("@DOB", DOB);
-            oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-            oParam[9] = new SqlParameter("@ClusterID", ClusterID);
-            oParam[10] = new SqlParameter("@MemberID", MemberID);*/
-
-
-            ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-
+            DataSet ds = new DataSet();            
             try
             {
-
+                string ProcName = "uspGetRequests";
+                SqlParameter[] oParam = null;
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
-            catch (Exception)
+            catch (Exception ex)
+            {                
+                throw ex;
+            }           
+            return ds;
+        }
+
+        public DataSet HandleRequests()
+        {
+            DataSet ds = new DataSet();
+            try
             {
-                
-                throw;
+                string ProcName = "uspManageRequests";
+                SqlParameter[] oParam = null;
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return ds;
         }

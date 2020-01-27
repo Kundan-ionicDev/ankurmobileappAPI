@@ -48,7 +48,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooks")]
         [OperationContract]
-        BookDetailsEntity GetBooks();
+        string GetBooks();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -81,7 +81,8 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetClusters")]
         [OperationContract]
-        ClusterDetailsEntity GetClusters();
+        // ClusterDetailsEntity GetClusters();
+        string GetClusters();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -96,7 +97,8 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetLibrarians")]
         [OperationContract]
-        LibrarianDetailsEntity GetLibrarians();
+       // LibrarianDetailsEntity GetLibrarians();
+        string GetLibrarians();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -111,7 +113,8 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetMembers")]
         [OperationContract]
-        MemberDetailsEntity GetMembers();
+        //MemberDetailsEntity GetMembers();
+        string GetMembers();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -120,6 +123,28 @@ namespace AnkurPrathisthan
         MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
         string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string MemberID = "");
         //[END] For Member Management
+
+        //[START] For Approvals Module
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetRequests")]
+        [OperationContract]
+        string GetRequests();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageRequests")]
+        [OperationContract]
+        RequestsDetailsEntity ManageRequests();
+        //[END] For Approvals Module
+
+        //[START] test newtonsoftjson
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "Test")]
+        [OperationContract]
+        string Test(string name);
+        //[End] test newton soft jspnon    
 
     }
       
