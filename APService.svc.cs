@@ -198,16 +198,16 @@ namespace AnkurPrathisthan
         
         //API on book management home page
        // public BookDetailsEntity GetBooks()
-        public string GetBooks()
+        public List<BookDetailsEntity> GetBooks()
         {
             clsBookManagement objbook = new clsBookManagement();         
-           // BookDetailsEntity entity = new BookDetailsEntity();
+            List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();           
             try
             {                
                     ds = objbook.ShowBooks();
 
-                   /* if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                   if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
@@ -217,9 +217,13 @@ namespace AnkurPrathisthan
                             entity.Stock = Convert.ToString(ds.Tables[0].Rows[i]["Stock"]);
                             entity.CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]);
                             entity.Language = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]);
-
+                                
+                            entity.add(new BookDetailsEntity{
+                                BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),
+                                AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"])
+                            });
                         }
-                    } */
+                    }
                        
                // }
             }
@@ -228,8 +232,8 @@ namespace AnkurPrathisthan
                 Console.WriteLine("APService----Error in API-- GetBoks" + ex.Message);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";              
             }
-            string result = JsonConvert.SerializeObject(ds);
-            return result;
+            // string result = JsonConvert.SerializeObject(ds);
+            return entity;
           //  return entity;
         }       
 
@@ -734,7 +738,7 @@ namespace AnkurPrathisthan
         // [START] Test jsonconvert newtonsoft
         public string Test(string name)
         {
-           //name = "Arya";
+           //name = "";
            string result = JsonConvert.SerializeObject(name);
            return result;
         }
