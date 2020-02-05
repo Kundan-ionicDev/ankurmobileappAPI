@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="APService.svc" />
+    <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,9 @@
     <Compile Include="Entity\MemberDetailsEntity.cs" />
     <Compile Include="Entity\RequestsDetailsEntity.cs" />
     <Compile Include="Entity\userdetailsEntity.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="IAPService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
