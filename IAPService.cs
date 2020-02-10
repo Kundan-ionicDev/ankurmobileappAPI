@@ -48,7 +48,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooks")]
         [OperationContract]
-        List<BookDetailsEntity> GetBooks();
+        string GetBooks();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -135,15 +135,16 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageRequests")]
         [OperationContract]
-        RequestsDetailsEntity ManageRequests();
+        List<RequestsDetailsEntity> ManageRequests(int cmd, string FirstName, string LastName, string EmailID, string BookID, string LibrarianID,
+        string MemberID, string ClusterID, string RequestID);   
         //[END] For Approvals Module
 
         //[START] test newtonsoftjson
-        [WebInvoke(Method = "POST",
-        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "Test")]
-        [OperationContract]
-        string Test(string name);
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "Test")]
+        //[OperationContract]
+        //string Test(string name);
         //[End] test newton soft jspnon    
 
     }

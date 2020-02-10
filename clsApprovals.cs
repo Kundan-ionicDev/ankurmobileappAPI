@@ -21,7 +21,9 @@ namespace AnkurPrathisthan
             {
                 string ProcName = "uspGetRequests";
                 SqlParameter[] oParam = null;
+
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+
             }
             catch (Exception ex)
             {                
@@ -30,13 +32,24 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet HandleRequests()
+        public DataSet HandleRequests(int cmd, string FirstName, string LastName, string EmailID, string BookID, string LibrarianID,
+        string MemberID, string ClusterID, string RequestID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "uspManageRequests";
                 SqlParameter[] oParam = null;
+                oParam = new SqlParameter[7];
+                oParam[0] = new SqlParameter("@RequestID", RequestID);
+                oParam[1] = new SqlParameter("@MemberID", MemberID);
+                oParam[2] = new SqlParameter("@BookID", BookID);
+               // oParam[3] = new SqlParameter("@AuthorID", Price);
+                oParam[3] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[4] = new SqlParameter("@LibrarianID", LibrarianID);
+                oParam[5] = new SqlParameter("@cmd", cmd);
+                //oParam[6] = new SqlParameter("@RequestStatus", LanguageID);
+                oParam[6] = new SqlParameter("@AddedBy", EmailID);               
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)

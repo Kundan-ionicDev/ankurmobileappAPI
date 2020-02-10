@@ -197,8 +197,8 @@ namespace AnkurPrathisthan
         //[START] For Book Management
         
         //API on book management home page
-       // public BookDetailsEntity GetBooks()
-        public List<BookDetailsEntity> GetBooks()
+        public string GetBooks()
+       // public List<BookDetailsEntity> GetBooks()
         {
             clsBookManagement objbook = new clsBookManagement();         
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
@@ -207,7 +207,7 @@ namespace AnkurPrathisthan
             {                
                     ds = objbook.ShowBooks();
 
-                   if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                  /* if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
@@ -223,7 +223,7 @@ namespace AnkurPrathisthan
                                 AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"])
                             });
                         }
-                    }
+                    } */
                        
                // }
             }
@@ -232,8 +232,8 @@ namespace AnkurPrathisthan
                 Console.WriteLine("APService----Error in API-- GetBoks" + ex.Message);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";              
             }
-            // string result = JsonConvert.SerializeObject(ds);
-            return entity;
+             string result = JsonConvert.SerializeObject(ds);
+             return result;
           //  return entity;
         }       
 
@@ -705,24 +705,29 @@ namespace AnkurPrathisthan
 
         }
 
-        public RequestsDetailsEntity ManageRequests()
+        public List<RequestsDetailsEntity> ManageRequests(int cmd, string FirstName, string LastName, string EmailID, string BookID, string LibrarianID,
+        string MemberID, string ClusterID, string RequestID)
         {
-            RequestsDetailsEntity requests = new RequestsDetailsEntity();
+            List<RequestsDetailsEntity> requests = new List<RequestsDetailsEntity>();
             DataSet ds = new DataSet();
             clsApprovals approvals = new clsApprovals();
             try
             {
-                ds = approvals.HandleRequests();
+                ds = approvals.HandleRequests(cmd,FirstName,LastName,EmailID,BookID,LibrarianID,MemberID,ClusterID,RequestID);
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                {
                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                    {
-                       requests.RequestedFor = Convert.ToString(ds.Tables[0].Rows[i]["RequestedFor"]);
-                       requests.RequestedDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestedDate "]);
-                       requests.BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]);
-                       requests.AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]);
-                       requests.RequestedBy = Convert.ToString(ds.Tables[0].Rows[i]["RequestedBy"]);
-                       requests.ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]);                       
+                       requests.Add
+                      (new RequestsDetailsEntity()
+                   {
+                       RequestedFor = ds.Tables[0].Rows[i]["RequestedFor"].ToString(),
+                       RequestedDate = ds.Tables[0].Rows[i]["RequestedDate "].ToString(),
+                       BookName = ds.Tables[0].Rows[i]["BookName"].ToString(),
+                       AuthorName = ds.Tables[0].Rows[i]["AuthorName"].ToString(),
+                       RequestedBy = ds.Tables[0].Rows[i]["RequestedBy"].ToString(),
+                       ClusterName = ds.Tables[0].Rows[i]["ClusterName"].ToString()   
+                   });
                    }
                } 
             }
@@ -736,12 +741,12 @@ namespace AnkurPrathisthan
 
         //[END] For Approvals
         // [START] Test jsonconvert newtonsoft
-        public string Test(string name)
-        {
-           //name = "";
-           string result = JsonConvert.SerializeObject(name);
-           return result;
-        }
+        //public string Test(string name)
+        //{
+        //   //name = "";
+        //   string result = JsonConvert.SerializeObject(name);
+        //   return result;
+        //}
         // [END] Test jsonconvert newtonsoft
     }
 }

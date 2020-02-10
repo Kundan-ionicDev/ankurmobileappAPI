@@ -22,7 +22,7 @@ namespace AnkurPrathisthan
         //[Start]:Added for CORS
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "http://localhost");
+            HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "http://ec2-3-6-173-252.ap-south-1.compute.amazonaws.com");
             if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
             {
                 HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "POST, PUT, DELETE,GET");
