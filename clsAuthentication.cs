@@ -68,28 +68,29 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password, string DOB,
-        string MobileNo)//, string RoleName)
+        public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password,
+            string ClusterCode, string RoleID,string MobileNo="", string OldPassword="")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "UserRegistration";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[6];
+                oParam = new SqlParameter[8];
                 oParam[0] = new SqlParameter("@FirstName", FirstName);
                 oParam[1] = new SqlParameter("@LastName", LastName);
                 oParam[2] = new SqlParameter("@EmailID", EmailID);
-                // oParam[3] = new SqlParameter("@DOB", DOB);
-                oParam[4] = new SqlParameter("@Password", Password);
-                // oParam[5] = new SqlParameter("@MobileNo", MobileNo);
-                //oParam[6] = new SqlParameter("@RoleName", RoleName);
+                oParam[3] = new SqlParameter("@Password", Password);
+                oParam[4] = new SqlParameter("@OldPassword", OldPassword);
+                oParam[5] = new SqlParameter("@ClusterCode", ClusterCode);
+                oParam[6] = new SqlParameter("@RoleID", RoleID);
+                oParam[7] = new SqlParameter("@MobileNo", MobileNo);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in RegisterUser" + ex.Message, EmailID, LastName, FirstName, Password,
-                DOB, MobileNo); //, RoleName);
+                RoleID, MobileNo); //, RoleName);
             }
 
             return ds;

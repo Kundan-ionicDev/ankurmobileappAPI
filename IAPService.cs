@@ -33,8 +33,8 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "UserRegister")]
         [OperationContract]
-        userdetailsEntity UserRegister(string FirstName, string LastName, string EmailID, string Password, string DOB,
-       string MobileNo);//, string RoleName);
+        List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string Password, string RoleID, string ClusterCode,
+        string MobileNo = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -48,32 +48,32 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooks")]
         [OperationContract]
-        string GetBooks();
+        List<BookDetailsEntity> GetBooks();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageBooks")]
         [OperationContract]
-        BookDetailsEntity ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
+        List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
         string LanguageID, string PublisherID, string BookID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageCategories")]
         [OperationContract]
-        CategoryDetails ManageCategories(string cmd, string CategoryName, string Email, string CategoryID = "");
+        List<CategoryDetails> ManageCategories(string cmd, string CategoryName, string Email, string CategoryID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageLanguages")]
         [OperationContract]
-        LanguageDetails ManageLanguages(string cmd, string LanguageName, string Email, string LanguageID = "");
+        List<LanguageDetails> ManageLanguages(string cmd, string LanguageName, string Email, string LanguageID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManagePublishers")]
         [OperationContract]
-        PublisherDetails ManagePublishers(string cmd, string PublisherName, string Email, string PublisherID = "");
+        List<PublisherDetails> ManagePublishers(string cmd, string PublisherName, string Email, string PublisherID = "");
         //[END] For Book Management
 
         //[Start] For Cluster Management
@@ -81,14 +81,13 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetClusters")]
         [OperationContract]
-        // ClusterDetailsEntity GetClusters();
-        string GetClusters();
+        List<ClusterDetailsEntity> GetClusters();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageClusters")]
         [OperationContract]
-        ClusterDetailsEntity ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
+        List<ClusterDetailsEntity> ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
         string LibEmailID, string Members, string AdminEmailID, string ClusterID = "");
 
         //[END] For Cluster Management
@@ -97,14 +96,13 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetLibrarians")]
         [OperationContract]
-       // LibrarianDetailsEntity GetLibrarians();
-        string GetLibrarians();
+        List<LibrarianDetailsEntity> GetLibrarians();        
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageLibrarians")]
         [OperationContract]
-        LibrarianDetailsEntity ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
+        List<LibrarianDetailsEntity> ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
         string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="");
         //[END] For Librarian Management
 
@@ -113,14 +111,13 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetMembers")]
         [OperationContract]
-        //MemberDetailsEntity GetMembers();
-        string GetMembers();
+        List<MemberDetailsEntity> GetMembers();        
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageMembers")]
         [OperationContract]
-        MemberDetailsEntity ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
+        List<MemberDetailsEntity> ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
         string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string MemberID = "");
         //[END] For Member Management
 
@@ -129,23 +126,22 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetRequests")]
         [OperationContract]
-        string GetRequests();
+        List<RequestsDetailsEntity> GetRequests();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageRequests")]
         [OperationContract]
-        List<RequestsDetailsEntity> ManageRequests(int cmd, string FirstName, string LastName, string EmailID, string BookID, string LibrarianID,
-        string MemberID, string ClusterID, string RequestID);   
+        List<RequestsDetailsEntity> ManageRequests(int cmd, string FirstName, string LastName, string BookID, string LibrarianID,
+        string MemberID, string ClusterID, string RequestID, int AuthorID, string RequestStatus);  
         //[END] For Approvals Module
 
-        //[START] test newtonsoftjson
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "Test")]
-        //[OperationContract]
-        //string Test(string name);
-        //[End] test newton soft jspnon    
+        //[START]
+
+        //GetVersionDetails
+        //GetBooksList
+
+        //[END]
 
     }
       

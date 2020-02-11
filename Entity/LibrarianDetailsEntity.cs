@@ -18,6 +18,7 @@ namespace AnkurPrathisthan.Entity
         public string Address { get; set; }
         public string ClusterName { get; set; }
         public string AdminEmailID { get; set; }
+        public string LibrarianName { get; set; }
        
     }
 }

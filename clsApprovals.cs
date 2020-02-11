@@ -32,24 +32,23 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet HandleRequests(int cmd, string FirstName, string LastName, string EmailID, string BookID, string LibrarianID,
-        string MemberID, string ClusterID, string RequestID)
+        public DataSet HandleRequests(int cmd, string FirstName, string LastName,string BookID, string LibrarianID,
+        string MemberID, string ClusterID, string RequestID, int AuthorID, string RequestStatus)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "uspManageRequests";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[7];
+                oParam = new SqlParameter[8];                
                 oParam[0] = new SqlParameter("@RequestID", RequestID);
                 oParam[1] = new SqlParameter("@MemberID", MemberID);
                 oParam[2] = new SqlParameter("@BookID", BookID);
-               // oParam[3] = new SqlParameter("@AuthorID", Price);
-                oParam[3] = new SqlParameter("@ClusterID", ClusterID);
-                oParam[4] = new SqlParameter("@LibrarianID", LibrarianID);
-                oParam[5] = new SqlParameter("@cmd", cmd);
-                //oParam[6] = new SqlParameter("@RequestStatus", LanguageID);
-                oParam[6] = new SqlParameter("@AddedBy", EmailID);               
+                oParam[3] = new SqlParameter("@AuthorID", AuthorID);
+                oParam[4] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[5] = new SqlParameter("@LibrarianID", LibrarianID);
+                oParam[6] = new SqlParameter("@cmd", cmd);
+                oParam[7] = new SqlParameter("@RequestStatus", RequestStatus);                             
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)

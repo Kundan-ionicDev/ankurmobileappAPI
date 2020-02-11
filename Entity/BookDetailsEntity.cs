@@ -31,7 +31,7 @@ namespace AnkurPrathisthan.Entity
         public string CategoryName { get; set; }
         public string CreatedBy { get; set; }
         public string Message { get; set; }
-        public string ModifiedBy { get; set; }
+        public string ModifiedBy { get; set; }       
 
     }
 

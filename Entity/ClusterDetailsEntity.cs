@@ -7,6 +7,7 @@ namespace AnkurPrathisthan.Entity
 {
     public class ClusterDetailsEntity
     {
+        public string ClusterID { get; set; }
         public string ClusterName { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }        
