@@ -15,38 +15,20 @@ namespace AnkurPrathisthan
     {
         public DataSet GetUserDetails(string EmailID, string Password)
         {
-            DataSet ds = new DataSet();
-            // List<userdetailsEntity> param = new List<userdetailsEntity>();
+            DataSet ds = new DataSet();           
             try
             {
-
                 string ProcName = "uspLogin";
-
                 SqlParameter[] oParam = null;
-
                 oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@P_EmailID", EmailID);
-                oParam[1] = new SqlParameter("@P_Password", Password);
-
-                //string procName = "uspLogin";
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-
-                //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                //{
-                //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                //    {
-                //        EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                //        Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
-                //    }
-                //}
-
-
+                oParam[1] = new SqlParameter("@P_Password", Password);               
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password);
             }
-
             return ds;
         }
         public DataSet LogoutDetail(string EmailID)

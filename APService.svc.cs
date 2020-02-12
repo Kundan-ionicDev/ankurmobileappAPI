@@ -34,10 +34,7 @@ namespace AnkurPrathisthan
             //   string result = "";
             DataSet ds = new DataSet();
             clsAuthentication objGeneral = new clsAuthentication();
-
-            userdetailsEntity entity = new userdetailsEntity();
-            //   UserID,  FirstName,  LastName,   RoleName,
-            //OrphanageName,  CreatedDate, string ModifiedDate = "", string isActive = "",  OldPassword = "";
+            userdetailsEntity entity = new userdetailsEntity();            
             try
             {
 
@@ -56,8 +53,7 @@ namespace AnkurPrathisthan
                             if (entity.Message == "Success")
                             {
                                 entity.FullName = Convert.ToString(ds.Tables[0].Rows[0]["FullName"]);
-                                entity.EmailId = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]);
-                               // entity.Password = Convert.ToString(ds.Tables[0].Rows[0]["Password"]);
+                                entity.EmailId = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]);                              
                                 entity.RoleID = Convert.ToInt32(ds.Tables[0].Rows[0]["RoleID"]);
                                 entity.ClusterCode = Convert.ToInt32(ds.Tables[0].Rows[0]["ClusterCode"]);
                             }
@@ -80,11 +76,7 @@ namespace AnkurPrathisthan
                 ds.Dispose();
 
             }
-
-            // byte[] resultbytes = Encoding.UTF32.GetBytes(entity);
-            WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
-            return entity;
-            //  return new MemoryStream(entity);
+            return entity;         
         }
         public string UserLogout(string EmailID)
         {
@@ -107,9 +99,7 @@ namespace AnkurPrathisthan
                         {
                             result = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
                         }
-                    }
-
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 1";
+                    }                    
                 }
 
             }
@@ -122,7 +112,7 @@ namespace AnkurPrathisthan
         }
 
         public List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string Password, string RoleID,string ClusterCode,
-            string MobileNo="") //,string RoleName)
+            string MobileNo="") 
         {
             DataSet ds = new DataSet();
             clsAuthentication objGeneral = new clsAuthentication();
@@ -149,6 +139,7 @@ namespace AnkurPrathisthan
                             ClusterCode = Convert.ToInt32(ds.Tables[0].Rows[i]["ClusterCode"]),
                             Mobile = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                             RoleID = Convert.ToInt32(ds.Tables[0].Rows[i]["RoleID"]),
+                            Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"])
                             
                         }); 
                             
@@ -275,7 +266,7 @@ namespace AnkurPrathisthan
                             {
                                 BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]),
                                 BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),
-                                AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["Author"]),
+                                AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]),
                                 Price = Convert.ToString(ds.Tables[0].Rows[i]["Price"]),
                                 Stock = Convert.ToString(ds.Tables[0].Rows[i]["Stock"]),
                                 CategoryID = Convert.ToString(ds.Tables[0].Rows[i]["CategoryID"]),
@@ -370,8 +361,8 @@ namespace AnkurPrathisthan
                             entity.Add(new LanguageDetails
                             {
 
-                                LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguageID"]),
-                                LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguageName"]),
+                                LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesID"]),
+                                LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]),
                                 CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
                                 ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
                             });
