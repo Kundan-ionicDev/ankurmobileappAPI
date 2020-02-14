@@ -21,7 +21,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "UserLogin")]
         [OperationContract]
-        userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string isnewapp);
+        userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string platform, string FCMID, string IMEI);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -33,8 +33,8 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "UserRegister")]
         [OperationContract]
-        List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string Password, string RoleID, string ClusterCode,
-        string MobileNo = "");
+        List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string RoleID, string ClusterCode,
+            string MobileNo = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -49,6 +49,12 @@ namespace AnkurPrathisthan
         UriTemplate = "GetBooks")]
         [OperationContract]
         List<BookDetailsEntity> GetBooks();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetBooksData")]
+        [OperationContract]
+        List<BooksData> GetBooksData(string Mode);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -88,7 +94,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageClusters")]
         [OperationContract]
         List<ClusterDetailsEntity> ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
-        string LibEmailID, string Members, string AdminEmailID, string ClusterID = "");
+        string LibrarianID, string Members, string AdminEmailID, string ClusterID = "");
 
         //[END] For Cluster Management
         //[START] For Librarian Management

@@ -96,6 +96,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\Books\" />
+    <Folder Include="Uploads\Clusters\" />
+    <Folder Include="Uploads\Librarian\" />
+    <Folder Include="Uploads\Members\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

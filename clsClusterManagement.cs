@@ -30,7 +30,7 @@ namespace AnkurPrathisthan
         }
 
         public DataSet HandleClusters(string ClusterName, string ClusterCode, string cmd, string EmailID = "", string Address = "", string MobileNo = "",
-        string LibEmailID="",string Members="",string AdminEmailID="", string ClusterID ="")
+        string LibrarianID = "", string Members = "", string AdminEmailID = "", string ClusterID = "")
         {
             DataSet ds = new DataSet();
             try
@@ -44,7 +44,7 @@ namespace AnkurPrathisthan
                 oParam[3] = new SqlParameter("@EmailID", EmailID);
                 oParam[4] = new SqlParameter("@Address", Address);
                 oParam[5] = new SqlParameter("@Mob", MobileNo);
-                oParam[6] = new SqlParameter("@LibEmailID", LibEmailID);
+                oParam[6] = new SqlParameter("@LibrarianID", LibrarianID);
                 oParam[7] = new SqlParameter("@Members", Members);
                 oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
                 oParam[9] = new SqlParameter("@ClusterID", ClusterID);

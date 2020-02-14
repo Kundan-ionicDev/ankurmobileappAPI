@@ -53,4 +53,18 @@ namespace AnkurPrathisthan.Entity
         public string Message { get; set; }
     }
 
+
+    public class BooksData
+    {
+        public string  PublisherID { get; set; }
+        public string PublisherName{ get; set; }
+        public string CategoryID { get; set; }
+        public string  CategoryName { get; set; }
+        public string  AuthorID { get; set; }
+        public string AuthorName { get; set; }
+        public string LanguageID { get; set; }
+        public string LanguageName { get; set; }
+
+
+    }
 }

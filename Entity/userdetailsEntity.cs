@@ -21,4 +21,11 @@ namespace AnkurPrathisthan.Entity
         public int ClusterCode { get; set; }
         
     }
+
+    public class ForgotPasswordEntity
+    {
+        public string OTP { get; set; }
+        public string Email { get; set; }
+
+    }
 }

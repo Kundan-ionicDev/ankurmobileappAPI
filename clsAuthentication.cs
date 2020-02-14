@@ -6,6 +6,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Xml;
 
@@ -13,7 +15,13 @@ namespace AnkurPrathisthan
 {
     public class clsAuthentication
     {
-        public DataSet GetUserDetails(string EmailID, string Password)
+        //[START] For Email sending         
+        public string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
+        public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
+        public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
+        //[END] For Email sending
+
+        public DataSet GetUserDetails(string EmailID, string Password, string FCMID)
         {
             DataSet ds = new DataSet();           
             try
@@ -22,7 +30,8 @@ namespace AnkurPrathisthan
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@P_EmailID", EmailID);
-                oParam[1] = new SqlParameter("@P_Password", Password);               
+                oParam[1] = new SqlParameter("@P_Password", Password);
+                oParam[1] = new SqlParameter("@p_fcmId", FCMID);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
             }
             catch (Exception ex)
@@ -97,6 +106,127 @@ namespace AnkurPrathisthan
 
             return ds;
         }
+
+        //[For Email send]
+        public string SendEmail(string EmailID)
+        {
+            string Password = ""; string ServerName = SMTPSERVER;
+            int PORTNO = 25; string Sender = USERNAME; string credential = PASSWORD;
+            Password = CreateRandomPassword();
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.EnableSsl = false;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Ankur Pratishthan Login Credentials";
+              /* string htmlString= @"<html>
+                  //    <body>
+                      <p>Dear AnkurPratishthan User,</p>
+                      <p>Thank you for registering for Mobile Library with Ankur Pratishthan.Please find below credentials for your Login</p>                     
+                      </body>
+                      </html>"; */
+
+               message.Body = "Dear AnkurPratishthan User, Thank you for registering for Mobile Library with Ankur Pratishthan.Please find below credentials for your Login::  " +Password;
+               message.IsBodyHtml = true; 
+             
+                message.To.Add(EmailID);                              
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return Password;
+        }
+        //[END] [For email send]
+
+        //[START]to create password
+        private static string CreateRandomPassword()
+        {              
+            int length = 8;
+            string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+            Random random = new Random();            
+            char[] chars = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            return (new string (chars));
+        } //[END]to create password
+
+
+        //[START] OTP FOR FORGOT PASSWORD
+        //public DataSet InsertOtp (string otp,string EmailID)
+        //{
+        //    DataSet ds = null;
+        //    try
+        //    {
+        //        string ProcName = "uspInsertOTP";
+        //        SqlParameter[] oParam = null;
+        //        oParam = new SqlParameter[2];
+        //        oParam[0] = new SqlParameter("@EmailID", EmailID);
+        //        oParam[1] = new SqlParameter("@OTP", otp);
+        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("APService----Error in InsertOTP" + ex.Message, EmailID, otp);
+        //    }
+        //    return ds;
+
+        //}
+
+        //public string CreateOTP(string EmailID)
+        //{
+        //    DataSet ds = new DataSet();
+        //    int length = 4;
+        //    //string chars = "";
+        //    string validChars = "0123456789";
+        //    Random random = new Random();
+        //    char[] chars = new char[length];
+        //    for (int i = 0; i < length; i++)
+        //    {
+        //        chars[i] = validChars[random.Next(0, validChars.Length)];
+        //    }
+        //    return (new string(chars));
+        //}
+
+        //public DataSet ValidateOTP(string EmailID, string otp)
+        //{
+        //    DataSet ds = new DataSet();
+        //    try
+        //    {
+        //        string ProcName = "ValidateOTP";
+        //        SqlParameter[] oParam = null;
+        //        oParam = new SqlParameter[2];
+        //        oParam[0] = new SqlParameter("@EmailID", EmailID);
+        //        oParam[1] = new SqlParameter("@OTP", otp);
+        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+        //        if (ds.Tables.Count>0 && ds.Tables[0].Rows[0] != null)
+        //        {
+        //            for (int i =0; i> ds.Tables.Count;i++)
+        //            {
+        //                if (ds.Tables[0].Rows[i]["Message"] == "OTP Valid")
+        //                {
+        //                    return ds;
+        //                }                                                  
+        //            }
+                    
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("APService----Error in ValidateOTP" + ex.Message, EmailID, otp);
+        //    }
+        //    return ds;
+        //}
+        //[END] OTP FOR FORGOT PASSWORD
 
         public sealed class SqlHelper
         {

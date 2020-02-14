@@ -12,6 +12,8 @@ using System.Text;
 using Gma.QrCodeNet.Encoding;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using System.Net.Mail;
+using System.Net;
 
 
 namespace AnkurPrathisthan
@@ -20,16 +22,31 @@ namespace AnkurPrathisthan
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class APService : IAPService
     {
+        //[START] For Email sending          
+        public static string PORTNO = System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString();
+        public static string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
+        public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
+        public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString(); 
+        //[END] For Email sending
+
         //[START] FOR login & logout
-        public userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string isnewapp)
+        public userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string platform, string FCMID, string IMEI)
         {
             if (deviceinfo == null)
             {
                 deviceinfo = "";
             }
-            if (isnewapp == null)
+            if (platform == null)
             {
-                isnewapp = "";
+                platform = "";
+            }
+            if (FCMID == null)
+            {
+                FCMID="";
+            }
+            if (IMEI==null)
+            {
+                IMEI = "";
             }
             //   string result = "";
             DataSet ds = new DataSet();
@@ -44,7 +61,7 @@ namespace AnkurPrathisthan
                 }
                 else
                 {
-                    ds = objGeneral.GetUserDetails(EmailID, Password);
+                    ds = objGeneral.GetUserDetails(EmailID, Password, FCMID);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -66,7 +83,7 @@ namespace AnkurPrathisthan
 
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password, deviceinfo, isnewapp);
+                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password, deviceinfo);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
             }
 
@@ -111,22 +128,23 @@ namespace AnkurPrathisthan
             return result;
         }
 
-        public List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string Password, string RoleID,string ClusterCode,
+            public List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string RoleID,string ClusterCode,
             string MobileNo="") 
         {
             DataSet ds = new DataSet();
-            clsAuthentication objGeneral = new clsAuthentication();
+            string Password = ""; //generated from email sending 
+            clsAuthentication objAuth = new clsAuthentication();
             List<userdetailsEntity> entity = new List<userdetailsEntity>();
             try
             {
-                if (EmailID == null || Password == null || FirstName == null) //|| RoleName == null)
+                if (EmailID == null || FirstName == null)
                 {
                     WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
                 }
-
                 else
                 {
-                    ds = objGeneral.RegisterUser(FirstName, LastName, EmailID, Password, ClusterCode, RoleID, MobileNo,"");
+                    Password = objAuth.SendEmail(EmailID); //Email sending for new password for new user
+                    ds = objAuth.RegisterUser(FirstName, LastName, EmailID, Password, ClusterCode, RoleID, MobileNo, "");
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -160,7 +178,8 @@ namespace AnkurPrathisthan
         public userdetailsEntity ForgotPassword(string EmailID, string Password)
         {
             DataSet ds = new DataSet();
-            clsAuthentication objGeneral = new clsAuthentication();
+            string OTP = "";
+            clsAuthentication obj= new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
             try
             {
@@ -171,7 +190,12 @@ namespace AnkurPrathisthan
 
                 else
                 {
-                    ds = objGeneral.PasswordReset(EmailID, Password);
+                    //[START]Forgot password email sending for otp 
+                  //  OTP = obj.CreateOTP(EmailID);
+                    //string validotp = 
+                    // obj.InsertOtp(OTP, EmailID);
+                    //[END]Forgot password email sending for otp
+                    ds = obj.PasswordReset(EmailID, Password);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -225,6 +249,42 @@ namespace AnkurPrathisthan
             return entity;
             
         }
+        //to get publisher author cateory languages data
+       public List<BooksData> GetBooksData(string Mode)
+        {
+            DataSet ds = new DataSet();
+            List<BooksData> bd = new List<BooksData>();
+            clsBookManagement bm = new clsBookManagement();
+            try
+            {
+                ds = bm.GetData(Mode);
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        bd.Add(new BooksData
+                        {                            
+                            AuthorName = Convert.ToString(ds.Tables[0].Rows[i]["AuthorName"]),
+                            AuthorID = Convert.ToString(ds.Tables[0].Rows[i]["AuthorID"]),
+                            CategoryName = Convert.ToString(ds.Tables[0].Rows[i]["CategoryName"]),
+                            CategoryID = Convert.ToString(ds.Tables[0].Rows[i]["CategoryID"]),
+                            LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesID"]),
+                            LanguageName = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]),
+                            PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]),
+                            PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"]),
+                        });
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }
+
+            return bd;
+
+        }
+
 
         public List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
         string LanguageID, string PublisherID, string BookID = "")
@@ -282,6 +342,7 @@ namespace AnkurPrathisthan
                         }
 
                     }
+
                 }
 
             }
@@ -449,7 +510,7 @@ namespace AnkurPrathisthan
                                 Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                                 MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                                 Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]),                      
-                                Librarian = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"])
+                                LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"])
                           });
 
                       }
@@ -465,7 +526,7 @@ namespace AnkurPrathisthan
         }
 
         public List<ClusterDetailsEntity> ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
-        string LibEmailID, string Members, string AdminEmailID, string ClusterID = "")
+        string LibrarianID, string Members, string AdminEmailID, string ClusterID = "")
         {
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
@@ -479,8 +540,8 @@ namespace AnkurPrathisthan
             if (Address == null) Address = "";
             if (MobileNo == null)
                 MobileNo = "";
-            if (LibEmailID == null)
-                LibEmailID = "";
+            if (LibrarianID == null)
+                LibrarianID = "";
             if (Members == null)
                 Members = "";
             if (AdminEmailID == null)
@@ -495,7 +556,7 @@ namespace AnkurPrathisthan
 
                 else
                 {
-                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibEmailID, Members, AdminEmailID, ClusterID);
+                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID);
 
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -510,7 +571,8 @@ namespace AnkurPrathisthan
                                 Email = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
                                 Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                                 MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),                              
-                                Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]),                               
+                                Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]),
+                              //  LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]),
                             });
 
                          
@@ -603,7 +665,8 @@ namespace AnkurPrathisthan
                             MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                             AltMobileNo = Convert.ToString(ds.Tables[0].Rows[i]["AltMobileNo"]),
                             ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
-                            AdminEmailID = Convert.ToString(ds.Tables[0].Rows[i]["AdminEmailID"])                            
+                            CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                            ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
                         });
                        
 
@@ -758,12 +821,12 @@ namespace AnkurPrathisthan
                         requests.Add
                        (new RequestsDetailsEntity()
                     {
-                        MemberName = ds.Tables[0].Rows[i]["MemberName"].ToString(),
-                        RequestedDate = ds.Tables[0].Rows[i]["RequestedDate "].ToString(),
-                        BookName = ds.Tables[0].Rows[i]["BookName"].ToString(),
-                        AuthorName = ds.Tables[0].Rows[i]["AuthorName"].ToString(),
-                        LibrarianName = ds.Tables[0].Rows[i]["LibrarianName"].ToString(),
-                        ClusterName = ds.Tables[0].Rows[i]["ClusterName"].ToString()
+                        MemberID = ds.Tables[0].Rows[i]["MemberID"].ToString(),
+                        RequestID = ds.Tables[0].Rows[i]["RequestID"].ToString(),
+                        BookID = ds.Tables[0].Rows[i]["BookID"].ToString(),
+                        AuthorID = ds.Tables[0].Rows[i]["AuthorID"].ToString(),
+                        LibrarianID = ds.Tables[0].Rows[i]["LibrarianID"].ToString(),
+                        ClusterID = ds.Tables[0].Rows[i]["ClusterID"].ToString()
                     });
                     }
                 }

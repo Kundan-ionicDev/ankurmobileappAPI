@@ -13,7 +13,7 @@ namespace AnkurPrathisthan.Entity
         public string Address { get; set; }        
         public string ClusterCode { get; set; }
         public string MobileNo { get; set; }       
-        public string Librarian { get; set; }
+        public string LibrarianID { get; set; }
         public string Members { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDate { get; set; }
