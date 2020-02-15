@@ -178,7 +178,7 @@ namespace AnkurPrathisthan
         public userdetailsEntity ForgotPassword(string EmailID, string Password)
         {
             DataSet ds = new DataSet();
-            string OTP = "";
+           // string OTP = "";
             clsAuthentication obj= new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
             try

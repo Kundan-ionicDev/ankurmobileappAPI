@@ -68,6 +68,21 @@
   <ItemGroup>
     <Content Include="APService.svc" />
     <Content Include="Global.asax" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  01.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  02 %281%29.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  02.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  03 %281%29.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  03.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  04.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  05 %281%29.jpg" />
+    <Content Include="Uploads\Books\Aesop%27s Fables  05.jpg" />
+    <Content Include="Uploads\Books\Classic Fairy Tales  01 The Three Litle Pigs.jpg" />
+    <Content Include="Uploads\Books\Classic Fairy Tales  03 Puss In Boots.jpg" />
+    <Content Include="Uploads\Books\१०० आवडत्या गोष्टी.jpg" />
+    <Content Include="Uploads\Books\१२१ शौर्यकथा.jpg" />
+    <Content Include="Uploads\Books\१५१ चातुर्य कथा.jpg" />
+    <Content Include="Uploads\Books\१९७१ चे अभिमन्यू.jpg" />
+    <Content Include="Uploads\Books\७५ गोष्टी श्रीकृष्णाच्या.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Uploads\Books\" />
     <Folder Include="Uploads\Clusters\" />
     <Folder Include="Uploads\Librarian\" />
     <Folder Include="Uploads\Members\" />
