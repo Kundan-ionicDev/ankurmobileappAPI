@@ -28,10 +28,10 @@ namespace AnkurPrathisthan
             {
                 string ProcName = "uspLogin";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[2];
+                oParam = new SqlParameter[3];
                 oParam[0] = new SqlParameter("@P_EmailID", EmailID);
                 oParam[1] = new SqlParameter("@P_Password", Password);
-                oParam[1] = new SqlParameter("@p_fcmId", FCMID);
+                oParam[2] = new SqlParameter("@p_fcmId", FCMID);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
             }
             catch (Exception ex)
