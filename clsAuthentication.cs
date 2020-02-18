@@ -128,7 +128,7 @@ namespace AnkurPrathisthan
 
         }
 
-        public string CreateOTP(string EmailID)
+        public string CreateOTP()
         {
             DataSet ds = new DataSet();
             int length = 4;            
@@ -152,18 +152,7 @@ namespace AnkurPrathisthan
                 oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@OTP", otp);
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows[0] != null)
-                {
-                    for (int i = 0; i > ds.Tables.Count; i++)
-                    {
-                        if (ds.Tables[0].Rows[i]["Message"].ToString() == "OTP Valid")
-                        {
-                            return ds;
-                        }
-                    }
-
-                }
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);                                
             }
             catch (Exception ex)
             {
@@ -173,8 +162,8 @@ namespace AnkurPrathisthan
         }
         //[EMAIL for forgot paasword otp]
         public string SendOTPEmail(string EmailID, string OTP)
-        {           
-              
+        {
+            string IsEmailSent = "";
             string ServerName = SMTPSERVER;
             int PORTNO = 25; string Sender = USERNAME; string credential = PASSWORD;
            // OTP = CreateOTP(EmailID);
@@ -196,26 +185,13 @@ namespace AnkurPrathisthan
 
                 message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   " + OTP;
                 message.IsBodyHtml = true;
-
                 message.To.Add(EmailID);
                 try
                 {
                     smtpClient.Send(message);
-                    DataSet dsnew = new DataSet();
-                    dsnew = InsertOtp(OTP, EmailID);
-                    if (dsnew != null && dsnew.Tables.Count > 0)
-                    {
-                        if (dsnew.Tables[0].Rows[0][""].ToString() == "")
-                        {
-                            //return dsnew;
-                        }
-                    }
-                }
-               // try
-              //  {
-                    
-              //  }
-                
+                    message.DeliveryNotificationOptions = System.Net.Mail.DeliveryNotificationOptions.OnSuccess;
+                    IsEmailSent = message.DeliveryNotificationOptions.ToString();
+                } 
                 catch (Exception ex)
                 {
                     throw ex;

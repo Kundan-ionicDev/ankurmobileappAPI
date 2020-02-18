@@ -22,9 +22,16 @@ namespace AnkurPrathisthan.Entity
         public string BookID { get; set; }
         public string Message { get; set; }
         public string qrcode { get; set; }
+        public string ThumbImage { get; set; }
         public string BookDescription { get; set; }
+    }
 
-    }   
+    public class BookImages
+    {
+        public string BookID { get; set; }
+        public int ImageId { get; set; }
+        public string ImagePath { get; set; }
+    }
 
     public class CategoryDetails
     {

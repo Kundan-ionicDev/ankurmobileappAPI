@@ -68,7 +68,7 @@
   <ItemGroup>
     <Content Include="APService.svc" />
     <Content Include="Global.asax" />
-    <Content Include="Uploads\Books\Aesop%27s Fables  01.jpg" />
+    <Content Include="Uploads\Books\AesopsFables.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02 %281%29.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  03 %281%29.jpg" />

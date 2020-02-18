@@ -179,78 +179,68 @@ namespace AnkurPrathisthan
         }
         //[END] For Admin Creation
         //[START] FOR FORGOT PASSWORD VIA OTP ON EMAIL
-        public userdetailsEntity ForgotPassword(string EmailID, string Password)
+        public string SendOTPEmail(string EmailID)
         {
             DataSet ds = new DataSet();
             string newOTP = "";
-            DataSet dsInsert = new DataSet();
-            DataSet dsValidate = new DataSet();
+            string Message = ""; 
+            DataSet dsInsert = new DataSet();            
             clsAuthentication obj = new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
+
             try
             {
-                if (EmailID == null || Password == null)
+                newOTP = obj.CreateOTP();
+                dsInsert = obj.InsertOtp(newOTP, EmailID);
+                if (dsInsert.Tables.Count > 0 && dsInsert.Tables[0].Rows.Count > 0)
                 {
-
-                }
-
-                else
-                {
-                    // newOTP = obj.CreateOTP(EmailID);
-                    dsInsert = obj.InsertOtp(newOTP, EmailID);
-                    string EmailMessage = "";
-                    //[START] [Email OTP for Forgot Password]
-                    // if (newOTP!= null && newOTP.Trim()!= null && newOTP.Length!= 0 )
-                    // {
-                    if (dsInsert.Tables.Count > 0 && dsInsert.Tables[0].Rows.Count > 0)
+                    Message = dsInsert.Tables[0].Rows[0]["Message"].ToString();
+                    if (Message == "SUCCESS")
                     {
-                        for (int i = 0; i < dsInsert.Tables.Count; i++)
-                        {
-                            if (dsInsert.Tables[0].Rows[i]["Message"].ToString() == "Success")
-                            {
-                                EmailMessage = obj.SendOTPEmail(EmailID, newOTP);
-                                if (EmailMessage != null && EmailMessage == "SuccessOTP")
-                                {
-                                    dsValidate = obj.ValidateOTP(EmailID, newOTP);
-
-                                    if (dsValidate.Tables.Count > 0 && dsValidate.Tables[0].Rows.Count > 0)
-                                    {
-                                        for (int i2 = 0; i2 < dsValidate.Tables.Count; i++)
-                                        {
-                                            if (dsValidate.Tables[0].Rows[i2]["Message"].ToString() == "OTP Valid")
-                                            {
-                                                ds = obj.PasswordReset(EmailID, Password);
-                                                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                                                {
-                                                    entity.Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        string objIsEmailSent = obj.SendOTPEmail(EmailID, newOTP);
                     }
-
-                    //   }
-
-
-
-
-
-                    //  }                                   
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- ForgotPassword" + ex.Message, EmailID, Password);
+                Console.WriteLine("APService----Error in API-- SendOTPEmail" + ex.Message, EmailID);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
             }
-            return entity;
+            return Message;
         }
         //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL
         //[END] For login & logout
 
+        public string ValidateOTP(string EmailID, string OTP,string Password)
+        {
+            string Message = "";
+            DataSet ds = new DataSet();           
+            clsAuthentication obj = new clsAuthentication();
+            DataSet dspwdchange = new DataSet();
+            try
+            {
+                ds = obj.ValidateOTP(EmailID, OTP);
+                if (ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows[0]["Message"].ToString()== "VALID")
+                    {
+                        dspwdchange = obj.PasswordReset(EmailID, Password);
+                        if (dspwdchange.Tables.Count>0 )
+                        {
+                            Message = dspwdchange.Tables[0].Rows[0]["Message"].ToString(); 
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ForgotPassword" + ex.Message);
+                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+            }
+            return Message;
+        }
+            
+            
         //[START] For Book Management        
         public List<BookDetailsEntity> GetBooks()
         {
@@ -276,8 +266,9 @@ namespace AnkurPrathisthan
                             CategoryID = Convert.ToString(ds.Tables[0].Rows[i]["CategoryID"]),
                             Language = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesName"]),
                             LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguagesID"]),
-                            BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),                            
+                            BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),
                             PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]),
+                            ThumbImage = Convert.ToString(ds.Tables[0].Rows[i]["ThumbImage"]),
                             PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"])
                         });
                     }
@@ -325,7 +316,7 @@ namespace AnkurPrathisthan
                         //    PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]),
                         //    PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"]),
                         //});
-                    }    
+                    }
                 }
                 if (ds.Tables[1].Rows.Count > 0)
                 {
@@ -376,7 +367,7 @@ namespace AnkurPrathisthan
                 //}
             }
             catch (Exception ex)
-            {                
+            {
                 throw ex;
             }
 

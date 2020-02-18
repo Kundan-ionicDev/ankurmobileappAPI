@@ -38,9 +38,15 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "ForgotPassword")]
+        UriTemplate = "SendOTPEmail")]
         [OperationContract]
-        userdetailsEntity ForgotPassword(string EmailID, string Password);
+        string SendOTPEmail(string EmailID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ValidateOTP")]
+        [OperationContract]
+        string ValidateOTP(string EmailID, string OTP, string Password);
         //[END] For Authentication
         //[STARt] For Book Management
 
