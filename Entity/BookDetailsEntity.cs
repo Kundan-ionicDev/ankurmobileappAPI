@@ -22,6 +22,7 @@ namespace AnkurPrathisthan.Entity
         public string BookID { get; set; }
         public string Message { get; set; }
         public string qrcode { get; set; }
+        public string BookDescription { get; set; }
 
     }   
 
@@ -53,6 +54,12 @@ namespace AnkurPrathisthan.Entity
         public string Message { get; set; }
     }
 
+    public class BookDetails
+    {
+        public List<PublisherDetails> Publishers { get;set;}
+        public List<LanguageDetails> Languages { get; set; }
+        public List<CategoryDetails> Categories { get; set; }
+    }
 
     public class BooksData
     {

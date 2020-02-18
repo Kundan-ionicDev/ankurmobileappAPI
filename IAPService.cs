@@ -41,7 +41,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ForgotPassword")]
         [OperationContract]
         userdetailsEntity ForgotPassword(string EmailID, string Password);
-        //[END] Added by ARya For Authentication
+        //[END] For Authentication
         //[STARt] For Book Management
 
         [WebInvoke(Method = "POST",
@@ -54,7 +54,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooksData")]
         [OperationContract]
-        List<BooksData> GetBooksData(string Mode);
+        List<BookDetails> GetBooksData();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

@@ -140,17 +140,18 @@ namespace AnkurPrathisthan
             return ds;
 
         }
-        public DataSet GetData(string Mode)
+        public DataSet GetData()
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "GetData";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[1];
-                oParam[0] = new SqlParameter("@Mode",Mode);               
-
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
+                //oParam = new SqlParameter[1];
+                //oParam[0] = new SqlParameter("@Mode",Mode);               
+                BookDetails objbooks = new BookDetails();
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                
             }
             catch (Exception ex)
             {

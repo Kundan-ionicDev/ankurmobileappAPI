@@ -28,10 +28,10 @@ namespace AnkurPrathisthan
             {
                 string ProcName = "uspLogin";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[2];
+                oParam = new SqlParameter[3];
                 oParam[0] = new SqlParameter("@P_EmailID", EmailID);
                 oParam[1] = new SqlParameter("@P_Password", Password);
-                oParam[1] = new SqlParameter("@p_fcmId", FCMID);
+                oParam[2] = new SqlParameter("@p_fcmId", FCMID);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
             }
             catch (Exception ex)
@@ -59,6 +59,7 @@ namespace AnkurPrathisthan
             return ds;
         }
 
+        //[START] For admin registration
         public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password,
             string ClusterCode, string RoleID,string MobileNo="", string OldPassword="")
         {
@@ -86,7 +87,7 @@ namespace AnkurPrathisthan
 
             return ds;
         }
-
+        //[END] For admin registration
         public DataSet PasswordReset(string EmailID, string Password)
         {
             DataSet ds = new DataSet();
@@ -106,8 +107,126 @@ namespace AnkurPrathisthan
 
             return ds;
         }
+        // [START] OTP FOR FORGOT PASSWORD
+        public DataSet InsertOtp(string otp, string EmailID)
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "uspInsertOTP";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@OTP", otp);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in InsertOTP" + ex.Message, EmailID, otp);
+            }
+            return ds;
 
-        //[For Email send]
+        }
+
+        public string CreateOTP(string EmailID)
+        {
+            DataSet ds = new DataSet();
+            int length = 4;            
+            string validChars = "0123456789";
+            Random random = new Random();
+            char[] chars = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            return (new string(chars));
+        }
+
+        public DataSet ValidateOTP(string EmailID, string otp)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ValidateOTP";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@OTP", otp);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows[0] != null)
+                {
+                    for (int i = 0; i > ds.Tables.Count; i++)
+                    {
+                        if (ds.Tables[0].Rows[i]["Message"].ToString() == "OTP Valid")
+                        {
+                            return ds;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in ValidateOTP" + ex.Message, EmailID, otp);
+            }
+            return ds;
+        }
+        //[EMAIL for forgot paasword otp]
+        public string SendOTPEmail(string EmailID, string OTP)
+        {           
+              
+            string ServerName = SMTPSERVER;
+            int PORTNO = 25; string Sender = USERNAME; string credential = PASSWORD;
+           // OTP = CreateOTP(EmailID);
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.EnableSsl = false;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Ankur Pratishthan Password Reset";
+                /* string htmlString= @"<html>
+                    //    <body>
+                        <p>Dear AnkurPratishthan User,</p>
+                        <p>Thank you for registering for Mobile Library with Ankur Pratishthan.Please find below credentials for your Login</p>                     
+                        </body>
+                        </html>"; */
+
+                message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   " + OTP;
+                message.IsBodyHtml = true;
+
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                    DataSet dsnew = new DataSet();
+                    dsnew = InsertOtp(OTP, EmailID);
+                    if (dsnew != null && dsnew.Tables.Count > 0)
+                    {
+                        if (dsnew.Tables[0].Rows[0][""].ToString() == "")
+                        {
+                            //return dsnew;
+                        }
+                    }
+                }
+               // try
+              //  {
+                    
+              //  }
+                
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return "";
+        }
+        //[EMD] EMAIL FOR FROGOT PASWPRD OTP
+        // [END] OTP FOR FORGOT PASSWORD
+
+        //[For Email send for new user regsitrations]
         public string SendEmail(string EmailID)
         {
             string Password = ""; string ServerName = SMTPSERVER;
@@ -121,7 +240,7 @@ namespace AnkurPrathisthan
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
-                message.Subject = "Ankur Pratishthan Login Credentials";
+                message.Subject = "Support Ankur Pratishthan";
               /* string htmlString= @"<html>
                   //    <body>
                       <p>Dear AnkurPratishthan User,</p>
@@ -129,7 +248,7 @@ namespace AnkurPrathisthan
                       </body>
                       </html>"; */
 
-               message.Body = "Dear AnkurPratishthan User, Thank you for registering for Mobile Library with Ankur Pratishthan.Please find below credentials for your Login::  " +Password;
+               message.Body = "Ankur Pratishthan Login Credentials  " +Password;
                message.IsBodyHtml = true; 
              
                 message.To.Add(EmailID);                              
@@ -144,7 +263,7 @@ namespace AnkurPrathisthan
             }
             return Password;
         }
-        //[END] [For email send]
+        //[END] [For email send for new user registration]
 
         //[START]to create password
         private static string CreateRandomPassword()
@@ -161,72 +280,7 @@ namespace AnkurPrathisthan
         } //[END]to create password
 
 
-        //[START] OTP FOR FORGOT PASSWORD
-        //public DataSet InsertOtp (string otp,string EmailID)
-        //{
-        //    DataSet ds = null;
-        //    try
-        //    {
-        //        string ProcName = "uspInsertOTP";
-        //        SqlParameter[] oParam = null;
-        //        oParam = new SqlParameter[2];
-        //        oParam[0] = new SqlParameter("@EmailID", EmailID);
-        //        oParam[1] = new SqlParameter("@OTP", otp);
-        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("APService----Error in InsertOTP" + ex.Message, EmailID, otp);
-        //    }
-        //    return ds;
-
-        //}
-
-        //public string CreateOTP(string EmailID)
-        //{
-        //    DataSet ds = new DataSet();
-        //    int length = 4;
-        //    //string chars = "";
-        //    string validChars = "0123456789";
-        //    Random random = new Random();
-        //    char[] chars = new char[length];
-        //    for (int i = 0; i < length; i++)
-        //    {
-        //        chars[i] = validChars[random.Next(0, validChars.Length)];
-        //    }
-        //    return (new string(chars));
-        //}
-
-        //public DataSet ValidateOTP(string EmailID, string otp)
-        //{
-        //    DataSet ds = new DataSet();
-        //    try
-        //    {
-        //        string ProcName = "ValidateOTP";
-        //        SqlParameter[] oParam = null;
-        //        oParam = new SqlParameter[2];
-        //        oParam[0] = new SqlParameter("@EmailID", EmailID);
-        //        oParam[1] = new SqlParameter("@OTP", otp);
-        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-        //        if (ds.Tables.Count>0 && ds.Tables[0].Rows[0] != null)
-        //        {
-        //            for (int i =0; i> ds.Tables.Count;i++)
-        //            {
-        //                if (ds.Tables[0].Rows[i]["Message"] == "OTP Valid")
-        //                {
-        //                    return ds;
-        //                }                                                  
-        //            }
-                    
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("APService----Error in ValidateOTP" + ex.Message, EmailID, otp);
-        //    }
-        //    return ds;
-        //}
-        //[END] OTP FOR FORGOT PASSWORD
+      
 
         public sealed class SqlHelper
         {
