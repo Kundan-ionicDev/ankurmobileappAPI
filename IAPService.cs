@@ -10,6 +10,7 @@ using System.Text;
 using System.Data;
 using System.Data.Sql;
 using System.Collections;
+using System.Drawing;
 namespace AnkurPrathisthan
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
@@ -56,18 +57,30 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<BookDetailsEntity> GetBooks();
 
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "SubmitImages")]
+        //[OperationContract]
+        //List<BookDetailsEntity> SubmitImages();
+
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooksData")]
         [OperationContract]
         List<BookDetails> GetBooksData();
 
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "GetImages")]
+        //[OperationContract]
+        //List<BookImages> GetImages();
+
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageBooks")]
         [OperationContract]
         List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
-        string LanguageID, string PublisherID, string BookID = "");
+        string LanguageID, string PublisherID, string BookDescription, string ThumbImg64, string Img1, string BookID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -86,6 +99,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ManagePublishers")]
         [OperationContract]
         List<PublisherDetails> ManagePublishers(string cmd, string PublisherName, string Email, string PublisherID = "");
+        
         //[END] For Book Management
 
         //[Start] For Cluster Management
@@ -100,22 +114,35 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageClusters")]
         [OperationContract]
         List<ClusterDetailsEntity> ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
-        string LibrarianID, string Members, string AdminEmailID, string ClusterID = "");
+        string LibrarianID, string Members, string AdminEmailID, string Image64 = "", string ClusterID = "");
 
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetClusterHeads")]
+        [OperationContract]
+        List<ClusterHeadEntity> GetClusterHeads();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageClusterHeads")]
+        [OperationContract]
+        List<ClusterHeadEntity> ManageClusterHeads(string FirstName, string LastName, string AdminEmailID, string ClusterHeadID,
+        int cmd, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterRegionID);
         //[END] For Cluster Management
+
         //[START] For Librarian Management
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetLibrarians")]
         [OperationContract]
-        List<LibrarianDetailsEntity> GetLibrarians();        
+        List<LibrarianDetailsEntity> GetLibrarians();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageLibrarians")]
         [OperationContract]
-        List<LibrarianDetailsEntity> ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
-        string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="");
+        List<LibrarianDetailsEntity> ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID,
+        string Address, string MobileNo, string AltMobileNo, string ClusterID, string AdminEmailID, string Image64, string LibrarianID = "");
         //[END] For Librarian Management
 
         //[START] For Member Management
@@ -123,14 +150,14 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetMembers")]
         [OperationContract]
-        List<MemberDetailsEntity> GetMembers();        
+        List<MemberDetailsEntity> GetMembers();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageMembers")]
         [OperationContract]
-        List<MemberDetailsEntity> ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, 
-        string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string MemberID = "");
+        List<MemberDetailsEntity> ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo,
+        string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string Image64, string MemberID = "");
         //[END] For Member Management
 
         //[START] For Approvals Module
@@ -148,13 +175,11 @@ namespace AnkurPrathisthan
         string MemberID, string ClusterID, string RequestID, int AuthorID, string RequestStatus);  
         //[END] For Approvals Module
 
-        //[START]
-
-        //GetVersionDetails
-        //GetBooksList
-
-        //[END]
-
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "Base64ToImage")]
+        //[OperationContract]
+        //Image Base64ToImage(string base64string);
     }
       
 }

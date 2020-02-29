@@ -13,13 +13,13 @@ namespace AnkurPrathisthan
     public class clsQRCode
     {
         //To generate QRCode
-        public string GenerateQRCode(string BookID, string BookName, string Authorname)
+        public string GenerateQRCode(string BookID, string BookName)
         {
             string qr_id = "";
             try
             {               
                 var qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
-                var qrCode = qrEncoder.Encode(BookID+BookName+Authorname);
+                var qrCode = qrEncoder.Encode(BookID+BookName);
                 long i= 1;
                 foreach (byte b in Guid.NewGuid().ToByteArray())
                 {
@@ -37,5 +37,7 @@ namespace AnkurPrathisthan
             }
             return qr_id + ".png";
         }
+
+
     }
 }

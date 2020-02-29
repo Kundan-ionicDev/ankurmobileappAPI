@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Xml;
@@ -20,16 +22,6 @@ namespace AnkurPrathisthan
             {
                 string ProcName = "uspGetBooksbyCategory";
                 SqlParameter[] oParam = null;
-              /*  oParam = new SqlParameter[1];
-                oParam[0] = new SqlParameter("@CategoryName", CategoryName);
-                oParam[1] = new SqlParameter("@PublisherName", PublisherName);
-                oParam[2] = new SqlParameter("@Author", AuthorName);
-                oParam[3] = new SqlParameter("@Price", Price);
-                oParam[4] = new SqlParameter("@CategoryName", CategoryName);
-                oParam[5] = new SqlParameter("@LanguageName", Language);
-                oParam[6] = new SqlParameter("@EmailID", EmailID);
-                oParam[7] = new SqlParameter("@Cmd", cmd); */
-
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
             }
             catch (Exception ex)
@@ -41,14 +33,15 @@ namespace AnkurPrathisthan
         }
         
         public DataSet HandleBooks(string BookName, string cmd, string EmailID ="", string Price="" , string Author="", string Stock="" , string CategoryID="" ,
-        string LanguageID="" , string PublisherID="", string BookID="")
+        string LanguageID="" , string PublisherID="", string BookID="", string BookDescription="",string ThumbImagePath="",string Image2Path="",
+        string qrcode="")
          {
             DataSet ds = new DataSet(); 
              try
             {
                 string ProcName = "uspManageBooks";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[14];
                 oParam[0] = new SqlParameter("@BookName", BookName);
                 oParam[1] = new SqlParameter("@cmd", cmd);
                 oParam[2] = new SqlParameter("@AddedBy", EmailID);
@@ -58,7 +51,11 @@ namespace AnkurPrathisthan
                 oParam[6] = new SqlParameter("@CategoryID", CategoryID);
                 oParam[7] = new SqlParameter("@LanguageID", LanguageID);
                 oParam[8] = new SqlParameter("@PublisherID", PublisherID);
-                oParam[9] = new SqlParameter("@BookID", BookID); 
+                oParam[9] = new SqlParameter("@BookID", BookID);
+                oParam[10] = new SqlParameter("@Description", BookDescription);
+                oParam[11] = new SqlParameter("@ThumbImage", ThumbImagePath);
+                oParam[12] = new SqlParameter("@ImageID", Image2Path);
+                oParam[13] = new SqlParameter("@QrCode", qrcode);
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName,oParam);  
             }
@@ -146,9 +143,7 @@ namespace AnkurPrathisthan
             try
             {
                 string ProcName = "GetData";
-                SqlParameter[] oParam = null;
-                //oParam = new SqlParameter[1];
-                //oParam[0] = new SqlParameter("@Mode",Mode);               
+                SqlParameter[] oParam = null;                            
                 BookDetails objbooks = new BookDetails();
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
                 
@@ -162,6 +157,7 @@ namespace AnkurPrathisthan
 
         }
         //[END] For BookManagement
+
         public sealed class SqlHelper
         {
             public static string ConnectionString(Int16 Type)

@@ -30,14 +30,14 @@ namespace AnkurPrathisthan
         }
 
         public DataSet HandleClusters(string ClusterName, string ClusterCode, string cmd, string EmailID = "", string Address = "", string MobileNo = "",
-        string LibrarianID = "", string Members = "", string AdminEmailID = "", string ClusterID = "")
+        string LibrarianID = "", string Members = "", string AdminEmailID = "", string ClusterID = "",string ImagePath="")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "uspManageClusters";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[11];
                 oParam[0] = new SqlParameter("@ClusterName", ClusterName);
                 oParam[2] = new SqlParameter("@ClusterCode", ClusterCode);
                 oParam[1] = new SqlParameter("@cmd", cmd);                
@@ -48,6 +48,7 @@ namespace AnkurPrathisthan
                 oParam[7] = new SqlParameter("@Members", Members);
                 oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
                 oParam[9] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[10] = new SqlParameter("@Image", ImagePath);
                  ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -55,6 +56,50 @@ namespace AnkurPrathisthan
                 Console.WriteLine("APService----Error in API-- ManageClusters" + ex.Message);
             }
 
+            return ds;
+        }
+
+        public DataSet ShowClusterHeads()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspGetClusterHeads";
+                SqlParameter[] oParam = null;
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- GetClusterHeads" + ex.Message);
+            }
+
+            return ds;
+        }
+
+        public DataSet HandleClusterHead(int cmd, string AdminEmailID, string FirstName, string LastName, string EmailID, string ClusterHeadID, string Address, string MobileNo, string AltMobileNo, string ClusterRegionID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "uspManageClusterHeads";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[8];
+                oParam[0] = new SqlParameter("@FirstName", FirstName);
+                oParam[2] = new SqlParameter("@LastName", LastName);
+                oParam[1] = new SqlParameter("@cmd", cmd);
+                oParam[3] = new SqlParameter("@EmailID", EmailID);
+                oParam[4] = new SqlParameter("@Address", Address);
+                oParam[5] = new SqlParameter("@MobileNo", MobileNo);
+                oParam[5] = new SqlParameter("@AltMobileNo", AltMobileNo);
+                oParam[6] = new SqlParameter("@ClusterHeadID", ClusterHeadID);
+                oParam[7] = new SqlParameter("@ClusterRegionID", ClusterRegionID);
+                oParam[7] = new SqlParameter("@AdminEmailID", AdminEmailID); 
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in API-- ManageClusterHeads API" + ex.Message);
+            }
             return ds;
         }
         public sealed class SqlHelper

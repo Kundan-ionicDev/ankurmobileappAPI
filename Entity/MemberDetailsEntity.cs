@@ -19,5 +19,6 @@ namespace AnkurPrathisthan.Entity
         public string ClusterName { get; set; }
         public string ClusterID { get; set; }
         public string MemberID { get; set; }
+        public string Image{ get; set; }
     }
 }

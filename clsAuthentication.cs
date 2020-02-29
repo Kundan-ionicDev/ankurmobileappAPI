@@ -197,7 +197,7 @@ namespace AnkurPrathisthan
                     throw ex;
                 }
             }
-            return "";
+            return "Y";
         }
         //[EMD] EMAIL FOR FROGOT PASWPRD OTP
         // [END] OTP FOR FORGOT PASSWORD
@@ -224,7 +224,7 @@ namespace AnkurPrathisthan
                       </body>
                       </html>"; */
 
-               message.Body = "Ankur Pratishthan Login Credentials  " +Password;
+               message.Body = "Ankur Pratishthan Login Credentials::  " +Password;
                message.IsBodyHtml = true; 
              
                 message.To.Add(EmailID);                              

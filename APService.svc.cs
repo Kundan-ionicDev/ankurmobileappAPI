@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
+using System.Drawing;
+using System.Web;
+using System.Security.Cryptography;
 
 
 namespace AnkurPrathisthan
@@ -75,16 +78,14 @@ namespace AnkurPrathisthan
                                 entity.ClusterCode = Convert.ToInt32(ds.Tables[0].Rows[0]["ClusterCode"]);
                             }
                         }
-                    }
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 1";
+                    }                   
                 }
 
             }
 
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password, deviceinfo);
-                WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password, deviceinfo);                
             }
 
             finally
@@ -183,7 +184,7 @@ namespace AnkurPrathisthan
         {
             DataSet ds = new DataSet();
             string newOTP = "";
-            string Message = ""; 
+            string Message = ""; string objIsEmailSent = "";
             DataSet dsInsert = new DataSet();            
             clsAuthentication obj = new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
@@ -197,7 +198,7 @@ namespace AnkurPrathisthan
                     Message = dsInsert.Tables[0].Rows[0]["Message"].ToString();
                     if (Message == "SUCCESS")
                     {
-                        string objIsEmailSent = obj.SendOTPEmail(EmailID, newOTP);
+                        objIsEmailSent = obj.SendOTPEmail(EmailID, newOTP);
                     }
                 }
             }
@@ -206,10 +207,9 @@ namespace AnkurPrathisthan
                 Console.WriteLine("APService----Error in API-- SendOTPEmail" + ex.Message, EmailID);
                 WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
             }
-            return Message;
+            return objIsEmailSent;
         }
-        //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL
-        //[END] For login & logout
+        //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL        
 
         public string ValidateOTP(string EmailID, string OTP,string Password)
         {
@@ -269,7 +269,8 @@ namespace AnkurPrathisthan
                             BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),
                             PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]),
                             ThumbImage = Convert.ToString(ds.Tables[0].Rows[i]["ThumbImage"]),
-                            PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"])
+                            PublisherName = Convert.ToString(ds.Tables[0].Rows[i]["PublisherName"]),
+                            Image2 = Convert.ToString(ds.Tables[0].Rows[i]["Image2"]),
                         });
                     }
                 }
@@ -292,6 +293,7 @@ namespace AnkurPrathisthan
             List<PublisherDetails> objPublishers = new List<PublisherDetails>();
             List<LanguageDetails> objLanguages = new List<LanguageDetails>();
             List<CategoryDetails> objCategories = new List<CategoryDetails>();
+            List<Images> objImages = new List<Images>();
             try
             {
                 ds = bm.GetData();
@@ -341,11 +343,28 @@ namespace AnkurPrathisthan
                     }
                 }
 
+                if (ds.Tables[3].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[3].Rows.Count; i++)
+                    {
+                        objImages.Add(new Images
+                        {
+                            BookID = Convert.ToString(ds.Tables[3].Rows[i]["BookID"]),
+                            BookImagePath = Convert.ToString(ds.Tables[3].Rows[i]["Image2"]),
+                            BookThumbImagePath = Convert.ToString(ds.Tables[3].Rows[i]["ThumbImage"]),
+
+                        });
+                    }
+                }
+
+
                 objBooks.Add(new BookDetails()
                 {
                     Categories = objCategories,
                     Languages = objLanguages,
-                    Publishers = objPublishers
+                    Publishers = objPublishers,
+                    Images = objImages
+
                 });
 
                 //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -375,15 +394,17 @@ namespace AnkurPrathisthan
 
         }
 
-
         public List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
-        string LanguageID, string PublisherID, string BookID = "")
+        string LanguageID, string PublisherID,string BookDescription,string ThumbImg64,string Img1, string BookID = "")
         {
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();
             clsBookManagement bm = new clsBookManagement();
             clsQRCode qrc = new clsQRCode();
-            string qrcode = "";
+           // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Books\" ;
+            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Books\";
+            string ThumbImgPath = "", Image2Path="";
+            Image ThumbImg, Image2;
             if (EmailID == null)
                 EmailID = "";
             if (Price == null)
@@ -401,15 +422,39 @@ namespace AnkurPrathisthan
             {
                 if (BookName == null || cmd == null)
                 {
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                   
                 }
-
-                else
-                {
-                    ds = bm.HandleBooks(BookName, cmd, EmailID, Price, Author, Stock, CategoryID, LanguageID, PublisherID, BookID);
-
-                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    else
                     {
+                        if (cmd.Trim() == "1" || cmd.Trim() == "2")
+                        {
+                            if (ThumbImg64 != "" && ThumbImg64 != null && BookName!=null  && BookName!= "")
+                            {
+                                try
+                                {
+                                    //[START] unique thumb image id 
+                                    string ThumbID = GenerateImageID();
+                                    //[END] unique thumb  image id
+                                    string ThumbImgName1 = BookName + ThumbID; //ThumbImgNAme
+                                    ThumbImg = Base64ToImage(ThumbImg64, filepath, ThumbImgName1);//ThumbImgNAme PNG
+                                    ThumbImgPath = filepath + ThumbImgName1;////ThumbImgNAme Path;
+                                    string Image2ID = GenerateImageID(); //unique image2 id
+                                    string ImgName2 = BookName + Image2ID; //image2 name
+                                    Image2 = Base64ToImage(Img1, filepath, ImgName2); //Image 2 PNG 
+                                    Image2Path = filepath+ImgName2; //Image 2 Path
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw ex;
+                                }
+                            }
+                        }
+                        ds = bm.HandleBooks(BookName, cmd, EmailID, Price, Author, Stock, CategoryID, LanguageID, PublisherID, BookID,
+                            BookDescription, ThumbImgPath,Image2Path, "");
+
+                        if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        {    
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             entity.Add(new BookDetailsEntity
@@ -423,24 +468,30 @@ namespace AnkurPrathisthan
                                 LanguageID = Convert.ToString(ds.Tables[0].Rows[i]["LanguageID"]),
                                 EmailID = Convert.ToString(ds.Tables[0].Rows[i]["AddedBy"]),
                                 PublisherID = Convert.ToString(ds.Tables[0].Rows[i]["PublisherID"]),
+                                BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),
+                                ThumbImage = Convert.ToString(ds.Tables[0].Rows[i]["ThumbImage"]),
+                                Image2= Convert.ToString(ds.Tables[0].Rows[i]["Image2"]),
+                               // qrcode = Convert.ToString(ds.Tables[0].Rows[i]["qrcode"])
                             });
-
-                        }
-                        if (BookID != "" && BookID != null)
-                        {
-                            qrcode = qrc.GenerateQRCode(BookID, BookName, Author);
-                        }
-
+                        } 
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
             return entity;
+        }
+
+
+        private static string GetQRCode (string BookID,string BookName)
+        {
+            string strQRCode = "";
+            DataSet ds = new DataSet();
+            clsQRCode qrc = new clsQRCode();
+            strQRCode = qrc.GenerateQRCode(BookID, BookName);
+            return strQRCode ;
         }
 
 
@@ -582,8 +633,7 @@ namespace AnkurPrathisthan
         //[END] For Book Management
 
 
-        //[START] For Cluster Management
-        // public string GetClusters()
+        //[START] For Cluster Management       
         public List<ClusterDetailsEntity> GetClusters()
         {
             clsClusterManagement cm = new clsClusterManagement();
@@ -604,7 +654,8 @@ namespace AnkurPrathisthan
                             Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                             MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                             Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]),
-                            LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"])
+                            LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"]),
+                            Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"]),
                         });
 
                     }
@@ -620,11 +671,14 @@ namespace AnkurPrathisthan
         }
 
         public List<ClusterDetailsEntity> ManageClusters(string ClusterName, string ClusterCode, string cmd, string EmailID, string Address, string MobileNo,
-        string LibrarianID, string Members, string AdminEmailID, string ClusterID = "")
+        string LibrarianID, string Members, string AdminEmailID, string Image64 = "", string ClusterID = "")
         {
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
             clsClusterManagement bm = new clsClusterManagement();
+            Image Image; string ImagePath = "";
+           // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Clusters\";
+            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Clusters\";
             if (EmailID == null)
                 EmailID = "";
             if (ClusterName == null)
@@ -645,18 +699,37 @@ namespace AnkurPrathisthan
             {
                 if (ClusterName == null || cmd == null)
                 {
-                    WebOperationContext.Current.OutgoingResponse.ContentType = "Flag, 2";
+                   
                 }
 
                 else
                 {
-                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID);
+                    if (cmd.Trim() == "1" || cmd.Trim() =="2")
+                    {
+                        if (Image64 != "" && Image64 != null && ClusterName != null && ClusterName != "")
+                        {
+                            try
+                            {
+                                //[START] unique thumb image id 
+                                string ImageID = GenerateImageID();
+                                //[END] unique thumb  image id
+                                string ImageName = ClusterName + ImageID; //ThumbImgNAme
+                                Image = Base64ToImage(Image64, filepath, ImageName);//ThumbImgNAme PNG
+                                ImagePath = filepath + ImageName;////ThumbImgNAme Path;                        
+
+                            }
+                            catch (Exception ex)
+                            {
+                                throw ex;
+                            }
+                        }
+                    }
+                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, ImagePath);
 
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
+                    { 
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            // entity.Add (new ClusterDetailsEntity)
+                        {                            
                             entity.Add(new ClusterDetailsEntity
                             {
                                 ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
@@ -666,11 +739,10 @@ namespace AnkurPrathisthan
                                 Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                                 MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                                 Members = Convert.ToString(ds.Tables[0].Rows[i]["Members"]),
-                                //  LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]),
+                                LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["Librarian"]),
+                                Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"]),
                             });
-
-
-                        }
+                        }                        
                     }
                 }
 
@@ -682,10 +754,109 @@ namespace AnkurPrathisthan
             return entity;
         }
 
+        ////[START]For ClusterHead Role
+        public List<ClusterHeadEntity> GetClusterHeads()
+        {
+            List<ClusterHeadEntity> entity = new List<ClusterHeadEntity>();
+            DataSet ds = new DataSet();
+            clsClusterManagement lm = new clsClusterManagement();
+            try
+            {
+                ds = lm.ShowClusterHeads();
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.Add(new ClusterHeadEntity
+                        {
+                            ClusterHeadID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterHeadID"]),
+                            ClusterRegionID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterRegionId"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]),
+                            Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
+                            MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
+                            AltMobileNo = Convert.ToString(ds.Tables[0].Rows[i]["AltMobileNo"]),
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"])
+                        });
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in API ---GetClusterHeadsAPI" + ex.Message);
+                throw ex;
+            }
+            return entity;
+        }
+
+        public List<ClusterHeadEntity> ManageClusterHeads(string FirstName, string LastName, string AdminEmailID, string ClusterHeadID,
+        int cmd, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterRegionID)
+        {
+            List<ClusterHeadEntity> cluster = new List<ClusterHeadEntity>();
+            clsClusterManagement objCluster = new clsClusterManagement();
+            clsAuthentication objauth = new clsAuthentication();
+            DataSet dscluster = new DataSet();
+            string Password = null;
+            if (FirstName == null)
+                FirstName = "";
+            if (LastName == null)
+                LastName = "";
+            if (EmailID == null)
+                EmailID = "";
+            if (Address == null) Address = "";
+            if (MobileNo == null)
+                MobileNo = "";
+            if (AltMobileNo == null)
+                AltMobileNo = "";
+            if (ClusterHeadID == null)
+                ClusterHeadID = "";
+            if (ClusterRegionID == null)
+                ClusterRegionID = "";
+
+            try
+            {
+                if (cmd == 1)
+                {
+                    Password = objauth.SendEmail(EmailID);
+                    DataSet dsUser = new DataSet();
+                    dsUser = objauth.RegisterUser(FirstName, LastName, EmailID, Password, "", "2", MobileNo, "");
+                }
+                dscluster = objCluster.HandleClusterHead(cmd, AdminEmailID, FirstName, LastName, EmailID, ClusterHeadID, Address, MobileNo, AltMobileNo, ClusterRegionID);
+                if (dscluster.Tables.Count > 0 && dscluster.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < dscluster.Tables[0].Rows.Count; i++)
+                    {
+                        cluster.Add(new ClusterHeadEntity
+                        {
+                            ClusterHeadID = Convert.ToString(dscluster.Tables[0].Rows[i]["ClusterHeadID"]),
+                            ClusterRegionID = Convert.ToString(dscluster.Tables[0].Rows[i]["ClusterRegionId"]),
+                            FirstName = Convert.ToString(dscluster.Tables[0].Rows[i]["FirstName"]),
+                            LastName = Convert.ToString(dscluster.Tables[0].Rows[i]["LastName"]),
+                            Address = Convert.ToString(dscluster.Tables[0].Rows[i]["Address"]),
+                            MobileNo = Convert.ToString(dscluster.Tables[0].Rows[i]["MobileNo"]),
+                            AltMobileNo = Convert.ToString(dscluster.Tables[0].Rows[i]["AltMobileNo"]),
+                            EmailID = Convert.ToString(dscluster.Tables[0].Rows[i]["EmailID"]),
+                            AdminEmailID = Convert.ToString(dscluster.Tables[0].Rows[i]["AdminEmailID"]),
+                        });
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return cluster;
+        }
+        ////[END]For CLusterHead ROle
 
         //[END] For CLuster Management
 
         //[START] For Librarian Management        
+
+
         public List<LibrarianDetailsEntity> GetLibrarians()
         {
             List<LibrarianDetailsEntity> entity = new List<LibrarianDetailsEntity>();
@@ -701,12 +872,13 @@ namespace AnkurPrathisthan
                         entity.Add(new LibrarianDetailsEntity
                         {
                             LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]),
-                            LibrarianName = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianName"]),
-                            ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
-                            ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]),
                             Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                             MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
-                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"])
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
+                            ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),                                                     
+                            Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"])
                         });
 
                     }
@@ -720,12 +892,16 @@ namespace AnkurPrathisthan
             return entity;
         }
         public List<LibrarianDetailsEntity> ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID,
-            string Address, string MobileNo,
-        string AltMobileNo, string ClusterID, string AdminEmailID, string LibrarianID = "")
+        string Address, string MobileNo,string AltMobileNo, string ClusterID, string AdminEmailID,string Image64, string LibrarianID = "")
         {
             List<LibrarianDetailsEntity> entity = new List<LibrarianDetailsEntity>();
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
+            clsAuthentication objauth = new clsAuthentication();
+           // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Librarian\";
+            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Librarian\";
+            Image Image; string ImagePath = "";
+            string Password = null;
             if (FirstName == null)
                 FirstName = "";
             if (LastName == null)
@@ -744,7 +920,35 @@ namespace AnkurPrathisthan
 
             try
             {
-                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, LibrarianID);
+                if (cmd == 1)
+                    {
+                       Password = objauth.SendEmail(EmailID);
+                       DataSet dsUser = new DataSet();
+                       dsUser = objauth.RegisterUser(FirstName, LastName, EmailID, Password,ClusterID, "3", MobileNo, "");
+                    }
+
+                if (cmd == 1 || cmd == 2)
+                {
+                    if (Image64 != "" && Image64 != null)
+                    {
+                        try
+                        {
+                            //[START] unique thumb image id 
+                            string ImageID = GenerateImageID();
+                            //[END] unique thumb  image id
+                            string ImageName = EmailID + ImageID; //ThumbImgNAme
+                            Image = Base64ToImage(Image64, filepath, ImageName);//ThumbImgNAme PNG
+                            ImagePath = filepath + ImageName;////ThumbImgNAme Path;                        
+
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                }
+
+                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, LibrarianID, ImagePath);
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -761,10 +965,9 @@ namespace AnkurPrathisthan
                             ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
                             CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
                             ModifiedBy = Convert.ToString(ds.Tables[0].Rows[i]["ModifiedBy"]),
+                            Image= Convert.ToString(ds.Tables[0].Rows[i]["Img"])
                         });
-
-
-                    }
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -791,12 +994,15 @@ namespace AnkurPrathisthan
                         entity.Add(new MemberDetailsEntity()
                        {
                            MemberID = Convert.ToString(ds.Tables[0].Rows[i]["MemberID"]),
-                           MemberName = Convert.ToString(ds.Tables[0].Rows[i]["MemberName"]),
+                           FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]),
+                           LastName= Convert.ToString(ds.Tables[0].Rows[i]["LastName"]),
                            Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                            MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]),
                            ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
-                           ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"])
+                           ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]),
+                           DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
+                           Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"]),
 
                        });
                     }
@@ -811,11 +1017,17 @@ namespace AnkurPrathisthan
         }
 
         public List<MemberDetailsEntity> ManageMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo,
-        string AltMobileNo, string ClusterID, string DOB, string AdminEmailID, string MemberID = "")
+        string AltMobileNo, string ClusterID, string DOB, string AdminEmailID,string Image64, string MemberID = "")
         {
             List<MemberDetailsEntity> entity = new List<MemberDetailsEntity>();
             DataSet ds = new DataSet();
             clsMemberManagement mem = new clsMemberManagement();
+            clsAuthentication objauth = new clsAuthentication();
+            string Password = null;
+            Image Image;
+            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Members";
+            // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Members\";
+            string ImagePath = "";
             if (FirstName == null)
                 FirstName = "";
             if (LastName == null)
@@ -832,7 +1044,34 @@ namespace AnkurPrathisthan
 
             try
             {
-                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, MemberID);
+                if (cmd == 1)
+                {
+                    Password = objauth.SendEmail(EmailID);
+                    DataSet dsUser = new DataSet();
+                    dsUser = objauth.RegisterUser(FirstName, LastName, EmailID, Password, "", "4", MobileNo, "");
+                }
+
+                if (cmd == 1 || cmd == 2)
+                {
+                    if (Image64 != "" && Image64 != null && FirstName != null && ClusterID != "")
+                    {
+                        try
+                        {
+                            //[START] unique thumb image id 
+                            string ImageID = GenerateImageID();
+                            //[END] unique thumb  image id
+                            string ImageName = FirstName+ClusterID+ImageID; //ThumbImgNAme
+                            Image = Base64ToImage(Image64, filepath,ImageName);//ThumbImgNAme PNG
+                            ImagePath = filepath + ImageName;////ThumbImgNAme Path;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                }
+
+                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, MemberID, ImagePath);
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -847,9 +1086,11 @@ namespace AnkurPrathisthan
                             MobileNo = Convert.ToString(ds.Tables[0].Rows[i]["MobileNo"]),
                             AltMobileNo = Convert.ToString(ds.Tables[0].Rows[i]["AltMobileNo"]),
                             ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
+                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
+                            Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"]),
 
                         });
-                    }
+                    }                   
                 }
             }
             catch (Exception ex)
@@ -931,6 +1172,36 @@ namespace AnkurPrathisthan
                 throw ex;
             }
             return requests;
+        }
+
+        private static Image Base64ToImage(string base64string, string filepath,string imgname)
+        {
+            Image image= null ;
+            string result = "";
+            try
+            {                               
+               result = filepath + imgname + ".jpeg";
+                var bytess = Convert.FromBase64String(base64string);
+                using (var imageFile = new FileStream(result, FileMode.Create))
+                {
+                    imageFile.Write(bytess, 0, bytess.Length);
+                    imageFile.Flush();
+                }
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }
+            return image;
+        }
+
+        private static string  GenerateImageID ()
+        {  
+            var bytes = new byte[4];
+            var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(bytes);
+            uint random = BitConverter.ToUInt32(bytes, 0) % 100000000;
+            return String.Format("{0:D3}", random);
         }
     }
 }
