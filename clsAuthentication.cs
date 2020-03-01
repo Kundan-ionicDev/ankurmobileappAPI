@@ -165,12 +165,12 @@ namespace AnkurPrathisthan
         {
             string IsEmailSent = "";
             string ServerName = SMTPSERVER;
-            int PORTNO = 25; string Sender = USERNAME; string credential = PASSWORD;
+            int PORTNO = 587;//gmail port string Sender = USERNAME; string credential = PASSWORD;
            // OTP = CreateOTP(EmailID);
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-            smtpClient.EnableSsl = false;
+            smtpClient.EnableSsl = true;
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = true;
+            smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
             using (MailMessage message = new MailMessage())
             {
@@ -202,30 +202,25 @@ namespace AnkurPrathisthan
         //[EMD] EMAIL FOR FROGOT PASWPRD OTP
         // [END] OTP FOR FORGOT PASSWORD
 
-        //[For Email send for new user regsitrations]
+        //[START][For Email send for new user regsitrations]
         public string SendEmail(string EmailID)
         {
             string Password = ""; string ServerName = SMTPSERVER;
-            int PORTNO = 25; string Sender = USERNAME; string credential = PASSWORD;
+          // int PORTNO = 25;//ankur port465
+            int PORTNO = 587;//gmail port
+            string Sender = USERNAME; string credential = PASSWORD;
             Password = CreateRandomPassword();
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-            smtpClient.EnableSsl = false;
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = true;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;           
+            smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
                 message.Subject = "Support Ankur Pratishthan";
-              /* string htmlString= @"<html>
-                  //    <body>
-                      <p>Dear AnkurPratishthan User,</p>
-                      <p>Thank you for registering for Mobile Library with Ankur Pratishthan.Please find below credentials for your Login</p>                     
-                      </body>
-                      </html>"; */
-
-               message.Body = "Ankur Pratishthan Login Credentials::  " +Password;
-               message.IsBodyHtml = true; 
+                message.Body = "Ankur Pratishthan Login Credentials::  " +Password;
+                message.IsBodyHtml = true; 
              
                 message.To.Add(EmailID);                              
                 try

@@ -17,6 +17,7 @@ using System.Net;
 using System.Drawing;
 using System.Web;
 using System.Security.Cryptography;
+using System.Security.AccessControl;
 
 
 namespace AnkurPrathisthan
@@ -31,6 +32,23 @@ namespace AnkurPrathisthan
         public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
         public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
         //[END] For Email sending
+
+
+        //#region Logs
+        //public static void WriteLog (string path, string EmailID="")
+        //{
+        //    try
+        //    {
+        //        TextWriter tw = new StreamWriter(@"G:\", true);
+        //        tw.WriteLine(EmailID);
+        //        tw.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {                
+        //        throw ex; 
+        //    }
+        //}
+        //#endregion Logs
 
         //[START] FOR login & logout
         public userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string platform, string FCMID, string IMEI)
@@ -249,6 +267,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
+               // WriteLog("GetBooks","kundansakpal@gmail.com");
                 ds = objbook.ShowBooks();
 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -898,8 +917,8 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
             clsAuthentication objauth = new clsAuthentication();
-           // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Librarian\";
-            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Librarian\";
+           string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Librarian\";
+            //string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Librarian\";
             Image Image; string ImagePath = "";
             string Password = null;
             if (FirstName == null)
