@@ -17,7 +17,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspGetMembers";
+                string ProcName = "ankurmobileapp.uspGetMembers";
                 SqlParameter[] oParam = null;
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -35,7 +35,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageMembers";
+                string ProcName = "ankurmobileapp.uspManageMembers";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[12];
                 oParam[0] = new SqlParameter("@cmd", cmd);
@@ -60,6 +60,44 @@ namespace AnkurPrathisthan
             }
             return ds;
 
+        }
+
+        public DataSet GetFbMsg()
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "GetFbMsg";
+                SqlParameter[] oParam = null;               
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
+
+        public DataSet InsertShayari(string msg, string EmailID, string cateogory)
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "InsertShayari";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[3];
+                oParam[0] = new SqlParameter("@Shayari", msg);
+                oParam[1] = new SqlParameter("@CreatedBy", EmailID);
+                oParam[2] = new SqlParameter("@Category", cateogory);
+                //oParam[3] = new SqlParameter("@Email", EmailID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
         }
 
       

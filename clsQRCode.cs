@@ -7,6 +7,8 @@ using System.IO;
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace AnkurPrathisthan
 {
@@ -38,6 +40,24 @@ namespace AnkurPrathisthan
             return qr_id + ".png";
         }
 
+        public DataSet GetCode(string EmailID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.GetQRCodes";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
 
+        }
     }
+
 }

@@ -34,6 +34,7 @@ namespace AnkurPrathisthan.Entity
         public string ClusterRegionID { get; set; }        
         public string Address { get; set; }
         public string AdminEmailID { get; set; }
-       
+        public string Image{ get; set; }
+        public string DOB { get; set; }
     }
 }

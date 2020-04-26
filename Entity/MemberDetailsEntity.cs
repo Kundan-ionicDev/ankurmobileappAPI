@@ -21,4 +21,10 @@ namespace AnkurPrathisthan.Entity
         public string MemberID { get; set; }
         public string Image{ get; set; }
     }
+
+    public class GetLatestShayari
+    {
+        public string Msg { get; set; }
+        public string Category { get; set; }
+    }
 }

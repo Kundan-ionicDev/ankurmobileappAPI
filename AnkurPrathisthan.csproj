@@ -42,6 +42,10 @@
     <Reference Include="Gma.QrCodeNet.Encoding">
       <HintPath>packages\QrCode.Net.0.4.0.0\lib\net45\Gma.QrCodeNet.Encoding.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -83,10 +87,13 @@
     <Content Include="Uploads\Books\१५१ चातुर्य कथा.jpg" />
     <Content Include="Uploads\Books\१९७१ चे अभिमन्यू.jpg" />
     <Content Include="Uploads\Books\७५ गोष्टी श्रीकृष्णाच्या.jpg" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WebForm.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APDonor.cs" />
     <Compile Include="APService.svc.cs">
       <DependentUpon>APService.svc</DependentUpon>
     </Compile>
@@ -96,14 +103,17 @@
     <Compile Include="clsClusterManagement.cs" />
     <Compile Include="clsLibrarianManagement.cs" />
     <Compile Include="clsMemberManagement.cs" />
+    <Compile Include="clsPDF.cs" />
     <Compile Include="clsQRCode.cs" />
     <Compile Include="clsSQL.cs" />
     <Compile Include="Entity\BookDetailsEntity.cs" />
+    <Compile Include="Entity\CelebrateEntity.cs" />
     <Compile Include="Entity\ClusterDetailsEntity.cs" />
     <Compile Include="Entity\LibrarianDetailsEntity.cs" />
     <Compile Include="Entity\MemberDetailsEntity.cs" />
     <Compile Include="Entity\RequestsDetailsEntity.cs" />
     <Compile Include="Entity\userdetailsEntity.cs" />
+    <Compile Include="Entity\DonationEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -119,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Logs\" />
     <Folder Include="Uploads\Clusters\" />
     <Folder Include="Uploads\Librarian\" />
     <Folder Include="Uploads\Members\" />

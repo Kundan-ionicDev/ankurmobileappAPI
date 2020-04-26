@@ -30,12 +30,12 @@ namespace AnkurPrathisthan
         [OperationContract]
         string UserLogout(string EmailID);
 
-        [WebInvoke(Method = "POST",
-        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "UserRegister")]
-        [OperationContract]
-        List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string RoleID, string ClusterCode,
-            string MobileNo = "");
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "UserRegister")]
+        //[OperationContract]
+        //List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string RoleID, string ClusterCode,
+        //    string MobileNo = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -49,19 +49,13 @@ namespace AnkurPrathisthan
         [OperationContract]
         string ValidateOTP(string EmailID, string OTP, string Password);
         //[END] For Authentication
-        //[STARt] For Book Management
 
+        //[STARt] For Book Management
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetBooks")]
         [OperationContract]
         List<BookDetailsEntity> GetBooks();
-
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "SubmitImages")]
-        //[OperationContract]
-        //List<BookDetailsEntity> SubmitImages();
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -69,18 +63,18 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<BookDetails> GetBooksData();
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "GetImages")]
-        //[OperationContract]
-        //List<BookImages> GetImages();
-
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageBooks")]
         [OperationContract]
         List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
         string LanguageID, string PublisherID, string BookDescription, string ThumbImg64, string Img1, string BookID = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetQrCodes")]
+        [OperationContract]
+        List<BookDetailsEntity> GetQrCodes(string EmailID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -120,15 +114,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetClusterHeads")]
         [OperationContract]
-        List<ClusterHeadEntity> GetClusterHeads();
-
-        [WebInvoke(Method = "POST",
-        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "ManageClusterHeads")]
-        [OperationContract]
-        List<ClusterHeadEntity> ManageClusterHeads(string FirstName, string LastName, string AdminEmailID, string ClusterHeadID,
-        int cmd, string EmailID, string Address, string MobileNo, string AltMobileNo, string ClusterRegionID);
-        //[END] For Cluster Management
+        List<ClusterHeadEntity> GetClusterHeads();        
 
         //[START] For Librarian Management
         [WebInvoke(Method = "POST",
@@ -142,7 +128,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageLibrarians")]
         [OperationContract]
         List<LibrarianDetailsEntity> ManageLibrarians(int cmd, string FirstName, string LastName, string EmailID,
-        string Address, string MobileNo, string AltMobileNo, string ClusterID, string AdminEmailID, string Image64, string LibrarianID = "");
+        string Address, string MobileNo, string AltMobileNo, string ClusterID, string AdminEmailID, string Image64, string DOB, string LibrarianID = "");
         //[END] For Librarian Management
 
         //[START] For Member Management
@@ -165,21 +151,94 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetRequests")]
         [OperationContract]
-        List<RequestsDetailsEntity> GetRequests();
+        List<RequestsDetailsEntity> GetRequests(string EmailID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageRequests")]
         [OperationContract]
-        List<RequestsDetailsEntity> ManageRequests(int cmd, string FirstName, string LastName, string BookID, string LibrarianID,
-        string MemberID, string ClusterID, string RequestID, int AuthorID, string RequestStatus);  
+        List<RequestsDetailsEntity> ManageRequests(int cmd, string BookID, string MemberID, string senderEmailID, string RequestID = "");  
         //[END] For Approvals Module
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetLatestShayari")]
+        [OperationContract]
+        List<GetLatestShayari> GetLatestShayari();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "SubmitLatestShayari")]
+        [OperationContract]
+        List<GetLatestShayari> SubmitLatestShayari(string msg, string EmailID, string Category);
+
+
+        #region AP Donor
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "APLogin")]
+        [OperationContract]
+        List<VolunteerEntity> APLogin(string EmailID, string Password, string FCM = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageVolunteer")]
+        [OperationContract]
+        List<VolunteerEntity> ManageVolunteer(string cmd, string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID, string Img = "", string LoginID = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetVolunteers")]
+        [OperationContract]
+        List<VolunteerEntity> GetVolunteers();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "AddDonors")]
+        [OperationContract]
+        List<DonorEntity> AddDonors(string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, int Amount, string PaymentMode, string AdminEmailID,string Description="");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetDonors")]
+        [OperationContract]
+        List<DonorEntity> GetDonors(string EmailID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetDonorBirthdays")]
+        [OperationContract]
+        List<DonorEntity> GetDonorBirthdays();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetCelebrateRequest")]
+        [OperationContract]
+        List<CelebrateEntity> GetCelebrateRequest();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageCelebrateRequest")]
+        [OperationContract]
+        List<CelebrateEntity> ManageCelebrateRequest(int cmd, string FirstName, string LastName,
+        string EmailID, string Contact, string Date, string VolEmailID, int AreaID, int OccassionID, string ID);
 
         //[WebInvoke(Method = "POST",
         //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "Base64ToImage")]
+        //UriTemplate = "ManageCelebrateRequest")]
         //[OperationContract]
-        //Image Base64ToImage(string base64string);
+        //List<CelebrateEntity> ManageCelebrateRequest(int cmd, string FirstName, string LastName,
+        //string EmailID, string Contact, string Date, string VolEmailID, int AreaID, int OccassionID, string ID);
+
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "SendReceiptMail")]
+        //[OperationContract]
+        //string SendReceiptMail(string EmailID, int DonorID);
+
+        #endregion AP Donor
+
     }
       
 }

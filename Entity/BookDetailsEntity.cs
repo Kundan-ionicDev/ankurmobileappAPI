@@ -25,6 +25,8 @@ namespace AnkurPrathisthan.Entity
         public string ThumbImage { get; set; }
         public string BookDescription { get; set; }
         public string Image2 { get; set; }
+        public string qrcodepath { get; set; }
+        public string mailsent { get; set; }
     }
 
     public class Images

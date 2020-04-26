@@ -8,47 +8,24 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 using Newtonsoft.Json;
+using System.IO;
+using System.Net;
+using System.Text;
 
 namespace AnkurPrathisthan
 {
     public class clsApprovals
     {
-
-        public DataSet ShowRequests()
-        {
-            DataSet ds = new DataSet();            
-            try
-            {
-                string ProcName = "uspGetRequests";
-                SqlParameter[] oParam = null;
-
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-
-            }
-            catch (Exception ex)
-            {                
-                throw ex;
-            }           
-            return ds;
-        }
-
-        public DataSet HandleRequests(int cmd, string FirstName, string LastName,string BookID, string LibrarianID,
-        string MemberID, string ClusterID, string RequestID, int AuthorID, string RequestStatus)
+        public static string serverapikey = System.Configuration.ConfigurationManager.AppSettings["serverapikey"].ToString();
+        public DataSet ShowRequests(string EmailID)
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageRequests";
+                string ProcName = "ankurmobileapp.uspGetRequests";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[8];                
-                oParam[0] = new SqlParameter("@RequestID", RequestID);
-                oParam[1] = new SqlParameter("@MemberID", MemberID);
-                oParam[2] = new SqlParameter("@BookID", BookID);
-                oParam[3] = new SqlParameter("@AuthorID", AuthorID);
-                oParam[4] = new SqlParameter("@ClusterID", ClusterID);
-                oParam[5] = new SqlParameter("@LibrarianID", LibrarianID);
-                oParam[6] = new SqlParameter("@cmd", cmd);
-                oParam[7] = new SqlParameter("@RequestStatus", RequestStatus);                             
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -56,6 +33,122 @@ namespace AnkurPrathisthan
                 throw ex;
             }
             return ds;
+        }
+
+        public DataSet HandleRequests(int cmd, string BookID, string EmailID,string MemberID, string RequestID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.uspManageRequests";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[5];
+                oParam[0] = new SqlParameter("@cmd", cmd);
+                oParam[1] = new SqlParameter("@BookID", BookID);
+                oParam[2] = new SqlParameter("@EmailID", EmailID);
+                oParam[3] = new SqlParameter("@MemberID", MemberID);                
+                oParam[4] = new SqlParameter("@RequestID", RequestID);
+
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+        public DataSet GetFCM(string senderEmailID, string receiverEmailID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "GetFCM";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@senderEmailID", senderEmailID);
+                oParam[1] = new SqlParameter("@receiverEmailID", receiverEmailID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }    
+   
+        public DataSet GetUser (string MemberID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.GetUser";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@MemberID", MemberID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
+        public class FCMID
+        {
+            public string ClusterFCM {get;set;}
+            public string LibFCM {get;set;}
+            public string MemberFCM { get; set; } 
+        } 
+        public string SendNotification(string ClusterFCM, string LibFCM,string MemberFCM, string messagebody)
+        {
+            var result = "-1";
+            List<FCMID> fcm = new List<FCMID>();
+            try
+            {
+                var webAddr = "https://fcm.googleapis.com/fcm/send";
+
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Headers.Add("Authorization:key=" + serverapikey);
+                httpWebRequest.Method = "POST";
+
+                var payload = new
+                {
+                   // to = new List<string> {ClusterFCM,LibFCM,MemberFCM},
+                  //  to = fcm,
+                    to = ClusterFCM,
+                    priority = "high",
+                    content_available = true,
+                    notification = new
+                    {
+                        body = messagebody,
+                        title = "Book Request",
+                        badge = 1,
+                        sound = "default",
+                        click_action = "FCM_PLUGIN_ACTIVITY",
+                        icon = "http://www.ankurpratishthan.org/wp-content/uploads/2019/09/Logo-Ankur.jpg"
+                    }
+                };
+
+                var jsonBody = JsonConvert.SerializeObject(payload);
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    streamWriter.Write(jsonBody);
+                    streamWriter.Flush();
+                }
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    result = streamReader.ReadToEnd();
+                }               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
         public sealed class SqlHelper
         {

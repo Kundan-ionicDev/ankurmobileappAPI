@@ -20,7 +20,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();           
             try
             {
-                string ProcName = "uspGetBooksbyCategory";
+                string ProcName = "ankurmobileapp.uspGetBooksbyCategory";
                 SqlParameter[] oParam = null;
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);  
             }
@@ -39,7 +39,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet(); 
              try
             {
-                string ProcName = "uspManageBooks";
+                string ProcName = "ankurmobileapp.uspManageBooks";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[14];
                 oParam[0] = new SqlParameter("@BookName", BookName);
@@ -73,7 +73,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageCategory";
+                string ProcName = "ankurmobileapp.uspManageCategory";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[4];
                 oParam[0] = new SqlParameter("@CategoryName", CategoryName);
@@ -97,7 +97,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageLanguages";
+                string ProcName = "ankurmobileapp.uspManageLanguages";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[4];
                 oParam[0] = new SqlParameter("@LanguageName", LanguageName);
@@ -120,7 +120,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManagePublishers";
+                string ProcName = "ankurmobileapp.uspManagePublishers";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[4];
                 oParam[0] = new SqlParameter("@PublisherName", PublisherName);
@@ -142,7 +142,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "GetData";
+                string ProcName = "ankurmobileapp.GetData";
                 SqlParameter[] oParam = null;                            
                 BookDetails objbooks = new BookDetails();
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
@@ -156,6 +156,46 @@ namespace AnkurPrathisthan
             return ds;
 
         }
+
+        public DataSet InsertError(string Email,string API,string Description, string Proc = "InsertError")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "InsertError";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[4];
+                oParam[0] = new SqlParameter("@Email", Email);
+                oParam[1] = new SqlParameter("@api", API);
+                oParam[2] = new SqlParameter("@Description", Description);
+                oParam[3] = new SqlParameter("@Proc", Proc);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
+        //public DataSet DefaultImage()
+        //{
+        //    DataSet ds = new DataSet();
+        //    try
+        //    {
+        //        string ProcName = "GetDefaultImage";
+        //        SqlParameter[] oParam = null;
+        //        BookDetails objbooks = new BookDetails();
+        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+        //    return ds.Tables[0].Rows[0]["Image64"];
+        //}
         //[END] For BookManagement
 
         public sealed class SqlHelper
