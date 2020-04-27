@@ -111,7 +111,7 @@ namespace AnkurPrathisthan
             {
                 string ProcName = "ankurmobileapp.RegisterDonation";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[9];
+                oParam = new SqlParameter[10];
                 oParam[0] = new SqlParameter("@FirstName", FirstName);
                 oParam[1] = new SqlParameter("@LastName", LastName);
                 oParam[2] = new SqlParameter("@Contact", Contact);
@@ -121,6 +121,7 @@ namespace AnkurPrathisthan
                 oParam[6] = new SqlParameter("@PaymentMode", PaymentMode);
                 oParam[7] = new SqlParameter("@Description", Description);
                 oParam[8] = new SqlParameter("@AddedBy", AdminEmailID);
+                oParam[9] = new SqlParameter("@DOB", DOB);
                 
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);

@@ -237,6 +237,12 @@ namespace AnkurPrathisthan
         //[OperationContract]
         //string SendReceiptMail(string EmailID, int DonorID);
 
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "DeclineEmailSMS")]
+        [OperationContract]
+        string DeclineEmailSMS(string EmailID);
+
         #endregion AP Donor
 
     }

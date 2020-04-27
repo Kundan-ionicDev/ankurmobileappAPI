@@ -1379,7 +1379,7 @@ namespace AnkurPrathisthan
                         (new VolunteerEntity()
                         {                           
                             EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
-                            Password= Convert.ToString(ds.Tables[0].Rows[0]["Password"]),
+                            //Password= Convert.ToString(ds.Tables[0].Rows[0]["Password"]),
                             Message= Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
                             RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
                         });
@@ -1494,6 +1494,7 @@ namespace AnkurPrathisthan
                             Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
                             PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
                             Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
+                           // DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
                         });
                 }           
 
@@ -1651,23 +1652,23 @@ namespace AnkurPrathisthan
 
         //[END]View Celebrate WIth US
 
-        //public string SendReceiptMail(string EmailID, int DonorID )
+        //public string SendReceiptMail(string EmailID, int DonorID)
         //{
         //    string message = null;
         //    try
         //    {
         //        clsPDF pdf = new clsPDF();
-        //        string filename = "APReceipt"+DonorID+EmailID;
+        //        string filename = "APReceipt" + DonorID + EmailID;
         //        APDonor ap = new APDonor();
         //        DataSet ds = null;
         //        ds = ap.ReceiptDonor(EmailID, DonorID);
         //        MailMessage mm = new MailMessage("kundan.mobileappdev@gmail.com", "kundan.mobileappdev@gmail.com");
         //        mm.Subject = "Ankur Pratishthan Donation Receipt";
-        //        mm.Body = "Thank you! PFA receipt";
+        //        mm.Body = "Thank you! PFA receipt";                
         //        // mm.Attachments.Add(new Attachment(new MemoryStream(bytes), "DonationReceipt.pdf"));
         //        mm.Attachments.Add(new Attachment(@"C:\DonationReceipt.pdf"));
         //        mm.IsBodyHtml = true;
-        //        SmtpClient smtp = new SmtpClient();
+        //        SmtpClient smtp = snew SmtpClient();
         //        smtp.Host = "smtp.gmail.com";
         //        smtp.EnableSsl = true;
         //        NetworkCredential NetworkCred = new NetworkCredential();
@@ -1686,6 +1687,38 @@ namespace AnkurPrathisthan
         //    }
         //    return message;
         //} 
+
+        public string DeclineEmailSMS(string EmailID)
+        {
+            clsBookManagement bm = new clsBookManagement();
+            string status = null;
+            string ServerName = SMTPSERVER; int PORTNO = 587;//25 //443 //587       
+            string Sender = USERNAME; string credential = PASSWORD;            
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.EnableSsl = true;
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Support Ankur Pratishthan";
+                message.Body = "Your Donation amount is declined due to" +"cheque bounce";
+                message.IsBodyHtml = true;
+
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                    status = "Y";                    
+                }
+                catch (Exception ex)
+                {
+                    bm.InsertError(EmailID, "SendDEclineEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "SendDEclineEmail");
+                }
+            }
+            return status;
+        }
 
         #endregion AP Donation Management System
     }
