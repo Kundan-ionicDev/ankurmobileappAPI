@@ -200,7 +200,7 @@ namespace AnkurPrathisthan
         {
             clsBookManagement bm = new clsBookManagement();
             string Password = ""; string ServerName = SMTPSERVER;
-            int PORTNO = 587;//25 //443 //587       
+            int PORTNO = 25;//25 //443 //587       
             string Sender = USERNAME; string credential = PASSWORD;
             Password = CreateRandomPassword();
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);

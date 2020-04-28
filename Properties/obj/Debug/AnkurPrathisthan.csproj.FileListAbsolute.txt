@@ -1,0 +1,18 @@
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\bin\AnkurPrathisthan.dll.config
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\bin\AnkurPrathisthan.dll
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\bin\AnkurPrathisthan.pdb
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\obj\Debug\AnkurPrathisthan.csprojResolveAssemblyReference.cache
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\obj\Debug\AnkurPrathisthan.dll
+F:\k_dev\New folder\AnkurPrathishthan API\AnkurPrathisthan\AnkurPrathisthan\obj\Debug\AnkurPrathisthan.pdb
+F:\k_dev\AnkurPrathisthan\bin\AnkurPrathisthan.dll.config
+F:\k_dev\AnkurPrathisthan\bin\AnkurPrathisthan.dll
+F:\k_dev\AnkurPrathisthan\bin\AnkurPrathisthan.pdb
+F:\k_dev\AnkurPrathisthan\bin\Gma.QrCodeNet.Encoding.dll
+F:\k_dev\AnkurPrathisthan\bin\itextsharp.dll
+F:\k_dev\AnkurPrathisthan\bin\Newtonsoft.Json.dll
+F:\k_dev\AnkurPrathisthan\bin\Gma.QrCodeNet.Encoding.pdb
+F:\k_dev\AnkurPrathisthan\bin\Gma.QrCodeNet.Encoding.xml
+F:\k_dev\AnkurPrathisthan\bin\itextsharp.xml
+F:\k_dev\AnkurPrathisthan\bin\Newtonsoft.Json.xml
+F:\k_dev\AnkurPrathisthan\obj\Debug\AnkurPrathisthan.dll
+F:\k_dev\AnkurPrathisthan\obj\Debug\AnkurPrathisthan.pdb

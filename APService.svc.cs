@@ -1377,9 +1377,13 @@ namespace AnkurPrathisthan
                 {
                     entity.Add
                         (new VolunteerEntity()
-                        {                           
-                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
-                            //Password= Convert.ToString(ds.Tables[0].Rows[0]["Password"]),
+                        {
+                            ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]), 
+                            Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]), 
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),                            
                             Message= Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
                             RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
                         });
@@ -1476,7 +1480,7 @@ namespace AnkurPrathisthan
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
-            APDonor objdonor = new APDonor();
+            APDonor objdonor = new APDonor();          
             try
             {
                 ds = objdonor.SubmitDonors(FirstName,LastName, EmailID, DOB, Address, ContactNo, AdminEmailID,Amount,PaymentMode,Description);
@@ -1494,7 +1498,8 @@ namespace AnkurPrathisthan
                             Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
                             PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
                             Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
-                           // DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            //PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]), 
                         });
                 }           
 
@@ -1719,6 +1724,22 @@ namespace AnkurPrathisthan
             }
             return status;
         }
+
+//        public string SendSMS();
+//        {
+
+//        var client = new Client(creds: new Nexmo.Api.Request.Credentials
+//{
+//    ApiKey = "0d0b06f2",
+//    ApiSecret = "0ymPXyEAKRYdT9hB"
+//});
+//var results = client.SMS.Send(request: new SMS.SMSRequest
+//{
+//    from = "Vonage SMS API",
+//    to = "919960097184",
+//    text = "Hello from Vonage"
+//});
+//        }
 
         #endregion AP Donation Management System
     }

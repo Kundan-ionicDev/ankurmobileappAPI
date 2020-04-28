@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bricks.SMS</name>
+    </assembly>
+    <members>
+        <member name="T:Bricks.SMS.ISmsService">
+            <summary>
+            Сервис отправки SMS.
+            </summary>
+        </member>
+        <member name="M:Bricks.SMS.ISmsService.SendAsync(System.String,System.String)">
+            <summary>
+            Отправляет SMS с текстом <paramref name="text" /> на номер телефона <paramref name="phoneNumber" />.
+            </summary>
+            <param name="phoneNumber">Номер телефона.</param>
+            <param name="text">Текст сообщения.</param>
+            <returns />
+        </member>
+    </members>
+</doc>

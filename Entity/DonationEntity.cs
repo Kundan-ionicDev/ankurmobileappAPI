@@ -17,7 +17,7 @@ namespace AnkurPrathisthan.Entity
         public string ImgPath {get;set;}
         public string AdminEmail { get; set; }
         public string Img { get; set; }
-        public string Password { get; set; }
+       // public string Password { get; set; }
         public string Message { get; set; }
         public string RoleID { get; set; }
     }
@@ -36,6 +36,7 @@ namespace AnkurPrathisthan.Entity
         public string AdminEmailID { get; set; }
         public string Description { get; set; }
         public string RegDate { get; set; }
+        public string PAN { get; set; }
         
     }
     
