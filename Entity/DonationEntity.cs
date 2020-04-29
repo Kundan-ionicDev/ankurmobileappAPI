@@ -37,6 +37,7 @@ namespace AnkurPrathisthan.Entity
         public string Description { get; set; }
         public string RegDate { get; set; }
         public string PAN { get; set; }
+        public string Amount1 { get; set; }
         
     }
     

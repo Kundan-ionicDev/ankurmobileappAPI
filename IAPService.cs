@@ -239,9 +239,9 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "DeclineEmailSMS")]
+        UriTemplate = "SendEmail")]
         [OperationContract]
-        string DeclineEmailSMS(string EmailID);
+        string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com");
 
         #endregion AP Donor
 

@@ -1423,12 +1423,12 @@ namespace AnkurPrathisthan
                         }); 
                 }
 
-                if (cmd == "1")
-                {
-                    string Password = "";
-                    Password = auth.SendEmail(EmailID);
-                    dsEmail = objdonor.VolEmail(EmailID, Password);
-                }              
+                //if (cmd == "1")
+                //{
+                //    string Password = "";
+                //    Password = auth.SendEmail(EmailID);
+                //    dsEmail = objdonor.VolEmail(EmailID, Password);
+                //}              
            
             }
             catch (Exception ex)
@@ -1498,8 +1498,9 @@ namespace AnkurPrathisthan
                             Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
                             PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
                             Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
-                            //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
-                            //PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]), 
+                            DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
+                            Amount1 = Convert.ToString(ds.Tables[0].Rows[0]["Amount1"]), 
                         });
                 }           
 
@@ -1693,37 +1694,38 @@ namespace AnkurPrathisthan
         //    return message;
         //} 
 
-        public string DeclineEmailSMS(string EmailID)
+        public string SendEmail(string EmailID = "kundansakpal@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string status = null;
-            string ServerName = SMTPSERVER; int PORTNO = 587;//25 //443 //587       
-            string Sender = USERNAME; string credential = PASSWORD;            
+            string ServerName = "mail.ankurpratishthan.com";
+            int PORTNO = 25;  //25 //443 //587       
+            string Sender = "Admin@ankurpratishthan.com";
+            string  PASSWORD ="Anku@87!";
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
             smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
-                message.From = new MailAddress(USERNAME);
+                message.From = new MailAddress(Sender);
                 message.Subject = "Support Ankur Pratishthan";
-                message.Body = "Your Donation amount is declined due to" +"cheque bounce";
+                message.Body = "Ankur Pratishthan Login Credentials::";
                 message.IsBodyHtml = true;
-
                 message.To.Add(EmailID);
                 try
                 {
                     smtpClient.Send(message);
-                    status = "Y";                    
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendDEclineEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "SendDEclineEmail");
+                    bm.InsertError(EmailID, "SendEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "sendEmail");
                 }
             }
-            return status;
+            return "Y";
         }
+    
+       
 
 //        public string SendSMS();
 //        {
