@@ -6,6 +6,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Xml;
 
@@ -13,40 +15,29 @@ namespace AnkurPrathisthan
 {
     public class clsAuthentication
     {
-        public DataSet GetUserDetails(string EmailID, string Password)
+        //[START] For Email sending         
+        public string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
+        public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
+        public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
+        //[END] For Email sending
+
+        public DataSet GetUserDetails(string EmailID, string Password, string FCMID)
         {
-            DataSet ds = new DataSet();
-            // List<userdetailsEntity> param = new List<userdetailsEntity>();
+            DataSet ds = new DataSet();           
             try
             {
-
-                string ProcName = "uspLogin";
-
+                string ProcName = "ankurmobileapp.uspLogin";
                 SqlParameter[] oParam = null;
-
-                oParam = new SqlParameter[2];
+                oParam = new SqlParameter[3];
                 oParam[0] = new SqlParameter("@P_EmailID", EmailID);
                 oParam[1] = new SqlParameter("@P_Password", Password);
-
-                //string procName = "uspLogin";
-                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
-
-                //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                //{
-                //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                //    {
-                //        EmailID = Convert.ToString(ds.Tables[0].Rows[i]["EmailID"]);
-                //        Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]);
-                //    }
-                //}
-
-
+                oParam[2] = new SqlParameter("@p_fcmId", FCMID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam); 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password);
             }
-
             return ds;
         }
         public DataSet LogoutDetail(string EmailID)
@@ -54,7 +45,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspLogout";
+                string ProcName = "ankurmobileapp.uspLogout";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[1];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
@@ -68,39 +59,40 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password, string DOB,
-        string MobileNo)//, string RoleName)
+        //[START] For User registration
+        public DataSet RegisterUser(string FirstName, string LastName, string EmailID, string Password,
+            string ClusterID, string RoleID,string MobileNo="", string OldPassword="")
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "UserRegistration";
+                string ProcName = "ankurmobileapp.UserRegistration";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[6];
+                oParam = new SqlParameter[8];
                 oParam[0] = new SqlParameter("@FirstName", FirstName);
                 oParam[1] = new SqlParameter("@LastName", LastName);
                 oParam[2] = new SqlParameter("@EmailID", EmailID);
-                // oParam[3] = new SqlParameter("@DOB", DOB);
-                oParam[4] = new SqlParameter("@Password", Password);
-                // oParam[5] = new SqlParameter("@MobileNo", MobileNo);
-                //oParam[6] = new SqlParameter("@RoleName", RoleName);
+                oParam[3] = new SqlParameter("@Password", Password);
+                oParam[4] = new SqlParameter("@OldPassword", OldPassword);
+                oParam[5] = new SqlParameter("@ClusterCode", ClusterID);
+                oParam[6] = new SqlParameter("@RoleID", RoleID);
+                oParam[7] = new SqlParameter("@MobileNo", MobileNo);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in RegisterUser" + ex.Message, EmailID, LastName, FirstName, Password,
-                DOB, MobileNo); //, RoleName);
+                RoleID, MobileNo); //, RoleName);
             }
-
             return ds;
         }
-
+        //[END] For User registration
         public DataSet PasswordReset(string EmailID, string Password)
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspForgotPassword";
+                string ProcName = "ankurmobileapp.uspForgotPassword";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
@@ -114,6 +106,142 @@ namespace AnkurPrathisthan
 
             return ds;
         }
+        // [START] OTP FOR FORGOT PASSWORD
+        public DataSet InsertOtp(string otp, string EmailID)
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "ankurmobileapp.uspInsertOTP";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@OTP", otp);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in InsertOTP" + ex.Message, EmailID, otp);
+            }
+            return ds;
+
+        }
+
+        public string CreateOTP()
+        {
+            DataSet ds = new DataSet();
+            int length = 4;            
+            string validChars = "0123456789";
+            Random random = new Random();
+            char[] chars = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            return (new string(chars));
+        }
+
+        public DataSet ValidateOTP(string EmailID, string otp)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ValidateOTP";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@OTP", otp);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);                                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in ValidateOTP" + ex.Message, EmailID, otp);
+            }
+            return ds;
+        }
+        //[EMAIL for forgot paasword otp]
+        public string SendOTPEmail(string EmailID, string OTP)
+        {
+            clsBookManagement bm = new clsBookManagement();
+            string IsEmailSent = "";
+            string ServerName = SMTPSERVER;
+            int PORTNO = 443;//gmail port string Sender = USERNAME; string credential = PASSWORD;
+            // OTP = CreateOTP(EmailID);
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.EnableSsl = true;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Ankur Pratishthan Password Reset";
+                message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   " + OTP;
+                message.IsBodyHtml = true;
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                    message.DeliveryNotificationOptions = System.Net.Mail.DeliveryNotificationOptions.OnSuccess;
+                    IsEmailSent = message.DeliveryNotificationOptions.ToString();
+                }
+                catch (Exception ex)
+                {
+                    bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "CreateOTP");
+                }
+            }
+            return "Y";
+        }
+        //[END] EMAIL FOR FROGOT PASWPRD OTP
+        // [END] OTP FOR FORGOT PASSWORD
+
+        //[START][For Email send for new user regsitrations]
+        public string SendEmail(string EmailID)
+        {
+            clsBookManagement bm = new clsBookManagement();
+            string Password = ""; string ServerName = SMTPSERVER;
+            int PORTNO = 25;//25 //443 //587       
+            string Sender = USERNAME; string credential = PASSWORD;
+            Password = CreateRandomPassword();
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.EnableSsl = true;
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Support Ankur Pratishthan";
+                message.Body = "Ankur Pratishthan Login Credentials::  " + Password;
+                message.IsBodyHtml = true;
+
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    bm.InsertError(EmailID, "SendVolEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "VolEmail");
+                }
+            }
+            return Password;
+        }
+        //[END] [For email send for new user registration]
+
+        //[START]to create password
+        private static string CreateRandomPassword()
+        {              
+            int length = 8;
+            string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+            Random random = new Random();            
+            char[] chars = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            return (new string (chars));
+        } //[END]to create password
 
         public sealed class SqlHelper
         {

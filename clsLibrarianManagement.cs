@@ -17,7 +17,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspGetLibrarians";
+                string ProcName = "ankurmobileapp.uspGetLibrarians";
                 SqlParameter[] oParam = null;
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -29,14 +29,14 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet HandleLibrarians(int cmd, string FirstName, string LastName,string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="")
+        public DataSet HandleLibrarians(int cmd, string FirstName, string LastName,string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="",string ImagePath="",string DOB="")
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageLibrarians";
+                string ProcName = "ankurmobileapp.uspManageLibrarians";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[12];
 
                 oParam[0] = new SqlParameter("@cmd", cmd);
                 oParam[1] = new SqlParameter("@FirstName", FirstName);
@@ -48,6 +48,8 @@ namespace AnkurPrathisthan
                 oParam[7] = new SqlParameter("@ClusterID", ClusterID);
                 oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
                 oParam[9] = new SqlParameter("@LibrarianID", LibrarianID);
+                oParam[10] = new SqlParameter("@Image", ImagePath);
+                oParam[11] = new SqlParameter("@DOB", DOB);
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
                 

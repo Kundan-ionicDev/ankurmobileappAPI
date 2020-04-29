@@ -7,19 +7,21 @@ using System.IO;
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace AnkurPrathisthan
 {
     public class clsQRCode
     {
         //To generate QRCode
-        public string GenerateQRCode(string BookID, string BookName, string Authorname)
+        public string GenerateQRCode(string BookID, string BookName)
         {
             string qr_id = "";
             try
             {               
                 var qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
-                var qrCode = qrEncoder.Encode(BookID+BookName+Authorname);
+                var qrCode = qrEncoder.Encode(BookID+BookName);
                 long i= 1;
                 foreach (byte b in Guid.NewGuid().ToByteArray())
                 {
@@ -37,5 +39,25 @@ namespace AnkurPrathisthan
             }
             return qr_id + ".png";
         }
+
+        public DataSet GetCode(string EmailID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.GetQRCodes";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+
+        }
     }
+
 }

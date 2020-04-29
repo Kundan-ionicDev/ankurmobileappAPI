@@ -17,7 +17,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspGetMembers";
+                string ProcName = "ankurmobileapp.uspGetMembers";
                 SqlParameter[] oParam = null;
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -29,25 +29,27 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-       public DataSet HandleMembers(int cmd, string FirstName,string LastName,string EmailID,string Address,string MobileNo,string AltMobileNo,string ClusterID, string DOB,string AdminEmailID,string MemberID = "")
+        public DataSet HandleMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo,
+            string ClusterID, string DOB, string AdminEmailID, string MemberID = "", string ImagePath="")
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "uspManageMembers";
+                string ProcName = "ankurmobileapp.uspManageMembers";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[11];
+                oParam = new SqlParameter[12];
                 oParam[0] = new SqlParameter("@cmd", cmd);
                 oParam[1] = new SqlParameter("@FirstName", FirstName);
-                oParam[2] = new SqlParameter("@LastName", FirstName);
+                oParam[2] = new SqlParameter("@LastName", LastName);
                 oParam[3] = new SqlParameter("@Email", EmailID);
                 oParam[4] = new SqlParameter("@Address", Address);
                 oParam[5] = new SqlParameter("@MobileNo", MobileNo);
                 oParam[6] = new SqlParameter("@AltMobNo", AltMobileNo);
-                oParam[7] = new SqlParameter("@DOB", DOB);
-                oParam[8] = new SqlParameter("@AdminEmailID", AdminEmailID);
-                oParam[9] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[7] = new SqlParameter("@ClusterID", ClusterID);
+                oParam[8] = new SqlParameter("@DOB", DOB);
+                oParam[9] = new SqlParameter("@AdminEmailID", AdminEmailID);               
                 oParam[10] = new SqlParameter("@MemberID", MemberID);
+                oParam[11] = new SqlParameter("@Image", ImagePath);
 
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
@@ -58,6 +60,44 @@ namespace AnkurPrathisthan
             }
             return ds;
 
+        }
+
+        public DataSet GetFbMsg()
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "GetFbMsg";
+                SqlParameter[] oParam = null;               
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
+
+        public DataSet InsertShayari(string msg, string EmailID, string cateogory)
+        {
+            DataSet ds = null;
+            try
+            {
+                string ProcName = "InsertShayari";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[3];
+                oParam[0] = new SqlParameter("@Shayari", msg);
+                oParam[1] = new SqlParameter("@CreatedBy", EmailID);
+                oParam[2] = new SqlParameter("@Category", cateogory);
+                //oParam[3] = new SqlParameter("@Email", EmailID);
+                ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
         }
 
       

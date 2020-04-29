@@ -15,7 +15,17 @@ namespace AnkurPrathisthan.Entity
         public string Dob { get; set; }
         public string Mobile { get; set; }
         public string Rolename { get; set; }
+        public int  RoleID { get; set; }  
         public string ClusterName { get; set; }
+        public string FullName{ get; set; }
+        public int ClusterCode { get; set; }
         
+    }
+
+    public class ForgotPasswordEntity
+    {
+        public string OTP { get; set; }
+        public string Email { get; set; }
+
     }
 }
