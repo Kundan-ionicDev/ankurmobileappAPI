@@ -38,7 +38,17 @@ namespace AnkurPrathisthan.Entity
         public string RegDate { get; set; }
         public string PAN { get; set; }
         public string Amount1 { get; set; }
+        public string BirthdayFlag { get; set; }
+        public string DonationTowards { get; set; }
         
+    }
+
+    public class GetSlides
+    {
+        public string ID { get; set; }
+        public string ImagePath { get; set; }
+        public string Title { get; set; }
+
     }
     
 }

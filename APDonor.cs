@@ -104,14 +104,14 @@ namespace AnkurPrathisthan
         }
 
         public DataSet SubmitDonors (string FirstName, string LastName, string EmailID, string DOB,
-            string Address, string Contact, string AdminEmailID,int Amount, string PaymentMode,string Description="")
+            string Address, string Contact, string AdminEmailID,int Amount, string PaymentMode,string DonationTowards,string PAN,string Amount1 ,string Description="" )
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.RegisterDonation";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[13];
                 oParam[0] = new SqlParameter("@FirstName", FirstName);
                 oParam[1] = new SqlParameter("@LastName", LastName);
                 oParam[2] = new SqlParameter("@Contact", Contact);
@@ -122,7 +122,9 @@ namespace AnkurPrathisthan
                 oParam[7] = new SqlParameter("@Description", Description);
                 oParam[8] = new SqlParameter("@AddedBy", AdminEmailID);
                 oParam[9] = new SqlParameter("@DOB", DOB);
-                
+                oParam[10] = new SqlParameter("@Donationtowards", DonationTowards);
+                oParam[11] = new SqlParameter("@PAN", PAN);
+                oParam[12] = new SqlParameter("@Amount1", Amount1);    
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -259,6 +261,26 @@ namespace AnkurPrathisthan
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in ReceiptDonor" + ex.Message, EmailID, DonorID);
+            }
+            return ds;
+        }
+
+        public DataSet CheckUser(string EmailID, string otp)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.CheckUser";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@OTP", otp);
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in ReceiptDonor" + ex.Message, EmailID, otp);
             }
             return ds;
         }

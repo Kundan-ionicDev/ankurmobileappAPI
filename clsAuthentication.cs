@@ -187,7 +187,7 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "CreateOTP");
+                    bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "OTPEmailforforgotpassword");
                 }
             }
             return "Y";

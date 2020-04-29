@@ -773,7 +773,7 @@ namespace AnkurPrathisthan
             Image Image; string ImagePath = ""; string DBImgPath = "";
            // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Clusters\";
             string DBPath = "/Uploads/Clusters/";
-           string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Clusters\";           
+            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Clusters\";           
             if (EmailID == null)
                 EmailID = "";
             if (ClusterName == null)
@@ -1396,6 +1396,48 @@ namespace AnkurPrathisthan
             return entity;
         }
 
+        public List<VolunteerEntity> CheckUser(string EmailID)
+        {
+            List<VolunteerEntity> entity = new List<VolunteerEntity>();
+            DataSet ds = new DataSet();
+            APDonor objdonor = new APDonor();
+            clsAuthentication obj = new clsAuthentication();
+            string  otp;
+            try
+            {
+                otp = obj.CreateOTP();
+                ds = objdonor.CheckUser(EmailID, otp);
+                if (ds.Tables.Count > 0)
+                {
+                    entity.Add
+                        (new VolunteerEntity()
+                        {
+                            //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            //FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            //LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            //EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
+                          //  RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                        });
+                }
+
+                //string flag = obj.SendOTPEmail(EmailID, otp);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
+        //public VolunteerEntity ChangePassword (string EmailID, string Password, string OTP)
+        //{
+        //    //proc = uspChangePassword
+        //}
+
         public List<VolunteerEntity> ManageVolunteer (string cmd, string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID,string Img="",string LoginID="")
         {
             List<VolunteerEntity> entity = new List<VolunteerEntity>();
@@ -1476,14 +1518,15 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> AddDonors (string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address,int Amount, string PaymentMode, string AdminEmailID,string Description="")
+        public List<DonorEntity> AddDonors (string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
             APDonor objdonor = new APDonor();          
             try
             {
-                ds = objdonor.SubmitDonors(FirstName,LastName, EmailID, DOB, Address, ContactNo, AdminEmailID,Amount,PaymentMode,Description);
+                ds = objdonor.SubmitDonors(FirstName,LastName, EmailID, DOB, Address, ContactNo, AdminEmailID,Amount,
+                    PaymentMode,DonationTowards,PAN,Amount1,Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1500,7 +1543,8 @@ namespace AnkurPrathisthan
                             Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
                             DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
                             PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
-                            Amount1 = Convert.ToString(ds.Tables[0].Rows[0]["Amount1"]), 
+                            Amount1 = Convert.ToString(ds.Tables[0].Rows[0]["Amount1"]),
+                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]), 
                         });
                 }           
 
@@ -1571,6 +1615,7 @@ namespace AnkurPrathisthan
                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["DonorEmailID"]),                          
                            ContactNo = Convert.ToString(ds.Tables[0].Rows[i]["ContactNo"]),
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
+                           BirthdayFlag = Convert.ToString(ds.Tables[0].Rows[i]["BdayFlag"]),
                        });
                     }
                 }
@@ -1610,7 +1655,7 @@ namespace AnkurPrathisthan
                             //OccassionID = Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]),                            
                         });
 
-                    mailsent = obj.SendCelebrateEmail(EmailID);
+                   // mailsent = obj.SendCelebrateEmail(EmailID);
                 }
                 
             }
@@ -1657,42 +1702,25 @@ namespace AnkurPrathisthan
         }
 
         //[END]View Celebrate WIth US
+        public List<GetSlides> GetSlides ()
+        {
+            List<GetSlides> obj = new List<GetSlides>();
+            try
+            {
+                obj.Add(new GetSlides{
 
-        //public string SendReceiptMail(string EmailID, int DonorID)
-        //{
-        //    string message = null;
-        //    try
-        //    {
-        //        clsPDF pdf = new clsPDF();
-        //        string filename = "APReceipt" + DonorID + EmailID;
-        //        APDonor ap = new APDonor();
-        //        DataSet ds = null;
-        //        ds = ap.ReceiptDonor(EmailID, DonorID);
-        //        MailMessage mm = new MailMessage("kundan.mobileappdev@gmail.com", "kundan.mobileappdev@gmail.com");
-        //        mm.Subject = "Ankur Pratishthan Donation Receipt";
-        //        mm.Body = "Thank you! PFA receipt";                
-        //        // mm.Attachments.Add(new Attachment(new MemoryStream(bytes), "DonationReceipt.pdf"));
-        //        mm.Attachments.Add(new Attachment(@"C:\DonationReceipt.pdf"));
-        //        mm.IsBodyHtml = true;
-        //        SmtpClient smtp = snew SmtpClient();
-        //        smtp.Host = "smtp.gmail.com";
-        //        smtp.EnableSsl = true;
-        //        NetworkCredential NetworkCred = new NetworkCredential();
-        //        NetworkCred.UserName = "kundan.mobileappdev@gmail.com";
-        //        NetworkCred.Password = "Kundan@2244";
-        //        smtp.UseDefaultCredentials = true;
-        //        smtp.Credentials = NetworkCred;
-        //        smtp.Port = 587;
-        //        smtp.Send(mm);
-        //        message = "Receipt sent succesfully";
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    return message;
-        //} 
+                    ID = "1",
+                    ImagePath="https://ankurpratishthan.com/Uploads/Books/Economics57865400.jpeg",
+                  //  ImagePath = " http://localhost:51582/Uploads/Books/1.png",
+                    Title="slider 1"
+                });
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }
+            return obj;
+        }
 
         public string SendEmail(string EmailID = "kundansakpal@gmail.com")
         {
@@ -1724,24 +1752,6 @@ namespace AnkurPrathisthan
             }
             return "Y";
         }
-    
-       
-
-//        public string SendSMS();
-//        {
-
-//        var client = new Client(creds: new Nexmo.Api.Request.Credentials
-//{
-//    ApiKey = "0d0b06f2",
-//    ApiSecret = "0ymPXyEAKRYdT9hB"
-//});
-//var results = client.SMS.Send(request: new SMS.SMSRequest
-//{
-//    from = "Vonage SMS API",
-//    to = "919960097184",
-//    text = "Hello from Vonage"
-//});
-//        }
 
         #endregion AP Donation Management System
     }

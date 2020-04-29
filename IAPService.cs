@@ -197,7 +197,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "AddDonors")]
         [OperationContract]
-        List<DonorEntity> AddDonors(string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, int Amount, string PaymentMode, string AdminEmailID,string Description="");
+        List<DonorEntity> AddDonors(string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1, string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -237,11 +237,17 @@ namespace AnkurPrathisthan
         //[OperationContract]
         //string SendReceiptMail(string EmailID, int DonorID);
 
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "SendEmail")]
+        //[OperationContract]
+        //string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com");
+
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "SendEmail")]
+        UriTemplate = "GetSlides")]
         [OperationContract]
-        string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com");
+        List<GetSlides> GetSlides();
 
         #endregion AP Donor
 
