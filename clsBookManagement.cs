@@ -162,7 +162,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "InsertError";
+                string ProcName = "ankurmobileap.InsertError";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[4];
                 oParam[0] = new SqlParameter("@Email", Email);

@@ -24,8 +24,8 @@ namespace AnkurPrathisthan.Entity
 
     public class DonorEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string FullName { get; set; }
+        public string Inthenameof { get; set; }
         public string EmailID { get; set; }
         public string DOB { get; set; }
         public string ContactNo { get; set; }
@@ -37,7 +37,7 @@ namespace AnkurPrathisthan.Entity
         public string Description { get; set; }
         public string RegDate { get; set; }
         public string PAN { get; set; }
-        public string Amount1 { get; set; }
+        public string Amountinwords { get; set; }
         public string BirthdayFlag { get; set; }
         public string DonationTowards { get; set; }
         

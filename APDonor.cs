@@ -103,8 +103,8 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet SubmitDonors (string FirstName, string LastName, string EmailID, string DOB,
-            string Address, string Contact, string AdminEmailID,int Amount, string PaymentMode,string DonationTowards,string PAN,string Amount1 ,string Description="" )
+        public DataSet SubmitDonors (string FullName, string Inthenameof, string EmailID, string DOB,
+            string Address, string Contact, string AdminEmailID, int Amount, string PaymentMode, string DonationTowards, string PAN, string AmountInWords, string Description = "")
         {
             DataSet ds = new DataSet();
             try
@@ -112,8 +112,8 @@ namespace AnkurPrathisthan
                 string ProcName = "ankurmobileapp.RegisterDonation";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[13];
-                oParam[0] = new SqlParameter("@FirstName", FirstName);
-                oParam[1] = new SqlParameter("@LastName", LastName);
+                oParam[0] = new SqlParameter("@Donatedby", FullName);
+                oParam[1] = new SqlParameter("@Inthenameof", Inthenameof);
                 oParam[2] = new SqlParameter("@Contact", Contact);
                 oParam[3] = new SqlParameter("@Address", Address);
                 oParam[4] = new SqlParameter("@Email", EmailID);
@@ -124,26 +124,27 @@ namespace AnkurPrathisthan
                 oParam[9] = new SqlParameter("@DOB", DOB);
                 oParam[10] = new SqlParameter("@Donationtowards", DonationTowards);
                 oParam[11] = new SqlParameter("@PAN", PAN);
-                oParam[12] = new SqlParameter("@Amount1", Amount1);    
+                oParam[12] = new SqlParameter("@Amountwords", AmountInWords);    
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in SubmitDonors" + ex.Message, EmailID, LastName, FirstName);
+                throw ex;
             }
             return ds;
         }
 
-        public DataSet FetchDonors(string VolEmailID)
+        public DataSet FetchDonors(string VolEmailID,int RoleID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.GetDonors";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[1];
+                oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@EmailID", VolEmailID);
+                oParam[1] = new SqlParameter("@RoleID", RoleID);
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -152,13 +153,16 @@ namespace AnkurPrathisthan
             }
             return ds;
         }
-        public DataSet DonorBirthdays()
+        public DataSet DonorBirthdays(string EmailID, int RoleID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.GetDonorBirthdays";
-                SqlParameter[] oParam = null; 
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@RoleID", RoleID);
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -243,6 +247,22 @@ namespace AnkurPrathisthan
                 }
             }
             return status;
+        }
+
+        public DataSet GetImages()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.GetSplashImages";
+                SqlParameter[] oParam = null;
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in GetSplashImages" + ex.Message);
+            }
+            return ds;
         }
 
         public DataSet ReceiptDonor(string EmailID,int DonorID)

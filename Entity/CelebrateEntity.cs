@@ -17,5 +17,9 @@ namespace AnkurPrathisthan.Entity
         public int OccassionID { get; set; }
         public string DateOfEvent { get; set; }
         public string Status { get; set; }
+        public string AreaName { get; set; }
+        public string Occassion { get; set; }
+
     }
+
 }

@@ -1518,22 +1518,24 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> AddDonors (string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,string Description="")
+        public List<DonorEntity> AddDonors (string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
+            string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,
+            string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
             APDonor objdonor = new APDonor();          
             try
             {
-                ds = objdonor.SubmitDonors(FirstName,LastName, EmailID, DOB, Address, ContactNo, AdminEmailID,Amount,
+                ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
                     PaymentMode,DonationTowards,PAN,Amount1,Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
                         (new DonorEntity()
-                        {                            
-                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
-                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                        {
+                            FullName = Convert.ToString(ds.Tables[0].Rows[0]["DonatedBy"]),
+                            Inthenameof = Convert.ToString(ds.Tables[0].Rows[0]["IntheNameof"]),
                             EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),                          
                             Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
@@ -1543,7 +1545,7 @@ namespace AnkurPrathisthan
                             Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
                             DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
                             PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
-                            Amount1 = Convert.ToString(ds.Tables[0].Rows[0]["Amount1"]),
+                            Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
                             DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]), 
                         });
                 }           
@@ -1556,7 +1558,7 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> GetDonors (string EmailID)
+        public List<DonorEntity> GetDonors (string EmailID,int RoleID)
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();            
@@ -1564,16 +1566,16 @@ namespace AnkurPrathisthan
             APDonor objdonor = new APDonor();
             try
             {
-                ds = objdonor.FetchDonors(EmailID);
+                ds = objdonor.FetchDonors(EmailID, RoleID);
                 if (ds.Tables.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         entity.Add
                        (new DonorEntity()
-                       {                           
-                           FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]),
-                           LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]),
+                       {
+                           FullName = Convert.ToString(ds.Tables[0].Rows[i]["DonatedBy"]),
+                           Inthenameof = Convert.ToString(ds.Tables[0].Rows[i]["IntheNameof"]),
                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["DonorEmailID"]),
                            Amount = Convert.ToInt32(ds.Tables[0].Rows[i]["Amount"]),
                            Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
@@ -1594,7 +1596,7 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> GetDonorBirthdays()
+        public List<DonorEntity> GetDonorBirthdays(string EmailID, int RoleID)
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
@@ -1602,7 +1604,7 @@ namespace AnkurPrathisthan
             APDonor objdonor = new APDonor();
             try
             {
-                ds = objdonor.DonorBirthdays();
+                ds = objdonor.DonorBirthdays(EmailID, RoleID);
                 if (ds.Tables.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1610,8 +1612,8 @@ namespace AnkurPrathisthan
                         entity.Add
                        (new DonorEntity()
                        {
-                           FirstName = Convert.ToString(ds.Tables[0].Rows[i]["FirstName"]),
-                           LastName = Convert.ToString(ds.Tables[0].Rows[i]["LastName"]),
+                           FullName = Convert.ToString(ds.Tables[0].Rows[i]["DonatedBy"]),
+                           Inthenameof = Convert.ToString(ds.Tables[0].Rows[i]["IntheNameof"]),
                            EmailID = Convert.ToString(ds.Tables[0].Rows[i]["DonorEmailID"]),                          
                            ContactNo = Convert.ToString(ds.Tables[0].Rows[i]["ContactNo"]),
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
@@ -1690,6 +1692,8 @@ namespace AnkurPrathisthan
                                 AreaID = Convert.ToInt32(ds.Tables[0].Rows[i]["AreaID"]),
                                 OccassionID = Convert.ToInt32(ds.Tables[0].Rows[i]["OccassionID"]),
                                 Status = Convert.ToString(ds.Tables[0].Rows[i]["Status"]),
+                                AreaName = Convert.ToString(ds.Tables[0].Rows[i]["AreaName"]),
+                                Occassion = Convert.ToString(ds.Tables[0].Rows[i]["Occassion"]),
                             });
                     }
                 }
@@ -1705,15 +1709,26 @@ namespace AnkurPrathisthan
         public List<GetSlides> GetSlides ()
         {
             List<GetSlides> obj = new List<GetSlides>();
+            APDonor apobj = new APDonor();
+            DataSet ds = new DataSet();
             try
             {
-                obj.Add(new GetSlides{
-
-                    ID = "1",
-                    ImagePath="https://ankurpratishthan.com/Uploads/Books/Economics57865400.jpeg",
-                  //  ImagePath = " http://localhost:51582/Uploads/Books/1.png",
-                    Title="slider 1"
-                });
+                ds = apobj.GetImages();
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {                       
+                        obj.Add(new GetSlides
+                        {
+                            ID = Convert.ToString(ds.Tables[0].Rows[i]["ID"]),
+                            ImagePath = Convert.ToString(ds.Tables[0].Rows[i]["ImgPath"]),
+                           // ImagePath = "https://ankurpratishthan.com/Uploads/Books/Economics57865400.jpeg",
+                            //  ImagePath = " http://localhost:51582/Uploads/Books/1.png",
+                          //  Title = "slider 1"
+                            Title = Convert.ToString(ds.Tables[0].Rows[i]["ImgName"]),
+                        });
+                  }
+                }              
             }
             catch (Exception ex)
             {                
@@ -1722,7 +1737,7 @@ namespace AnkurPrathisthan
             return obj;
         }
 
-        public string SendEmail(string EmailID = "kundansakpal@gmail.com")
+        public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
             string ServerName = "mail.ankurpratishthan.com";
@@ -1747,7 +1762,8 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "sendEmail");
+                    throw ex;
+                    //bm.InsertError(EmailID, "SendEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "sendEmail");
                 }
             }
             return "Y";
