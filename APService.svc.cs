@@ -1764,6 +1764,38 @@ namespace AnkurPrathisthan
             return obj;
         }
 
+        public string SendDeclineEmail(string EmailID)
+        {
+            clsBookManagement bm = new clsBookManagement();
+            string ServerName = "mail.ankurpratishthan.com";
+            int PORTNO = 25;  //25 //443 //587       
+            string Sender = "Admin@ankurpratishthan.com";
+            string PASSWORD = "Anku@87!";
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.EnableSsl = true;
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(Sender);
+                message.Subject = "Support Ankur Pratishthan";
+                message.Body = "Your donation at ankur is decline. admin willcontact with you for the same";
+                message.IsBodyHtml = true;
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                    //bm.InsertError(EmailID, "SendEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "sendEmail");
+                }
+            }
+            return "Y";
+        }
+
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
