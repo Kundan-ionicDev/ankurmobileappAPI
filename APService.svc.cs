@@ -1545,17 +1545,17 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> AddDonors (string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
+        public List<DonorEntity> ManageDonor(string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,
-            string Description="")
+            int cmd,int DonorID,string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
             APDonor objdonor = new APDonor();          
             try
             {
-                ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
-                    PaymentMode,DonationTowards,PAN,Amount1,Description);
+                ds = objdonor.handleDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
+                    PaymentMode,DonationTowards,PAN,Amount1,cmd,DonorID,Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1573,9 +1573,49 @@ namespace AnkurPrathisthan
                             DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
                             PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
                             Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
-                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]), 
+                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
+                            DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]), 
                         });
-                }           
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
+        public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
+           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
+           string Description = "")
+        {
+            List<DonorEntity> entity = new List<DonorEntity>();
+            DataSet ds = new DataSet();
+            APDonor objdonor = new APDonor();
+            try
+            {
+                ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
+                    PaymentMode, DonationTowards, PAN, Amount1, Description);
+                if (ds.Tables.Count > 0)
+                {
+                    entity.Add
+                        (new DonorEntity()
+                        {
+                            FullName = Convert.ToString(ds.Tables[0].Rows[0]["DonatedBy"]),
+                            Inthenameof = Convert.ToString(ds.Tables[0].Rows[0]["IntheNameof"]),
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),
+                            Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            AdminEmailID = Convert.ToString(ds.Tables[0].Rows[0]["CreatedBy"]),
+                            Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
+                            PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
+                            Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
+                            DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
+                            Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
+                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
+                        });
+                }
 
             }
             catch (Exception ex)
@@ -1695,14 +1735,14 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<CelebrateEntity> GetCelebrateRequest()
+        public List<CelebrateEntity> GetCelebrateRequest(string EmailID, int RoleID)
         {
             List<CelebrateEntity> entity = new List<CelebrateEntity>();
             DataSet ds = new DataSet();
             APDonor obj = new APDonor();
             try
             {
-                ds = obj.GetAllReqeusts();
+                ds = obj.GetAllReqeusts(EmailID,RoleID);
                 if (ds.Tables.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1759,6 +1799,34 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {                
+                throw ex;
+            }
+            return obj;
+        }
+        public List<ContactUs> SubmitQuery (string FullName,string EmailID, int Contact, string Query)
+        {
+            DataSet ds = new DataSet();
+            List<ContactUs> obj = new List<ContactUs>();
+            APDonor apobj = new APDonor();
+            try
+            {
+                ds = apobj.Contactus(FullName,EmailID,Query,Contact);
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj.Add(new ContactUs
+                        {
+                            FullName = Convert.ToString(ds.Tables[0].Rows[i]["FullName"]),
+                            Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]),
+                            Query = Convert.ToString(ds.Tables[0].Rows[i]["Query"]),
+                            Contact = Convert.ToString(ds.Tables[0].Rows[i]["Contact"]),
+                        });
+                    }
+                } 
+            }
+            catch (Exception ex)
+            {               
                 throw ex;
             }
             return obj;

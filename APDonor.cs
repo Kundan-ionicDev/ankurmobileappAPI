@@ -135,6 +135,41 @@ namespace AnkurPrathisthan
             return ds;
         }
 
+        public DataSet handleDonors(string FullName, string Inthenameof, string EmailID, string DOB,
+            string Address, string Contact, string AdminEmailID, int Amount, string PaymentMode, string DonationTowards, string PAN, 
+            string AmountInWords,int cmd, int DonorID, string Description = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.ManageDonors";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[15];
+                oParam[0] = new SqlParameter("@Donatedby", FullName);
+                oParam[1] = new SqlParameter("@Inthenameof", Inthenameof);
+                oParam[2] = new SqlParameter("@Contact", Contact);
+                oParam[3] = new SqlParameter("@Address", Address);
+                oParam[4] = new SqlParameter("@Email", EmailID);
+                oParam[5] = new SqlParameter("@Amount", Amount);
+                oParam[6] = new SqlParameter("@PaymentMode", PaymentMode);
+                oParam[7] = new SqlParameter("@Description", Description);
+                oParam[8] = new SqlParameter("@AddedBy", AdminEmailID);
+                oParam[9] = new SqlParameter("@DOB", DOB);
+                oParam[10] = new SqlParameter("@Donationtowards", DonationTowards);
+                oParam[11] = new SqlParameter("@PAN", PAN);
+                oParam[12] = new SqlParameter("@Amountwords", AmountInWords);
+                oParam[13] = new SqlParameter("@cmd", cmd);
+                oParam[14] = new SqlParameter("@DonorID", DonorID);
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
         public DataSet FetchDonors(string VolEmailID,int RoleID)
         {
             DataSet ds = new DataSet();
@@ -200,13 +235,16 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet GetAllReqeusts()
+        public DataSet GetAllReqeusts(string EmailID, int RoleID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.GetCelebrateRequest";
                 SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@RoleID", RoleID);
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -322,6 +360,28 @@ namespace AnkurPrathisthan
             catch (Exception ex)
             {
                 Console.WriteLine("APService----Error in ChangePassword" + ex.Message, EmailID, Otp);
+            }
+            return ds;
+        }
+
+        public DataSet Contactus(string Fullname,string EmailID, string Query, int contact)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.uspContactus";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[4];
+                oParam[0] = new SqlParameter("@Fullname", Fullname);
+                oParam[1] = new SqlParameter("@EmailID", EmailID);
+                oParam[2] = new SqlParameter("@contact", contact);
+                oParam[3] = new SqlParameter("@Query", Query);
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return ds;
         }

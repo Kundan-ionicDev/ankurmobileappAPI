@@ -209,6 +209,14 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageDonor")]
+        [OperationContract]
+        List<DonorEntity> ManageDonor(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
+            string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
+            int cmd, int DonorID, string Description = "");
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetDonorBirthdays")]
         [OperationContract]
         List<DonorEntity> GetDonorBirthdays(string EmailID, int RoleID);
@@ -217,7 +225,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetCelebrateRequest")]
         [OperationContract]
-        List<CelebrateEntity> GetCelebrateRequest();
+        List<CelebrateEntity> GetCelebrateRequest(string EmailID, int RoleID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -255,6 +263,12 @@ namespace AnkurPrathisthan
         UriTemplate = "GetSlides")]
         [OperationContract]
         List<GetSlides> GetSlides();
+
+        [WebInvoke(Method = "POST",
+       RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+       UriTemplate = "SubmitQuery")]
+        [OperationContract]
+        List<ContactUs> SubmitQuery(string FullName, string EmailID, int Contact, string Query);
 
         #endregion AP Donor
 

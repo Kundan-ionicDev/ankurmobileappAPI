@@ -40,6 +40,7 @@ namespace AnkurPrathisthan.Entity
         public string Amountinwords { get; set; }
         public string BirthdayFlag { get; set; }
         public string DonationTowards { get; set; }
+        public string DonorID { get; set; }
         
     }
 
@@ -49,6 +50,14 @@ namespace AnkurPrathisthan.Entity
         public string ImagePath { get; set; }
         public string Title { get; set; }
 
+    }
+
+    public class ContactUs
+    {
+        public string FullName { get; set; }
+        public string Contact { get; set; }
+        public string Email { get; set; }
+        public string Query { get; set; }
     }
     
 }
