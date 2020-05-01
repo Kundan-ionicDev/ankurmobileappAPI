@@ -226,18 +226,17 @@ namespace AnkurPrathisthan
         List<CelebrateEntity> ManageCelebrateRequest(int cmd, string FirstName, string LastName,
         string EmailID, string Contact, string Date, string VolEmailID, int AreaID, int OccassionID, string ID);
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "ManageCelebrateRequest")]
-        //[OperationContract]
-        //List<CelebrateEntity> ManageCelebrateRequest(int cmd, string FirstName, string LastName,
-        //string EmailID, string Contact, string Date, string VolEmailID, int AreaID, int OccassionID, string ID);
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "CheckUser")]
+        [OperationContract]
+        List<VolunteerEntity> CheckUser(string EmailID);
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "SendReceiptMail")]
-        //[OperationContract]
-        //string SendReceiptMail(string EmailID, int DonorID);
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ChangePassword")]
+        [OperationContract]
+        List<VolunteerEntity> ChangePassword(string EmailID, string Password, int Otp);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

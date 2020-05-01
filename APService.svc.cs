@@ -1395,7 +1395,6 @@ namespace AnkurPrathisthan
             }
             return entity;
         }
-
         public List<VolunteerEntity> CheckUser(string EmailID)
         {
             List<VolunteerEntity> entity = new List<VolunteerEntity>();
@@ -1433,10 +1432,38 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        //public VolunteerEntity ChangePassword (string EmailID, string Password, string OTP)
-        //{
-        //    //proc = uspChangePassword
-        //}
+        public List<VolunteerEntity> ChangePassword(string EmailID, string Password, int Otp)
+        {
+            List<VolunteerEntity> entity = new List<VolunteerEntity>();
+            DataSet ds = new DataSet();
+            APDonor objdonor = new APDonor();
+            clsAuthentication obj = new clsAuthentication();
+            try
+            {                
+                ds = objdonor.ChangePassword(EmailID,Password,Otp);
+                if (ds.Tables.Count > 0)
+                {
+                    entity.Add
+                        (new VolunteerEntity()
+                        {
+                            //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            //FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            //LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            //EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
+                            //  RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+            //proc = uspchangepassword
+        }
 
         public List<VolunteerEntity> ManageVolunteer (string cmd, string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID,string Img="",string LoginID="")
         {

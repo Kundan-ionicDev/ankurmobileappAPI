@@ -305,5 +305,26 @@ namespace AnkurPrathisthan
             return ds;
         }
 
+        public DataSet ChangePassword(string EmailID, string Password, int Otp)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.uspChangePassword";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[3];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                oParam[1] = new SqlParameter("@Password", Password);
+                oParam[2] = new SqlParameter("@OTP", Otp);
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("APService----Error in ChangePassword" + ex.Message, EmailID, Otp);
+            }
+            return ds;
+        }
+
     }
 }
