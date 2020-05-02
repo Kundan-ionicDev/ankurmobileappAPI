@@ -1651,6 +1651,7 @@ namespace AnkurPrathisthan
                            RegDate = Convert.ToString(ds.Tables[0].Rows[i]["DateOfDonation"]),
                            PaymentMode = Convert.ToString(ds.Tables[0].Rows[i]["PaymentMode"]),
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
+                           DonorID = Convert.ToString(ds.Tables[0].Rows[i]["DonorID"]),
                        });
                     }
                 }
