@@ -308,9 +308,9 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "ankurmobileapp.RegisterRequest";
+                string ProcName = "ankurmobileapp.uspGetDonationReceipt";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[2];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@DonorID", DonorID);                              
 

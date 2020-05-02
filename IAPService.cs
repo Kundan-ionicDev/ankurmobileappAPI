@@ -260,6 +260,12 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "SendReceiptMail")]
+        [OperationContract]
+        string SendReceiptMail(string EmailID, int DonorID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetSlides")]
         [OperationContract]
         List<GetSlides> GetSlides();
