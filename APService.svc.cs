@@ -1959,13 +1959,33 @@ namespace AnkurPrathisthan
             return "Y";
         }
 
+        public string SendSMS(int Contact, int DonorID)
+        {
+            string result = "";
+            string key = "d0b06f2";
+            string secret = "0ymPXyEAKRYdT9hB";
+            string to = "9987088651";
+            string messages = "TestSMSAP";
+            string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMS%20SMS&priority=1";  
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }
+            
+            return result;
+        }
+
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "mail.ankurpratishthan.com";
+            string ServerName = "smtp.gmail.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "Admin@ankurpratishthan.com";
-            string  PASSWORD ="Anku@87!";
+            string Sender = "ngoankur@gmail.com";
+            string  PASSWORD ="sevadharma";
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
