@@ -2052,7 +2052,7 @@ namespace AnkurPrathisthan
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(Sender);
