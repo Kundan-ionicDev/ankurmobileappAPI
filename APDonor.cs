@@ -386,5 +386,25 @@ namespace AnkurPrathisthan
             return ds;
         }
 
+        public DataSet SendDonorSMS(int DonorID, int Mode)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.SendDonorSMS";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[2];
+                oParam[0] = new SqlParameter("@DonorID", DonorID);
+                oParam[1] = new SqlParameter("@Mode", Mode);                
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
     }
 }

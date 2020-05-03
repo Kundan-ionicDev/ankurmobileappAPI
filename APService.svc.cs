@@ -1959,23 +1959,85 @@ namespace AnkurPrathisthan
             return "Y";
         }
 
-        public string SendSMS(int Contact, int DonorID)
+        public string SendDonorSMS(int DonorID)
         {
             string result = "";
-            string key = "d0b06f2";
-            string secret = "0ymPXyEAKRYdT9hB";
-            string to = "9987088651";
-            string messages = "TestSMSAP";
-            string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMS%20SMS&priority=1";  
+            DataSet ds1 = new DataSet();
+            DataSet ds2 = new DataSet();
+            APDonor ap = new APDonor();             
             try
             {
+                ds1 = ap.SendDonorSMS(DonorID, 1);
+                if (ds1.Tables.Count>0 )
+                {
+                    var contact="";
+                    contact = ds1.Tables[0].Rows[0]["ContactNo"].ToString(); ;
+                    //if (ds.Tables[0].Rows[0]["ContactNo"]) ! = null )
+                    //{
+                    if (contact != null)
+                    {
+                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1"; 
+                        WebRequest request = HttpWebRequest.Create(sURL);  
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Stream s = (Stream)response.GetResponseStream();
+                        StreamReader readStream = new StreamReader(s);
+                        string dataString = readStream.ReadToEnd();
+                        response.Close();
+                        s.Close();
+                        readStream.Close();
+                    }
+
+                    ds2 = ap.SendDonorSMS(DonorID, 2);
+                 
+                }                
+                            
+            }
+            catch (Exception ex)
+            {
+                result = "SMS not sent";
+            }
+            
+            return result;
+        }
+
+        public string SendDeclineSMS(int DonorID,int LoginID)
+        {
+            string result = "";
+            DataSet ds1 = new DataSet();
+            DataSet ds2 = new DataSet();
+            APDonor ap = new APDonor();
+            try
+            {
+                ds1 = ap.SendDonorSMS(DonorID, 1);
+                if (ds1.Tables.Count > 0)
+                {
+                    var contact = "";
+                    contact = ds1.Tables[0].Rows[0]["ContactNo"].ToString(); ;
+                    //if (ds.Tables[0].Rows[0]["ContactNo"]) ! = null )
+                    //{
+                    if (contact != null)
+                    {
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1";
+                        WebRequest request = HttpWebRequest.Create(sURL1);
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Stream s = (Stream)response.GetResponseStream();
+                        StreamReader readStream = new StreamReader(s);
+                        string dataString = readStream.ReadToEnd();
+                        response.Close();
+                        s.Close();
+                        readStream.Close();
+                    }
+
+                    ds2 = ap.SendDonorSMS(DonorID, 2);
+
+                }
 
             }
             catch (Exception ex)
-            {                
-                throw ex;
+            {
+                result = "SMS not sent";
             }
-            
+
             return result;
         }
 

@@ -266,9 +266,9 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "SendSMS")]
+        UriTemplate = "SendDonorSMS")]
         [OperationContract]
-        string SendSMS(int Contact, int DonorID);
+        string SendDonorSMS(int DonorID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
