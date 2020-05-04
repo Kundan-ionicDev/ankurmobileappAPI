@@ -2045,14 +2045,14 @@ namespace AnkurPrathisthan
         {
             clsBookManagement bm = new clsBookManagement();
             string ServerName = "smtp.gmail.com";
-            int PORTNO = 25;  //25 //443 //587       
+            int PORTNO = 587;  //25 //443 //587       
             string Sender = "ngoankur@gmail.com";
             string  PASSWORD ="sevadharma";
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = false;
+            smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(Sender);
