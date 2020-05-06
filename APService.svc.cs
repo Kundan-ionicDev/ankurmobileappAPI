@@ -965,8 +965,8 @@ namespace AnkurPrathisthan
                             string ImageName = EmailID + ImageID; //ThumbImgNAme
                             Image = Base64ToImage(Image64, filepath, ImageName);//ThumbImgNAme PNG
                             ImagePath = filepath + ImageName;////ThumbImgNAme Path; 
-                            DBImgPath = DBPath + ImageName;//DB pth
-                            //WriteToFile("ManageLibrarians", DBImgPath, EmailID);
+                            DBImgPath = DBPath + ImageName;//DB pth                         
+                            
                         }
                         catch (Exception ex)
                         {
@@ -1545,9 +1545,49 @@ namespace AnkurPrathisthan
             return entity;
         }
 
+        public List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address,string Img, int LoginID
+            )
+        {
+            List<VolunteerEntity> entity = new List<VolunteerEntity>();
+            DataSet ds = new DataSet();
+            clsAuthentication auth = new clsAuthentication();
+            DataSet dsEmail = new DataSet();
+            APDonor objdonor = new APDonor();
+            Image Image;
+            try
+            {
+                string imgpath = @"C:/Uploads/Librarian/" +LoginID+EmailID;
+                string imgname = LoginID+EmailID;
+                if (Img!="" && Img!=null)
+                {
+                    Image = Base64ToImage(Img, imgpath, imgname);
+                }
+                ds = objdonor.UpdateProfile(EmailID, DOB, Address, ContactNo, imgpath, LoginID);
+                if (ds.Tables.Count > 0)
+                {
+                    entity.Add
+                        (new VolunteerEntity()
+                        {
+                            LoginID = Convert.ToString(ds.Tables[0].Rows[0]["LoginID"]),
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            ImgPath = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
+
         public List<DonorEntity> ManageDonor(string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,
-            int cmd,int DonorID,string Description="")
+            int cmd,int DonorID,int Tempflag, string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
@@ -1555,7 +1595,7 @@ namespace AnkurPrathisthan
             try
             {
                 ds = objdonor.handleDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
-                    PaymentMode,DonationTowards,PAN,Amount1,cmd,DonorID,Description);
+                    PaymentMode, DonationTowards, PAN, Amount1, cmd, DonorID, Tempflag, Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1575,6 +1615,7 @@ namespace AnkurPrathisthan
                             Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
                             DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
                             DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]), 
+                            TemporaryFlag= Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]), 
                         });
                 }
             }
@@ -1586,7 +1627,7 @@ namespace AnkurPrathisthan
         }
 
         public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
-           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
+           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,int Tempflag,
            string Description = "")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
@@ -1595,7 +1636,7 @@ namespace AnkurPrathisthan
             try
             {
                 ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
-                    PaymentMode, DonationTowards, PAN, Amount1, Description);
+                    PaymentMode, DonationTowards, PAN, Amount1, Tempflag,Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1615,9 +1656,19 @@ namespace AnkurPrathisthan
                             Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
                             DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
                             DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
+                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
                         });
                 }
-
+                //[START]SMS integration
+                //if (ds.Tables[0].Rows[0]["ContactNo"].ToString()!= null && ds.Tables[0].Rows[0]["ContactNo"].ToString()!= "")
+                //{
+                //    string addedby = ds.Tables[0].Rows[0]["CreatedBy"].ToString();
+                //    string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                //    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                //    string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " +fullname+ ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+                //    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + addedby + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";   
+                //}
+                //[END]SMS integration
             }
             catch (Exception ex)
             {
@@ -1658,6 +1709,7 @@ namespace AnkurPrathisthan
                            BirthdayFlag = Convert.ToString(ds.Tables[0].Rows[i]["BdayFlag"]),
                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[i]["DonationTowards"]),
                            Description = Convert.ToString(ds.Tables[0].Rows[i]["Description"]),
+                           TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["TempFlag"]),
                        });
                     }
                 }
@@ -1810,14 +1862,46 @@ namespace AnkurPrathisthan
             }
             return obj;
         }
-        public List<ContactUs> SubmitQuery (string FullName,string EmailID, int Contact, string Query)
+
+
+        public List<GetSlides> GetAnkurPDF()
+        {
+            List<GetSlides> obj = new List<GetSlides>();
+            APDonor apobj = new APDonor();
+            DataSet ds = new DataSet();
+            try
+            {
+                ds = apobj.GetPDF();
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj.Add(new GetSlides
+                        {
+                            ID = Convert.ToString(ds.Tables[0].Rows[i]["ID"]),
+                            PDFPath = Convert.ToString(ds.Tables[0].Rows[i]["PDFPath"]),
+                            // ImagePath = "https://ankurpratishthan.com/Uploads/Books/Economics57865400.jpeg",
+                            //  ImagePath = " http://localhost:51582/Uploads/Books/Economics57865400.jpeg",
+                            //  Title = "slider 1"
+                            Title = Convert.ToString(ds.Tables[0].Rows[i]["PDFName"]),
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return obj;
+        }
+        public List<ContactUs> SubmitQuery (string FullName,string EmailID, int Contact, string Query, int Subject)
         {
             DataSet ds = new DataSet();
             List<ContactUs> obj = new List<ContactUs>();
             APDonor apobj = new APDonor();
             try
             {
-                ds = apobj.Contactus(FullName,EmailID,Query,Contact);
+                ds = apobj.Contactus(FullName, EmailID, Query, Contact, Subject);
                 if (ds.Tables.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1826,8 +1910,10 @@ namespace AnkurPrathisthan
                         {
                             FullName = Convert.ToString(ds.Tables[0].Rows[i]["FullName"]),
                             Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]),
-                            Query = Convert.ToString(ds.Tables[0].Rows[i]["Query"]),
+                            Comments = Convert.ToString(ds.Tables[0].Rows[i]["Comments"]),
                             Contact = Convert.ToString(ds.Tables[0].Rows[i]["Contact"]),
+                            Subject = Convert.ToString(ds.Tables[0].Rows[i]["Subject"]),
+                            TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
                         });
                     }
                 } 
@@ -1976,7 +2062,10 @@ namespace AnkurPrathisthan
                     //{
                     if (contact != null)
                     {
-                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1"; 
+                       // string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1"; 
+
+                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + contact + "&msg=Thank you for donating to ankur pratishthan%20SMS&priority=1"; 
+
                         WebRequest request = HttpWebRequest.Create(sURL);  
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         Stream s = (Stream)response.GetResponseStream();
@@ -1986,17 +2075,14 @@ namespace AnkurPrathisthan
                         s.Close();
                         readStream.Close();
                     }
-
                     ds2 = ap.SendDonorSMS(DonorID, 2);
-                 
-                }                
-                            
+                    result = "SMS sent successfully";
+                }                            
             }
             catch (Exception ex)
             {
                 result = "SMS not sent";
-            }
-            
+            }            
             return result;
         }
 
@@ -2017,7 +2103,7 @@ namespace AnkurPrathisthan
                     //{
                     if (contact != null)
                     {
-                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1";
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + contact + "&msg=Thank you for donating to ankur pratishthan%20SMS&priority=1";
                         WebRequest request = HttpWebRequest.Create(sURL1);
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         Stream s = (Stream)response.GetResponseStream();

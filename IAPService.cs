@@ -195,11 +195,17 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "UpdateProfile")]
+        [OperationContract]
+        List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string Img, int LoginID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "AddDonors")]
         [OperationContract]
         List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
-            string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
-            string Description = "");
+           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1, int Tempflag,
+           string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -213,7 +219,7 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<DonorEntity> ManageDonor(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
-            int cmd, int DonorID, string Description = "");
+            int cmd, int DonorID, int Tempflag, string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -277,10 +283,16 @@ namespace AnkurPrathisthan
         List<GetSlides> GetSlides();
 
         [WebInvoke(Method = "POST",
-       RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-       UriTemplate = "SubmitQuery")]
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetAnkurPDF")]
         [OperationContract]
-        List<ContactUs> SubmitQuery(string FullName, string EmailID, int Contact, string Query);
+        List<GetSlides> GetAnkurPDF();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "SubmitQuery")]
+        [OperationContract]
+        List<ContactUs> SubmitQuery(string FullName, string EmailID, int Contact, string Query, int Subject);
 
         #endregion AP Donor
 

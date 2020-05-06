@@ -165,6 +165,7 @@
     <Folder Include="Uploads\Clusters\" />
     <Folder Include="Uploads\Librarian\" />
     <Folder Include="Uploads\Members\" />
+    <Folder Include="Uploads\PDF\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
