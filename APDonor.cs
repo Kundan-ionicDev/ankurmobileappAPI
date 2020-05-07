@@ -256,25 +256,25 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public string SendCelebrateEmail(string EmailID)
+        public string SendCelebrateEmail(string EmailID,string Fullname)
         {
             clsBookManagement bm = new clsBookManagement();
             string status = ""; 
             string ServerName = SMTPSERVER;
-            int PORTNO = 587;//25 //443 //587       
+            int PORTNO = 25;    //25 //443 //587       
             string Sender = USERNAME; string credential = PASSWORD;  
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
+            smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
             smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
                 message.Subject = "Support Ankur Pratishthan";
-                message.Body = "Hello!Your celebrate with us request added succesfully. For further details our Admin will contact you on your provided contact details";
+                message.Body = "Dear " + Fullname;
+                message.Body = "The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.";
                 message.IsBodyHtml = true;
-
                 message.To.Add(EmailID);
                 try
                 {
@@ -283,7 +283,7 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendCelebrateEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "SendCelebrateEmail");
+                    throw ex;
                 }
             }
             return status;
@@ -377,7 +377,7 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in ChangePassword" + ex.Message, EmailID, Otp);
+                throw ex;
             }
             return ds;
         }
@@ -447,6 +447,37 @@ namespace AnkurPrathisthan
                 throw ex;
             }
             return ds;
+        }
+
+        public string RegisterEmail(string EmailID,string FullName)
+        {
+            string ServerName = "mail.smallmodule.com";
+            int PORTNO = 25;  //25 //443 //587       
+            string Sender = "ankursupport@smallmodule.com";
+            string PASSWORD = "Ankur@456"; //sevadharma
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.EnableSsl = true;
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(Sender);
+                message.Subject = "Support Ankur Pratishthan";
+                message.Body = "Dear " +FullName;
+                message.Body = "Thank you for your support. Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.";
+                message.IsBodyHtml = true;
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;                   
+                }
+            }
+            return "Y";
         }
 
     }

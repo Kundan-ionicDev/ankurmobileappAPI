@@ -251,7 +251,7 @@ namespace AnkurPrathisthan
                 }
                 else
                 {
-                    Password = objAuth.SendEmail(EmailID); //Email sending for new password for new user
+                    Password = objAuth.SendPasswordEmail(EmailID); //Email sending for new password for new user
                   //  //WriteToFile("UserRegister",Password,EmailID);
                     ds = objAuth.RegisterUser(FirstName, LastName, EmailID, Password, ClusterCode, RoleID, MobileNo, "");
                     ////WriteToFile("UserRegister", "UserRegistered", EmailID);
@@ -1414,15 +1414,16 @@ namespace AnkurPrathisthan
                             //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
-                            //FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
-                            //LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
-                            //EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
                             Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
-                          //  RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                            LoginID = Convert.ToString(ds.Tables[0].Rows[0]["LoginID"]),
+                            RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
                         });
                 }
 
-                //string flag = obj.SendOTPEmail(EmailID, otp);
+                string flag = obj.SendOTPEmail(EmailID, otp);
 
             }
             catch (Exception ex)
@@ -1449,11 +1450,12 @@ namespace AnkurPrathisthan
                             //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             //DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
-                            //FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
-                            //LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
-                            //EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
                             Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
-                            //  RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                            RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                            LoginID = Convert.ToString(ds.Tables[0].Rows[0]["LoginID"]),
                         });
                 }
             }
@@ -1461,8 +1463,7 @@ namespace AnkurPrathisthan
             {
                 throw ex;
             }
-            return entity;
-            //proc = uspchangepassword
+            return entity;           
         }
 
         public List<VolunteerEntity> ManageVolunteer (string cmd, string FirstName,string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID,string Img="",string LoginID="")
@@ -1492,12 +1493,12 @@ namespace AnkurPrathisthan
                         }); 
                 }
 
-                //if (cmd == "1")
-                //{
-                //    string Password = "";
-                //    Password = auth.SendEmail(EmailID);
-                //    dsEmail = objdonor.VolEmail(EmailID, Password);
-                //}              
+                if (cmd == "1")
+                {
+                    string Password = "";
+                    Password = auth.SendPasswordEmail(EmailID);
+                    dsEmail = objdonor.VolEmail(EmailID, Password);
+                }              
            
             }
             catch (Exception ex)
@@ -1553,13 +1554,14 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            Image Image;
+            Image Image; string imgpath = "";
             try
             {
-                string imgpath = @"C:/Uploads/Librarian/" +LoginID+EmailID;
-                string imgname = LoginID+EmailID;
-                if (Img!="" && Img!=null)
+                
+                if (Img != "" && Img != null)
                 {
+                    imgpath = @"C:/Uploads/Librarian/" + LoginID + EmailID;
+                    string imgname = LoginID + EmailID;
                     Image = Base64ToImage(Img, imgpath, imgname);
                 }
                 ds = objdonor.UpdateProfile(EmailID, DOB, Address, ContactNo, imgpath, LoginID);
@@ -1659,16 +1661,21 @@ namespace AnkurPrathisthan
                             TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
                         });
                 }
+                string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 //[START]SMS integration
-                //if (ds.Tables[0].Rows[0]["ContactNo"].ToString()!= null && ds.Tables[0].Rows[0]["ContactNo"].ToString()!= "")
-                //{
-                //    string addedby = ds.Tables[0].Rows[0]["CreatedBy"].ToString();
-                //    string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                //    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                //    string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " +fullname+ ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
-                //    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + addedby + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";   
-                //}
+                if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
+                {
+                    string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
+                    
+                    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                    string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                }
                 //[END]SMS integration
+
+                //[START]Email 
+                string email = objdonor.RegisterEmail(EmailID, fullname);
+                //[END]Email
             }
             catch (Exception ex)
             {
@@ -1782,10 +1789,9 @@ namespace AnkurPrathisthan
                             //AreaID = Convert.ToInt32(ds.Tables[0].Rows[0]["ContactNo"]),
                             //OccassionID = Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]),                            
                         });
-
-                   // mailsent = obj.SendCelebrateEmail(EmailID);
-                }
-                
+                    string Fullname = FirstName+LastName;
+                    mailsent = obj.SendCelebrateEmail(EmailID, Fullname);
+                }                
             }
             catch (Exception ex)
             {                
@@ -1911,7 +1917,7 @@ namespace AnkurPrathisthan
                             FullName = Convert.ToString(ds.Tables[0].Rows[i]["FullName"]),
                             Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]),
                             Comments = Convert.ToString(ds.Tables[0].Rows[i]["Comments"]),
-                            Contact = Convert.ToString(ds.Tables[0].Rows[i]["Contact"]),
+                            Contact = Convert.ToInt32(ds.Tables[0].Rows[i]["Contact"]),
                             Subject = Convert.ToString(ds.Tables[0].Rows[i]["Subject"]),
                             TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
                         });
@@ -1935,14 +1941,12 @@ namespace AnkurPrathisthan
             try
             {
                 string receipt = auth.CreateOTP();
-                string ReceiptNo = DonorID + receipt;
+                string ReceiptNo = 2020-2021-05+receipt;
                 ds = ap.ReceiptDonor(EmailID, DonorID);
-                string ServerName = "smtp.gmail.com";
-                int PORTNO = 25;  //25 //443 //587       
-                // string Sender = "Admin@ankurpratishthan.com";
-                string Sender = "kundan.mobileappdev@gmail.com";
-                //string PASSWORD = "Anku@87!";
-                string PASSWORD = "Kundan@2244";
+                string ServerName = "mail.smallmodule.com";
+                int PORTNO = 25;  //25 //443 //587              
+                string Sender = "ankursupport@smallmodule.com";                
+                string PASSWORD = "Ankur@456";
                 SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.UseDefaultCredentials = true;
@@ -1951,7 +1955,13 @@ namespace AnkurPrathisthan
                 using (MailMessage message = new MailMessage())
                 {
                     message.From = new MailAddress(Sender);
-                    message.Subject = "Donation Receipt (Support Ankur Pratishthan)";
+                    message.Subject = "Donation Receipt,80G Certificate (Support Ankur Pratishthan)";
+                    //[Attachment]
+                    System.Net.Mail.Attachment attachment;
+                    attachment = new System.Net.Mail.Attachment(@"C:/Uploads/PDF/Ankur Pratishthan 12AA.pdf");                   
+                    message.Attachments.Add(attachment);                  
+                    //[Attachment]
+
                     message.Body += "<html>";
                     message.Body += "<head></head>";
                     message.Body += "<body>";
@@ -1962,25 +1972,25 @@ namespace AnkurPrathisthan
                     message.Body += "<p style='text-align: center;'><strong>Contact No. :</strong> 9869866814 / 9819553390 | <strong>Email ID :</strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>";
                     message.Body += "<p style='text-align: center;'>..................................................................................................................................................................................................................................................</p>";
                     message.Body += "<p>&nbsp;</p>";
-                    message.Body += "<p><strong>Receipt No. : </strong></p>" +ReceiptNo;
+                    message.Body += "<p><strong>Receipt No. : </strong></p>" + ReceiptNo;
                     message.Body += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>" + ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
                     message.Body += "<p><strong>&nbsp;</strong></p>";
                     message.Body += "<p><strong>Donated by :</strong></p>" + ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                    message.Body += "<p><strong>In the Name of :</strong></p" + ds.Tables[0].Rows[0]["IntheNameof"].ToString(); 
-                    message.Body += "<p><strong>Residential Address : </strong></p>" +ds.Tables[0].Rows[0]["Address"].ToString();
-                   // message.Body += "<p><strong>Contact No. :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
-                 //   message.Body += "<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
-                    message.Body += "<p><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();                   
+                    message.Body += "<p><strong>In the Name of :</strong></p" + ds.Tables[0].Rows[0]["IntheNameof"].ToString();
+                    message.Body += "<p><strong>Residential Address : </strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();
+                    // message.Body += "<p><strong>Contact No. :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
+                    //   message.Body += "<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
+                    message.Body += "<p><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();
                     message.Body += "<p><strong>Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
                     message.Body += "<p><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString();
                     message.Body += "<p><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
                     message.Body += "<p><strong>Amount in Figures : &nbsp;</strong></p>" + ds.Tables[0].Rows[0]["Amount"].ToString();
-                    message.Body += "<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>"  + ds.Tables[0].Rows[0]["DonationTowards"].ToString();
+                    message.Body += "<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString();
                     message.Body += "<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong></p>" + ds.Tables[0].Rows[0]["PaymentMode"].ToString();
-                    message.Body += "<p><strong>Transaction Details : </strong></p>" + ds.Tables[0].Rows[0]["Description"].ToString(); 
+                    message.Body += "<p><strong>Transaction Details : </strong></p>" + ds.Tables[0].Rows[0]["Description"].ToString();
                     message.Body += "<p><strong>&nbsp;</strong></p>";
                     message.Body += "<p><strong>&nbsp;</strong></p>";
-                    message.Body += "<p><strong>Received by</strong></p>" +"Pranav Bhonde";
+                    message.Body += "<p><strong>Received by</strong></p>" + "Pranav Bhonde";
                     message.Body += "<p><strong>&nbsp;</strong></p>";
                     message.Body += "<p><strong>&nbsp;</strong></p>";
                     message.Body += "<ul>";
@@ -2007,19 +2017,17 @@ namespace AnkurPrathisthan
             {                
                 throw ex;
             }
-            //string ServerName = "mail.ankurpratishthan.com";
-            
             return result;
         }
 
 
-        public string SendDeclineEmail(string EmailID)
+        public string SendDeclineEmail(string EmailID,string DonorName)
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "mail.ankurpratishthan.com";
+            string ServerName = "mail.smallmodule.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "Admin@ankurpratishthan.com";
-            string PASSWORD = "Anku@87!";
+            string Sender = "ankursupport@smallmodule.com";
+            string PASSWORD = "Ankur@456";
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
@@ -2029,7 +2037,7 @@ namespace AnkurPrathisthan
             {
                 message.From = new MailAddress(Sender);
                 message.Subject = "Support Ankur Pratishthan";
-                message.Body = "Your donation at ankur is decline. admin willcontact with you for the same";
+                message.Body = "Dear " + DonorName + ", your donation is declined. Our Team will get in touch with you for further proceedings.";
                 message.IsBodyHtml = true;
                 message.To.Add(EmailID);
                 try
@@ -2038,8 +2046,7 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
-                    //bm.InsertError(EmailID, "SendEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "sendEmail");
+                    throw ex;                    
                 }
             }
             return "Y";

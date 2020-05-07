@@ -161,60 +161,58 @@ namespace AnkurPrathisthan
         }
         //[EMAIL for forgot paasword otp]
         public string SendOTPEmail(string EmailID, string OTP)
-        {
-            clsBookManagement bm = new clsBookManagement();
+        {           
             string IsEmailSent = "";
-            string ServerName = SMTPSERVER;
-            int PORTNO = 443;//gmail port string Sender = USERNAME; string credential = PASSWORD;
-            // OTP = CreateOTP(EmailID);
+            string ServerName = "mail.smallmodule.com";
+            int PORTNO = 25;  //25 //443 //587       
+            string Sender = "ankursupport@smallmodule.com";
+            string PASSWORD = "Ankur@456"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-            smtpClient.EnableSsl = true;
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
                 message.Subject = "Ankur Pratishthan Password Reset";
-                message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   " + OTP;
+                message.Body = "Dear AnkurPratishthan User, your OTP for authentication:  " + OTP;
                 message.IsBodyHtml = true;
                 message.To.Add(EmailID);
                 try
                 {
                     smtpClient.Send(message);
-                    message.DeliveryNotificationOptions = System.Net.Mail.DeliveryNotificationOptions.OnSuccess;
-                    IsEmailSent = message.DeliveryNotificationOptions.ToString();
+                    IsEmailSent = "Y";
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "OTPEmailforforgotpassword");
+                    throw ex;                    
                 }
             }
-            return "Y";
+            return IsEmailSent;
         }
+
         //[END] EMAIL FOR FROGOT PASWPRD OTP
         // [END] OTP FOR FORGOT PASSWORD
 
-        //[START][For Email send for new user regsitrations]
-        public string SendEmail(string EmailID)
-        {
-            clsBookManagement bm = new clsBookManagement();
+        //[START][For Email send for new volunteer regsitrations]
+        public string SendPasswordEmail(string EmailID)
+        {            
             string Password = ""; string ServerName = SMTPSERVER;
             int PORTNO = 25;//25 //443 //587       
             string Sender = USERNAME; string credential = PASSWORD;
             Password = CreateRandomPassword();
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
+            smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
             smtpClient.EnableSsl = true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
                 message.Subject = "Support Ankur Pratishthan";
-                message.Body = "Ankur Pratishthan Login Credentials::  " + Password;
+                message.Body = "Ankur Pratishthan Login Credentials: " + Password;
                 message.IsBodyHtml = true;
-
                 message.To.Add(EmailID);
                 try
                 {
@@ -222,18 +220,18 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                    bm.InsertError(EmailID, "SendVolEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "VolEmail");
+                    throw ex;
                 }
             }
             return Password;
         }
-        //[END] [For email send for new user registration]
+        //[END] [For email send for new volunteer registration]
 
         //[START]to create password
         private static string CreateRandomPassword()
         {              
             int length = 8;
-            string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+            string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*?_";
             Random random = new Random();            
             char[] chars = new char[length];
             for (int i = 0; i < length; i++)

@@ -262,7 +262,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SendDeclineEmail")]
         [OperationContract]
-        string SendDeclineEmail(string EmailID);
+        string SendDeclineEmail(string EmailID, string DonorName);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
