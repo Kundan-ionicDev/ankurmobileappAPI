@@ -197,7 +197,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "UpdateProfile")]
         [OperationContract]
-        List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string Img, int LoginID);
+        List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, int LoginID, string Img = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -252,11 +252,11 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<VolunteerEntity> ChangePassword(string EmailID, string Password, int Otp);
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "SendEmail")]
-        //[OperationContract]
-        //string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com");
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "SendEmail")]
+        [OperationContract]
+        string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com");
 
         //[WebInvoke(Method = "POST",
         //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -294,11 +294,17 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<ContactUs> SubmitQuery(string FullName, string EmailID, int Contact, string Query, int Subject);
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "SendBirthdayEmailSMS")]
-        //[OperationContract]
-        //string SendBirthdayEmailSMS(string EmailID, int Contact);
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "DonationApproval")]
+        [OperationContract]
+        string DonationApproval(int cmd, int DonorID, string EmailID, int Contact);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "SendBirthdayEmailSMS")]
+        [OperationContract]
+        string SendBirthdayEmailSMS(string EmailID, int Contact);
 
         #endregion AP Donor
 
