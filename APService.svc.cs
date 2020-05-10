@@ -1948,7 +1948,7 @@ namespace AnkurPrathisthan
             return obj;
         }
 
-        public string DonationApproval(int cmd, int DonorID, string EmailID, int Contact)
+        public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact)
         {
             string result = "";
             clsAuthentication auth = new clsAuthentication();
@@ -1958,35 +1958,54 @@ namespace AnkurPrathisthan
             string ReceiptNo = 2020 - 2021 - 05 + receipt;
             ds = ap.ReceiptDonor(EmailID, DonorID);
             string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-            string ServerName = "mail.smallmodule.com";
-            int PORTNO = 25;  //25 //443 //587              
-            string Sender = "ankursupport@smallmodule.com";
-            string PASSWORD = "Ankur@456";
-            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = true;
-            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = true;
+            
             try
             {
                 if (cmd == 1 )
                 {
                     //[Start] SMS Accept                   
                     string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email & courier. Ankur Pratishthan is grateful to you & looks forward to continuing this association!%20SMS&priority=1";
+                   
+                    WebRequest request = HttpWebRequest.Create(sURL1);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream s = (Stream)response.GetResponseStream();
+                    StreamReader readStream = new StreamReader(s);
+                    string dataString = readStream.ReadToEnd();
+                    response.Close();
+                    s.Close();
+                    readStream.Close();
+
                     string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our central office is dispatching the donation receipt of Vijayendra Acharya via email and courier.%20SMS&priority=1";
-                   // result = "Accept SMS sent successfully";
+                   
+                    WebRequest request1 = HttpWebRequest.Create(surl2);
+                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                    Stream s1 = (Stream)response1.GetResponseStream();
+                    StreamReader readStream1 = new StreamReader(s1);
+                    string dataString1 = readStream1.ReadToEnd();
+                    response1.Close();
+                    s1.Close();
+                    readStream1.Close();                    
+                    
                     //[END]SMS Accept
 
 
                     //[START]********Email Accept thank you letter , receipt, 80 G attachment*********                   
-                   
+                    string ServerName = "mail.smallmodule.com";
+                    int PORTNO = 25;  //25 //443 //587              
+                    string Sender = "ankursupport@smallmodule.com";
+                    string PASSWORD = "Ankur@456";
+                    SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtpClient.UseDefaultCredentials = true;
+                    smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+                    smtpClient.EnableSsl = true;
                     using (MailMessage message = new MailMessage())
                     {
                         message.From = new MailAddress(Sender);
                         message.Subject = "Donation Receipt,80G Certificate (Support Ankur Pratishthan)";
                         //[Attachment]
                         System.Net.Mail.Attachment attachment;
-                        attachment = new System.Net.Mail.Attachment(@"C:/Uploads/PDF/Ankur Pratishthan 12AA.pdf");
+                        attachment = new System.Net.Mail.Attachment("F:/k_dev/AnkurPrathisthan/Uploads/PDF/Ankur Pratishthan 12AA.pdf");
                         message.Attachments.Add(attachment);
                         //[Attachment]
 
@@ -2049,11 +2068,29 @@ namespace AnkurPrathisthan
                 else if (cmd ==2)
                 {
                     //[START] DEcline SMS
-                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear" + DonorName + "Your donation has been declined at Ankur Pratishthan.Our tema will get in touch with you for further proceedings&priority=1";
-                  //  result = "Decline SMS Sent";
+                    string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear" + DonorName + "Your donation has been declined at Ankur Pratishthan.Our tema will get in touch with you for further proceedings&priority=1";
+                    WebRequest request3 = HttpWebRequest.Create(sURL3);
+                    HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
+                    Stream s3 = (Stream)response3.GetResponseStream();
+                    StreamReader readStream3 = new StreamReader(s3);
+                    string dataString1 = readStream3.ReadToEnd();
+                    response3.Close();
+                    s3.Close();
+                    readStream3.Close(); 
+                    
+                    //  result = "Decline SMS Sent";
                     //[END] Decline SMS
 
                     //[STARt]Decline Email
+                    string ServerName = "mail.smallmodule.com";
+                    int PORTNO = 25;  //25 //443 //587              
+                    string Sender = "ankursupport@smallmodule.com";
+                    string PASSWORD = "Ankur@456";
+                    SmtpClient smtpClient1 = new SmtpClient(ServerName, PORTNO);
+                    smtpClient1.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtpClient1.UseDefaultCredentials = true;
+                    smtpClient1.Credentials = new NetworkCredential(Sender, PASSWORD);
+                    smtpClient1.EnableSsl = true;
                      using (MailMessage declinemessage = new MailMessage())
                      {
                          declinemessage.From = new MailAddress(Sender);
@@ -2063,7 +2100,7 @@ namespace AnkurPrathisthan
                          declinemessage.To.Add(EmailID);
                          try
                          {
-                             smtpClient.Send(declinemessage);
+                             smtpClient1.Send(declinemessage);
                              //result = "Decline Email Sent";
                          }
                          catch (Exception ex)
@@ -2082,128 +2119,6 @@ namespace AnkurPrathisthan
             }
             return result;
         }
-
-        //public string SendDeclineEmailSMS(string EmailID,string DonorName,int DonorID)
-        //{
-        //    string result = "";
-        //    string ServerName = "mail.smallmodule.com";
-        //    int PORTNO = 25;  //25 //443 //587       
-        //    string Sender = "ankursupport@smallmodule.com";
-        //    string PASSWORD = "Ankur@456";
-        //    SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-        //    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-        //    smtpClient.UseDefaultCredentials = true;
-        //    smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-        //    smtpClient.EnableSsl = true;
-        //    using (MailMessage message = new MailMessage())
-        //    {
-        //        message.From = new MailAddress(Sender);
-        //        message.Subject = "Support Ankur Pratishthan";
-        //        message.Body = "Dear " + DonorName + ", your donation is declined. Our Team will get in touch with you for further proceedings.";
-        //        message.IsBodyHtml = true;
-        //        message.To.Add(EmailID);
-        //        try
-        //        {
-        //            smtpClient.Send(message);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw ex;                    
-        //        }
-        //    }
-        //    return "Y";
-        //}
-
-        //public string SendReceiptSMS(int DonorID)
-        //{
-        //    string result = "";
-        //    DataSet ds1 = new DataSet();
-        //    DataSet ds2 = new DataSet();
-        //    APDonor ap = new APDonor();             
-        //    try
-        //    {
-        //        ds1 = ap.SendDonorSMS(DonorID, 1);
-        //        if (ds1.Tables.Count>0 )
-        //        {
-        //            var contact="";
-        //            contact = ds1.Tables[0].Rows[0]["ContactNo"].ToString(); ;
-        //            //if (ds.Tables[0].Rows[0]["ContactNo"]) ! = null )
-        //            //{
-        //            if (contact != null)
-        //            {
-        //               // string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=TestSMSThank you for donating to ankur pratishthan%20SMS&priority=1"; 
-
-        //                string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + contact + "&msg=We are dispatching your donation receipt via email & courier. Ankur Pratishthan is grateful to you & looks forward to continuing this association!%20SMS&priority=1";
-        //                string surl1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our central office is dispatching the donation receipt of Vijayendra Acharya via email and courier.%20SMS&priority=1";
-        //                WebRequest request = HttpWebRequest.Create(sURL);  
-        //                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        //                Stream s = (Stream)response.GetResponseStream();
-        //                StreamReader readStream = new StreamReader(s);
-        //                string dataString = readStream.ReadToEnd();
-        //                response.Close();
-        //                s.Close();
-        //                readStream.Close();
-
-        //                WebRequest request1 = HttpWebRequest.Create(surl1);
-        //                HttpWebResponse response1 = (HttpWebResponse)request.GetResponse();
-        //                Stream s1 = (Stream)response.GetResponseStream();
-        //                StreamReader readStream1 = new StreamReader(s);
-        //                string dataString1 = readStream1.ReadToEnd();
-        //                response.Close();
-        //                s.Close();
-        //                readStream.Close();
-        //            }
-        //            ds2 = ap.SendDonorSMS(DonorID, 2);
-        //            result = "SMS sent successfully";
-        //        }                            
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result = "SMS not sent";
-        //    }            
-        //    return result;
-        //}
-
-        //public string SendDeclineSMS(int DonorID,int LoginID)
-        //{
-            
-        //    DataSet ds1 = new DataSet();
-        //    DataSet ds2 = new DataSet();
-        //    APDonor ap = new APDonor();
-        //    try
-        //    {
-        //        ds1 = ap.SendDonorSMS(DonorID, 1);
-        //        if (ds1.Tables.Count > 0)
-        //        {
-        //            var contact = "";
-        //            contact = ds1.Tables[0].Rows[0]["ContactNo"].ToString(); ;
-        //            //if (ds.Tables[0].Rows[0]["ContactNo"]) ! = null )
-        //            //{
-        //            if (contact != null)
-        //            {
-        //                string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + contact + "&msg=Thank you for donating to ankur pratishthan%20SMS&priority=1";
-        //                WebRequest request = HttpWebRequest.Create(sURL1);
-        //                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        //                Stream s = (Stream)response.GetResponseStream();
-        //                StreamReader readStream = new StreamReader(s);
-        //                string dataString = readStream.ReadToEnd();
-        //                response.Close();
-        //                s.Close();
-        //                readStream.Close();
-        //            }
-
-        //            ds2 = ap.SendDonorSMS(DonorID, 2);
-
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result = "SMS not sent";
-        //    }
-
-        //    return result;
-        //}
 
         public string SendBirthdayEmailSMS(string EmailID, int Contact)
         {
