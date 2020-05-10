@@ -1424,8 +1424,7 @@ namespace AnkurPrathisthan
                         });
                 }
 
-                string flag = obj.SendOTPEmail(EmailID, otp);
-
+                string flag = obj.SendOTPEmail(EmailID, ds.Tables[0].Rows[0]["Otp"].ToString());
             }
             catch (Exception ex)
             {
@@ -1679,7 +1678,23 @@ namespace AnkurPrathisthan
                     
                     string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
                     string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+                    WebRequest request = HttpWebRequest.Create(sURL);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream s = (Stream)response.GetResponseStream();
+                    StreamReader readStream = new StreamReader(s);
+                    string dataString = readStream.ReadToEnd();
+                    response.Close();
+                    s.Close();
+                    readStream.Close();
                     string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                    WebRequest request1 = HttpWebRequest.Create(sURL1);
+                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                    Stream s1 = (Stream)response1.GetResponseStream();
+                    StreamReader readStream1 = new StreamReader(s1);
+                    string dataString1 = readStream1.ReadToEnd();
+                    response1.Close();
+                    s1.Close();
+                    readStream1.Close();
                 }
                 //[END]SMS integration
 
@@ -1955,7 +1970,7 @@ namespace AnkurPrathisthan
             APDonor ap = new APDonor();
             DataSet ds = new DataSet();
             string receipt = auth.CreateOTP();
-            string ReceiptNo = 2020 - 2021 - 05 + receipt;
+            string ReceiptNo = "2020202105" + receipt;
             ds = ap.ReceiptDonor(EmailID, DonorID);
             string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
             
@@ -2005,7 +2020,7 @@ namespace AnkurPrathisthan
                         message.Subject = "Donation Receipt,80G Certificate (Support Ankur Pratishthan)";
                         //[Attachment]
                         System.Net.Mail.Attachment attachment;
-                        attachment = new System.Net.Mail.Attachment("F:/k_dev/AnkurPrathisthan/Uploads/PDF/Ankur Pratishthan 12AA.pdf");
+                        attachment = new System.Net.Mail.Attachment("C:/AnkurPrathisthan/Uploads/PDF/Ankur Pratishthan 12AA.pdf");
                         message.Attachments.Add(attachment);
                         //[Attachment]
 
@@ -2120,7 +2135,7 @@ namespace AnkurPrathisthan
             return result;
         }
 
-        public string SendBirthdayEmailSMS(string EmailID, int Contact)
+        public string SendBirthdayEmailSMS(string EmailID, string Contact)
         {
             string result = "";
             string ServerName = "mail.smallmodule.com";

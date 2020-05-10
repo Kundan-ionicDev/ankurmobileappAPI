@@ -286,7 +286,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SendBirthdayEmailSMS")]
         [OperationContract]
-        string SendBirthdayEmailSMS(string EmailID, int Contact);
+        string SendBirthdayEmailSMS(string EmailID, string Contact);
 
         #endregion AP Donor
 
