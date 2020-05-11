@@ -382,7 +382,7 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet Contactus(string Fullname,string EmailID, string Query, int contact, int Subject)
+        public DataSet Contactus(string Fullname,string EmailID, string Query, string contact, int Subject)
         {
             DataSet ds = new DataSet();
             try

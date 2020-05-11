@@ -57,7 +57,7 @@ namespace AnkurPrathisthan.Entity
     public class ContactUs
     {
         public string FullName { get; set; }
-        public int Contact { get; set; }
+        public string Contact { get; set; }
         public string Email { get; set; }
         public string Comments { get; set; }
         public string Subject { get; set; }

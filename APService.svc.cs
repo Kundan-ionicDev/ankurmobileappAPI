@@ -1629,6 +1629,41 @@ namespace AnkurPrathisthan
                             TemporaryFlag= Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]), 
                         });
                 }
+                if (cmd == 1)
+                {
+                    string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                    //[START]SMS integration
+                    if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
+                    {
+                        string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
+
+                        string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + ContactNo + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+                        WebRequest request = HttpWebRequest.Create(sURL);
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Stream s = (Stream)response.GetResponseStream();
+                        StreamReader readStream = new StreamReader(s);
+                        string dataString = readStream.ReadToEnd();
+                        response.Close();
+                        s.Close();
+                        readStream.Close();
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                        WebRequest request1 = HttpWebRequest.Create(sURL1);
+                        HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                        Stream s1 = (Stream)response1.GetResponseStream();
+                        StreamReader readStream1 = new StreamReader(s1);
+                        string dataString1 = readStream1.ReadToEnd();
+                        response1.Close();
+                        s1.Close();
+                        readStream1.Close();
+                    }
+                    //[END]SMS integration
+
+                    //[START]Email 
+                    string email = objdonor.RegisterEmail(EmailID, fullname);
+                    //[END]Email
+                }
+                
             }
             catch (Exception ex)
             {
@@ -1637,77 +1672,77 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
-           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,int Tempflag,
-           string Description = "")
-        {
-            List<DonorEntity> entity = new List<DonorEntity>();
-            DataSet ds = new DataSet();
-            APDonor objdonor = new APDonor();
-            try
-            {
-                ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
-                    PaymentMode, DonationTowards, PAN, Amount1, Tempflag,Description);
-                if (ds.Tables.Count > 0)
-                {
-                    entity.Add
-                        (new DonorEntity()
-                        {
-                            FullName = Convert.ToString(ds.Tables[0].Rows[0]["DonatedBy"]),
-                            Inthenameof = Convert.ToString(ds.Tables[0].Rows[0]["IntheNameof"]),
-                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),
-                            Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                            ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
-                            AdminEmailID = Convert.ToString(ds.Tables[0].Rows[0]["CreatedBy"]),
-                            Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
-                            PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
-                            Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
-                            DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
-                            PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
-                            Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
-                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
-                            DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
-                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
-                        });
-                }
-                string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                //[START]SMS integration
-                if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
-                {
-                    string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
+        //public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
+        //   string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,int Tempflag,
+        //   string Description = "")
+        //{
+        //    List<DonorEntity> entity = new List<DonorEntity>();
+        //    DataSet ds = new DataSet();
+        //    APDonor objdonor = new APDonor();
+        //    try
+        //    {
+        //        ds = objdonor.SubmitDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
+        //            PaymentMode, DonationTowards, PAN, Amount1, Tempflag,Description);
+        //        if (ds.Tables.Count > 0)
+        //        {
+        //            entity.Add
+        //                (new DonorEntity()
+        //                {
+        //                    FullName = Convert.ToString(ds.Tables[0].Rows[0]["DonatedBy"]),
+        //                    Inthenameof = Convert.ToString(ds.Tables[0].Rows[0]["IntheNameof"]),
+        //                    EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),
+        //                    Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+        //                    ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+        //                    AdminEmailID = Convert.ToString(ds.Tables[0].Rows[0]["CreatedBy"]),
+        //                    Amount = Convert.ToInt32(ds.Tables[0].Rows[0]["Amount"]),
+        //                    PaymentMode = Convert.ToString(ds.Tables[0].Rows[0]["PaymentMode"]),
+        //                    Description = Convert.ToString(ds.Tables[0].Rows[0]["Description"]),
+        //                    DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+        //                    PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
+        //                    Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
+        //                    DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
+        //                    DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
+        //                    TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
+        //                });
+        //        }
+        //        string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+        //        //[START]SMS integration
+        //        if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
+        //        {
+        //            string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
                     
-                    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                    string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
-                    WebRequest request = HttpWebRequest.Create(sURL);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Stream s = (Stream)response.GetResponseStream();
-                    StreamReader readStream = new StreamReader(s);
-                    string dataString = readStream.ReadToEnd();
-                    response.Close();
-                    s.Close();
-                    readStream.Close();
-                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
-                    WebRequest request1 = HttpWebRequest.Create(sURL1);
-                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-                    Stream s1 = (Stream)response1.GetResponseStream();
-                    StreamReader readStream1 = new StreamReader(s1);
-                    string dataString1 = readStream1.ReadToEnd();
-                    response1.Close();
-                    s1.Close();
-                    readStream1.Close();
-                }
-                //[END]SMS integration
+        //            string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+        //            string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + contact + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+        //            WebRequest request = HttpWebRequest.Create(sURL);
+        //            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        //            Stream s = (Stream)response.GetResponseStream();
+        //            StreamReader readStream = new StreamReader(s);
+        //            string dataString = readStream.ReadToEnd();
+        //            response.Close();
+        //            s.Close();
+        //            readStream.Close();
+        //            string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+        //            WebRequest request1 = HttpWebRequest.Create(sURL1);
+        //            HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+        //            Stream s1 = (Stream)response1.GetResponseStream();
+        //            StreamReader readStream1 = new StreamReader(s1);
+        //            string dataString1 = readStream1.ReadToEnd();
+        //            response1.Close();
+        //            s1.Close();
+        //            readStream1.Close();
+        //        }
+        //        //[END]SMS integration
 
-                //[START]Email 
-                string email = objdonor.RegisterEmail(EmailID, fullname);
-                //[END]Email
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return entity;
-        }
+        //        //[START]Email 
+        //        string email = objdonor.RegisterEmail(EmailID, fullname);
+        //        //[END]Email
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return entity;
+        //}
 
         public List<DonorEntity> GetDonors (string EmailID,int RoleID)
         {
@@ -1806,9 +1841,9 @@ namespace AnkurPrathisthan
                         {
                             Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
                             ID = Convert.ToString(ds.Tables[0].Rows[0]["ID"]),
-                            //FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
-                            //LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
-                            //Email = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            Email = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
                             //Contact = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
                             //DateOfEvent = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             //AreaID = Convert.ToInt32(ds.Tables[0].Rows[0]["ContactNo"]),
@@ -1820,9 +1855,27 @@ namespace AnkurPrathisthan
                     //[ENd]for email
 
                     //[Start]for sms
-                    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest="+contact+"&msg=Dear Sahayogi,The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
-                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987008651&msg=Pranav has registered a celebration request from Vijayendra Acharya. Kindly check the details and initiate further proceedings.&priority=1";
+                    //string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear" + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                    WebRequest request = HttpWebRequest.Create(url);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream s = (Stream)response.GetResponseStream();
+                    StreamReader readStream = new StreamReader(s);
+                    string dataString = readStream.ReadToEnd();
+                    response.Close();
+                    s.Close();
+                    readStream.Close();
+                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987008651&msg=Pranav has registered a celebration request from" +Fullname +" .Kindly check the details and initiate further proceedings.&priority=1";
+
+                    WebRequest request1 = HttpWebRequest.Create(url1);
+                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                    Stream s1 = (Stream)response1.GetResponseStream();
+                    StreamReader readStream1 = new StreamReader(s1);
+                    string dataString1 = readStream1.ReadToEnd();
+                    response1.Close();
+                    s1.Close();
+                    readStream1.Close();   
+                    
                     //[end]for sms
                 }                
             }
@@ -1932,7 +1985,7 @@ namespace AnkurPrathisthan
             }
             return obj;
         }
-        public List<ContactUs> SubmitQuery (string FullName,string EmailID, int Contact, string Query, int Subject)
+        public List<ContactUs> SubmitQuery (string FullName,string EmailID, string Contact, string Query, int Subject)
         {
             DataSet ds = new DataSet();
             List<ContactUs> obj = new List<ContactUs>();
@@ -1949,7 +2002,7 @@ namespace AnkurPrathisthan
                             FullName = Convert.ToString(ds.Tables[0].Rows[i]["FullName"]),
                             Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]),
                             Comments = Convert.ToString(ds.Tables[0].Rows[i]["Comments"]),
-                            Contact = Convert.ToInt32(ds.Tables[0].Rows[i]["Contact"]),
+                            Contact = Convert.ToString(ds.Tables[0].Rows[i]["Contact"]),
                             Subject = Convert.ToString(ds.Tables[0].Rows[i]["Subject"]),
                             TicketID = Convert.ToInt32(ds.Tables[0].Rows[i]["TicketID"]),
                         });
@@ -1979,7 +2032,7 @@ namespace AnkurPrathisthan
                 if (cmd == 1 )
                 {
                     //[Start] SMS Accept                   
-                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email & courier. Ankur Pratishthan is grateful to you & looks forward to continuing this association!%20SMS&priority=1";
+                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you & looks forward to continuing this association!%20SMS&priority=1";
                    
                     WebRequest request = HttpWebRequest.Create(sURL1);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -1990,7 +2043,7 @@ namespace AnkurPrathisthan
                     s.Close();
                     readStream.Close();
 
-                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our central office is dispatching the donation receipt of Vijayendra Acharya via email and courier.%20SMS&priority=1";
+                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our central office is dispatching the donation receipt of "+DonorName+" via email and courier.%20SMS&priority=1";
                    
                     WebRequest request1 = HttpWebRequest.Create(surl2);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
@@ -2157,7 +2210,7 @@ namespace AnkurPrathisthan
                 try
                 {
                     smtpClient.Send(message);
-                    string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long, healthy & prosperous life! May all your wishes come true! Continue to spread joy!&priority=1";
+                    string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
                     WebRequest request = HttpWebRequest.Create(sms);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                     Stream s = (Stream)response.GetResponseStream();
@@ -2173,7 +2226,6 @@ namespace AnkurPrathisthan
                     throw ex;
                 }
             }
-
             return result;
         }
 

@@ -199,13 +199,13 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, int LoginID, string Img = "");
 
-        [WebInvoke(Method = "POST",
-        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "AddDonors")]
-        [OperationContract]
-        List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
-           string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1, int Tempflag,
-           string Description = "");
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "AddDonors")]
+        //[OperationContract]
+        //List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
+        //   string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1, int Tempflag,
+        //   string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -274,7 +274,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SubmitQuery")]
         [OperationContract]
-        List<ContactUs> SubmitQuery(string FullName, string EmailID, int Contact, string Query, int Subject);
+        List<ContactUs> SubmitQuery(string FullName, string EmailID, string Contact, string Query, int Subject);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
