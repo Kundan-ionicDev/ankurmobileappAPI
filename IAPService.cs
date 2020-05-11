@@ -219,7 +219,7 @@ namespace AnkurPrathisthan
         [OperationContract]
         List<DonorEntity> ManageDonor(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
-            int cmd, int DonorID, int Tempflag, string Description = "");
+            int cmd, string DonorID, int Tempflag, string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

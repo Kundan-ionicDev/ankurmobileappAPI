@@ -138,7 +138,7 @@ namespace AnkurPrathisthan
 
         public DataSet handleDonors(string FullName, string Inthenameof, string EmailID, string DOB,
             string Address, string Contact, string AdminEmailID, int Amount, string PaymentMode, string DonationTowards, string PAN, 
-            string AmountInWords,int cmd, int DonorID,int Tempflag, string Description = "")
+            string AmountInWords,int cmd, string DonorID,int Tempflag, string Description = "")
         {
             DataSet ds = new DataSet();
             try
@@ -272,8 +272,8 @@ namespace AnkurPrathisthan
             {
                 message.From = new MailAddress(USERNAME);
                 message.Subject = "Support Ankur Pratishthan";
-                message.Body = "Dear " + Fullname;
-                message.Body = "The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.";
+                message.Body = "Dear  " + Fullname;
+                message.Body = ", The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.";
                 message.IsBodyHtml = true;
                 message.To.Add(EmailID);
                 try

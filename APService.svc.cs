@@ -1572,7 +1572,7 @@ namespace AnkurPrathisthan
                 //    Image = Base64ToImage(Img, imgpath, imgname);
                 //}
                 Img = "https://ankurpratishthan.com/Uploads/Default.png";
-                ds = objdonor.UpdateProfile(EmailID, DOB, Address, ContactNo, Img, LoginID);
+                ds = objdonor.UpdateProfile(EmailID,ContactNo,DOB, Address, Img, LoginID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1598,7 +1598,7 @@ namespace AnkurPrathisthan
 
         public List<DonorEntity> ManageDonor(string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,
-            int cmd,int DonorID,int Tempflag, string Description="")
+            int cmd,string DonorID,int Tempflag, string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
@@ -1856,7 +1856,7 @@ namespace AnkurPrathisthan
 
                     //[Start]for sms
                     //string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear" + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
                     WebRequest request = HttpWebRequest.Create(url);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                     Stream s = (Stream)response.GetResponseStream();
@@ -1865,8 +1865,8 @@ namespace AnkurPrathisthan
                     response.Close();
                     s.Close();
                     readStream.Close();
-                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987008651&msg=Pranav has registered a celebration request from" +Fullname +" .Kindly check the details and initiate further proceedings.&priority=1";
 
+                   string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Pranav has registered a celebration request for" +Fullname +" .Kindly check the details and initiate further proceedings.&priority=1";
                     WebRequest request1 = HttpWebRequest.Create(url1);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                     Stream s1 = (Stream)response1.GetResponseStream();
