@@ -185,7 +185,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageVolunteer")]
         [OperationContract]
-        List<VolunteerEntity> ManageVolunteer(string cmd, string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID, string Img = "", string LoginID = "");
+        List<VolunteerEntity> ManageVolunteer(string cmd, string FirstName, string LastName, string EmailID, string ContactNo, string DOB, string Address, string AdminEmailID, string Img, string LoginID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -286,7 +286,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SendBirthdayEmailSMS")]
         [OperationContract]
-        string SendBirthdayEmailSMS(string EmailID, string Contact);
+        string SendBirthdayEmailSMS(string EmailID, string Contact, int DonorID);
 
         #endregion AP Donor
 

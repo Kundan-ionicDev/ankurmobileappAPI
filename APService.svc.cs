@@ -18,6 +18,9 @@ using System.Drawing;
 using System.Web;
 using System.Security.Cryptography;
 using System.Security.AccessControl;
+//using iTextSharp.text;
+//using iTextSharp.text.pdf;
+//using iTextSharp.text.html.simpleparser;
 
 //using System.iTextSharp.text;
 //using iTextSharp.text.pdf;
@@ -472,7 +475,7 @@ namespace AnkurPrathisthan
             string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Books\";           
             string DBPath = "/Uploads/Books/";
             string ThumbImgPath = "", Image2Path="";
-            Image ThumbImg, Image2;
+            System.Drawing.Image ThumbImg, Image2;
             if (EmailID == null)
                 EmailID = "";
             if (Price == null)
@@ -770,7 +773,7 @@ namespace AnkurPrathisthan
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
             clsClusterManagement bm = new clsClusterManagement();
-            Image Image; string ImagePath = ""; string DBImgPath = "";
+            System.Drawing.Image Image; string ImagePath = ""; string DBImgPath = "";
            // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Clusters\";
             string DBPath = "/Uploads/Clusters/";
             string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Clusters\";           
@@ -931,7 +934,7 @@ namespace AnkurPrathisthan
             // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Librarian\";
             string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Librarian\";
             string DBPath = "/Uploads/Librarian/";
-            Image Image; string ImagePath = "";
+            System.Drawing.Image Image; string ImagePath = "";
             string Password = null;
             if (FirstName == null)
                 FirstName = "";
@@ -968,7 +971,7 @@ namespace AnkurPrathisthan
                             DBImgPath = DBPath + ImageName;//DB pth                         
                             
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             //WriteToFile("ManageLibrarians", ex.Message, EmailID);
                         }
@@ -999,7 +1002,7 @@ namespace AnkurPrathisthan
                     }                    
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //WriteToFile("ManageLibrarians", ex.Message, EmailID);
             }
@@ -1054,7 +1057,7 @@ namespace AnkurPrathisthan
             clsMemberManagement mem = new clsMemberManagement();
             clsAuthentication objauth = new clsAuthentication();
             string Password = null;
-            Image Image;
+            System.Drawing.Image Image;
             string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Members";
             //string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Members\";
             string DBPath = "/Uploads/Members/";
@@ -1239,15 +1242,15 @@ namespace AnkurPrathisthan
             return requests;
         }
 
-        private static Image Base64ToImage(string base64string, string filepath,string imgname)
+        private static System.Drawing.Image Base64ToImage(string base64string, string filepath,string imgname)
         {
-            Image image= null ;
+            System.Drawing.Image image= null ;
             string result = "";
             try
             {                               
                 result = filepath + imgname;               
                 var bytess = Convert.FromBase64String(base64string);
-                using (var imageFile = new FileStream(result, FileMode.Create))
+                using (var imageFile = new FileStream(filepath, FileMode.Create))//filepath change made for Volunteer image 
                 {
                     imageFile.Write(bytess, 0, bytess.Length);
                     imageFile.Flush();
@@ -1387,6 +1390,7 @@ namespace AnkurPrathisthan
                             Message= Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
                             RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
                             LoginID = Convert.ToString(ds.Tables[0].Rows[0]["LoginID"]),
+                            ImgPath = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
                         });
                 }
             }
@@ -1467,23 +1471,23 @@ namespace AnkurPrathisthan
         }
 
         public List<VolunteerEntity> ManageVolunteer (string cmd, string FirstName,string LastName, string EmailID, string ContactNo, string DOB,
-            string Address, string AdminEmailID,string Img="",string LoginID="")
+            string Address, string AdminEmailID,string Img,string LoginID="")
         {
             List<VolunteerEntity> entity = new List<VolunteerEntity>();
             DataSet ds = new DataSet();
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            if (Img==null)
+            if (Img == string.Empty)
             {
-                if (Img == string.Empty)
-                {
+                //if (Img == null)
+                //{
                     Img = "https://ankurpratishthan.com/Uploads/Default.png";
-                }                
+                //}                
             }
             try
             {
-                ds = objdonor.RegisterVolunteer(cmd,FirstName, LastName, EmailID, DOB, Address, ContactNo, AdminEmailID, Img, "",LoginID);
+                ds = objdonor.RegisterVolunteer(cmd, FirstName, LastName, EmailID, DOB, Address, ContactNo, AdminEmailID, Img, "", LoginID);
                 if (ds.Tables.Count>0)
                 {
                     entity.Add
@@ -1561,18 +1565,23 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            //Image Image; string imgpath = "";
+            string imgpath = "";
             try
             {
-                
-                //if (Img != "" && Img != null)
-                //{
-                //    imgpath = @"C:/Uploads/Librarian/" + LoginID + EmailID;
-                //    string imgname = LoginID + EmailID;
-                //    Image = Base64ToImage(Img, imgpath, imgname);
-                //}
-                Img = "https://ankurpratishthan.com/Uploads/Default.png";
-                ds = objdonor.UpdateProfile(EmailID,ContactNo,DOB, Address, Img, LoginID);
+
+                if (Img != "" && Img != null)
+                {
+                    System.Drawing.Image Image;
+                    string path = @"C:/Uploads/Volunteers/";                    
+                    string imgname = LoginID.ToString();
+                    imgpath = path + imgname;
+                    Image = Base64ToImage(Img, imgpath, imgname);
+                }
+                else
+                {
+                    imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
+                }
+                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, LoginID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1766,7 +1775,7 @@ namespace AnkurPrathisthan
                            Amount = Convert.ToInt32(ds.Tables[0].Rows[i]["Amount"]),
                            Address = Convert.ToString(ds.Tables[0].Rows[i]["Address"]),
                            ContactNo = Convert.ToString(ds.Tables[0].Rows[i]["ContactNo"]),
-                           AdminEmailID = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                           CreatedBy = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
                            RegDate = Convert.ToString(ds.Tables[0].Rows[i]["DateOfDonation"]),
                            PaymentMode = Convert.ToString(ds.Tables[0].Rows[i]["PaymentMode"]),
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
@@ -1975,6 +1984,7 @@ namespace AnkurPrathisthan
                             //  ImagePath = " http://localhost:51582/Uploads/Books/Economics57865400.jpeg",
                             //  Title = "slider 1"
                             Title = Convert.ToString(ds.Tables[0].Rows[i]["PDFName"]),
+                            Shareable = Convert.ToString(ds.Tables[0].Rows[i]["ShareableFlag"]),
                         });
                     }
                 }
@@ -2188,7 +2198,7 @@ namespace AnkurPrathisthan
             return result;
         }
 
-        public string SendBirthdayEmailSMS(string EmailID, string Contact)
+        public string SendBirthdayEmailSMS(string EmailID, string Contact,int DonorID)
         {
             string result = "";
             string ServerName = "mail.smallmodule.com";
@@ -2210,6 +2220,7 @@ namespace AnkurPrathisthan
                 try
                 {
                     smtpClient.Send(message);
+                    //[START] SMS
                     string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
                     WebRequest request = HttpWebRequest.Create(sms);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -2219,7 +2230,12 @@ namespace AnkurPrathisthan
                     response.Close();
                     s.Close();
                     readStream.Close();
+                    //[END]SMS
                     result = "Y";
+
+                    APDonor obj = new APDonor();
+                    DataSet ds = new DataSet();
+                    ds = obj.SendBday(DonorID);
                 }
                 catch (Exception ex)
                 {

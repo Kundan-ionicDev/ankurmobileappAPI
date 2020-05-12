@@ -42,6 +42,8 @@ namespace AnkurPrathisthan.Entity
         public string DonationTowards { get; set; }
         public string DonorID { get; set; }
         public int TemporaryFlag { get; set; }
+        public string VolEmailID { get; set; }
+        public string CreatedBy { get; set; }
         
     }
 
@@ -51,6 +53,7 @@ namespace AnkurPrathisthan.Entity
         public string ImagePath { get; set; }
         public string Title { get; set; }
         public string PDFPath { get; set; }
+        public string Shareable { get; set; }
 
     }
 
