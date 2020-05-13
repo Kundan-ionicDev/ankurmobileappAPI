@@ -1786,6 +1786,7 @@ namespace AnkurPrathisthan
                            DonationTowards = Convert.ToString(ds.Tables[0].Rows[i]["DonationTowards"]),
                            Description = Convert.ToString(ds.Tables[0].Rows[i]["Description"]),
                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["TempFlag"]),
+                           AcceptFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["AcceptFlag"]),
                        });
                     }
                 }
