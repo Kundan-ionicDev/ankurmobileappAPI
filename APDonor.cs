@@ -321,16 +321,18 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet ReceiptDonor(string EmailID,int DonorID)
+        public DataSet ReceiptDonor(string EmailID,int DonorID,string AddedBy,int Mode)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.uspGetDonationReceipt";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[2];
+                oParam = new SqlParameter[4];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
-                oParam[1] = new SqlParameter("@DonorID", DonorID);                              
+                oParam[1] = new SqlParameter("@DonorID", DonorID);
+                oParam[2] = new SqlParameter("@AddedBy", AddedBy);
+                oParam[3] = new SqlParameter("@Mode", Mode); 
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -464,7 +466,7 @@ namespace AnkurPrathisthan
                 message.From = new MailAddress(Sender);
                 message.Subject = "Support Ankur Pratishthan";
                 message.Body = "Dear " +FullName;
-                message.Body = "Thank you for your support. Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.";
+                message.Body = "Thank you for your support. Ankur Pratishthan acknowledges your donation and will issue a receipt of the same after realization.";
                 message.IsBodyHtml = true;
                 message.To.Add(EmailID);
                 try

@@ -175,7 +175,7 @@ namespace AnkurPrathisthan
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
-                message.Subject = "Ankur Pratishthan Password Reset";
+                message.Subject = "Support Ankur Pratishthan(Password Reset)";
                 message.Body = "Dear AnkurPratishthan User, your OTP for authentication:  " + OTP;
                 message.IsBodyHtml = true;
                 message.To.Add(EmailID);

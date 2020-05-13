@@ -18,9 +18,9 @@ using System.Drawing;
 using System.Web;
 using System.Security.Cryptography;
 using System.Security.AccessControl;
-//using iTextSharp.text;
-//using iTextSharp.text.pdf;
-//using iTextSharp.text.html.simpleparser;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html.simpleparser;
 
 //using System.iTextSharp.text;
 //using iTextSharp.text.pdf;
@@ -1502,15 +1502,15 @@ namespace AnkurPrathisthan
                             ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             AdminEmail = Convert.ToString(ds.Tables[0].Rows[0]["CreatedBy"]),
                             Img = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
-                        }); 
-                }
+                        });
 
-                if (cmd == "1")
-                {
-                    string Password = "";
-                    Password = auth.SendPasswordEmail(EmailID);
-                    dsEmail = objdonor.VolEmail(EmailID, Password);
-                }              
+                    if (cmd == "1")
+                    {
+                        string Password = "";
+                        Password = auth.SendPasswordEmail(EmailID);
+                        dsEmail = objdonor.VolEmail(EmailID, Password);
+                    }
+                }                         
            
             }
             catch (Exception ex)
@@ -1623,7 +1623,7 @@ namespace AnkurPrathisthan
                         {
                             FullName = Convert.ToString(ds.Tables[0].Rows[0]["DonatedBy"]),
                             Inthenameof = Convert.ToString(ds.Tables[0].Rows[0]["IntheNameof"]),
-                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),                          
+                            EmailID = Convert.ToString(ds.Tables[0].Rows[0]["DonorEmailID"]),
                             Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             AdminEmailID = Convert.ToString(ds.Tables[0].Rows[0]["CreatedBy"]),
@@ -1634,10 +1634,11 @@ namespace AnkurPrathisthan
                             PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
                             Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
                             DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
-                            DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]), 
-                            TemporaryFlag= Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]), 
+                            DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
+                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
                         });
                 }
+
                 if (cmd == 1)
                 {
                     string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
@@ -1647,7 +1648,7 @@ namespace AnkurPrathisthan
                         string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
 
                         string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + ContactNo + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation & will issue a receipt of the same after realization.&priority=1";
+                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + ContactNo + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation and will issue a receipt of the same after realization.&priority=1";
                         WebRequest request = HttpWebRequest.Create(sURL);
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         Stream s = (Stream)response.GetResponseStream();
@@ -1671,7 +1672,7 @@ namespace AnkurPrathisthan
                     //[START]Email 
                     string email = objdonor.RegisterEmail(EmailID, fullname);
                     //[END]Email
-                }
+                }              
                 
             }
             catch (Exception ex)
@@ -1859,8 +1860,12 @@ namespace AnkurPrathisthan
                             //AreaID = Convert.ToInt32(ds.Tables[0].Rows[0]["ContactNo"]),
                             //OccassionID = Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]),                            
                         });
-                    //[Start]for email
-                    string Fullname = FirstName+LastName;
+                    //[Start]for email                    
+                }
+
+                if (cmd == 1)
+                {
+                    string Fullname = FirstName + LastName;
                     mailsent = obj.SendCelebrateEmail(EmailID, Fullname);
                     //[ENd]for email
 
@@ -1876,7 +1881,7 @@ namespace AnkurPrathisthan
                     s.Close();
                     readStream.Close();
 
-                   string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Pranav has registered a celebration request for" +Fullname +" .Kindly check the details and initiate further proceedings.&priority=1";
+                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings.&priority=1";
                     WebRequest request1 = HttpWebRequest.Create(url1);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                     Stream s1 = (Stream)response1.GetResponseStream();
@@ -1884,10 +1889,10 @@ namespace AnkurPrathisthan
                     string dataString1 = readStream1.ReadToEnd();
                     response1.Close();
                     s1.Close();
-                    readStream1.Close();   
-                    
+                    readStream1.Close();
+
                     //[end]for sms
-                }                
+                }
             }
             catch (Exception ex)
             {                
@@ -2027,177 +2032,235 @@ namespace AnkurPrathisthan
             return obj;
         }
 
-        public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact)
+        public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy)
         {
-            string result = "";
+            string result = ""; string ReceiptNo = "2020202105";
             clsAuthentication auth = new clsAuthentication();
             APDonor ap = new APDonor();
             DataSet ds = new DataSet();
-            string receipt = auth.CreateOTP();
-            string ReceiptNo = "2020202105" + receipt;
-            ds = ap.ReceiptDonor(EmailID, DonorID);
-            string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-            
+            DataSet dsDecline = new DataSet();
+            DataSet dsAccept = new DataSet();
             try
             {
-                if (cmd == 1 )
+                string ServerName = "mail.smallmodule.com";
+                int PORTNO = 25;              
+                string Sender = "ankursupport@smallmodule.com";
+                string PASSWORD = "Ankur@456";
+                ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1);
+                string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                if(cmd ==1)  //[Accept]
                 {
-                    //[Start] SMS Accept                   
-                    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you & looks forward to continuing this association!%20SMS&priority=1";
-                   
-                    WebRequest request = HttpWebRequest.Create(sURL1);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Stream s = (Stream)response.GetResponseStream();
-                    StreamReader readStream = new StreamReader(s);
-                    string dataString = readStream.ReadToEnd();
-                    response.Close();
-                    s.Close();
-                    readStream.Close();
-
-                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our central office is dispatching the donation receipt of "+DonorName+" via email and courier.%20SMS&priority=1";
-                   
-                    WebRequest request1 = HttpWebRequest.Create(surl2);
-                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-                    Stream s1 = (Stream)response1.GetResponseStream();
-                    StreamReader readStream1 = new StreamReader(s1);
-                    string dataString1 = readStream1.ReadToEnd();
-                    response1.Close();
-                    s1.Close();
-                    readStream1.Close();                    
-                    
-                    //[END]SMS Accept
-
-
-                    //[START]********Email Accept thank you letter , receipt, 80 G attachment*********                   
-                    string ServerName = "mail.smallmodule.com";
-                    int PORTNO = 25;  //25 //443 //587              
-                    string Sender = "ankursupport@smallmodule.com";
-                    string PASSWORD = "Ankur@456";
-                    SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtpClient.UseDefaultCredentials = true;
-                    smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-                    smtpClient.EnableSsl = true;
-                    using (MailMessage message = new MailMessage())
+                    #region Accept
+                    try
                     {
-                        message.From = new MailAddress(Sender);
-                        message.Subject = "Donation Receipt,80G Certificate (Support Ankur Pratishthan)";
-                        //[Attachment]
-                        System.Net.Mail.Attachment attachment;
-                        attachment = new System.Net.Mail.Attachment("C:/AnkurPrathisthan/Uploads/PDF/Ankur Pratishthan 12AA.pdf");
-                        message.Attachments.Add(attachment);
-                        //[Attachment]
-
-                        message.Body += "<html>";
-                        message.Body += "<head></head>";
-                        message.Body += "<body>";
-                        message.Body += "<p style='text-align:center;'> <strong> ANKUR PRATISHTHAN </strong></p>";
-                        message.Body += "<p style='text-align: center;'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
-                        message.Body += "<p style='text-align: center;'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
-                        message.Body += "<p style='text-align: center;'><strong>Office Address :</strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
-                        message.Body += "<p style='text-align: center;'><strong>Contact No. :</strong> 9869866814 / 9819553390 | <strong>Email ID :</strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>";
-                        message.Body += "<p style='text-align: center;'>..................................................................................................................................................................................................................................................</p>";
-                        message.Body += "<p>&nbsp;</p>";
-                        message.Body += "<p><strong>Receipt No. : </strong></p>" + ReceiptNo;
-                        message.Body += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>" + ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
-                        message.Body += "<p><strong>&nbsp;</strong></p>";
-                        message.Body += "<p><strong>Donated by :</strong></p>" + ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                        message.Body += "<p><strong>In the Name of :</strong></p" + ds.Tables[0].Rows[0]["IntheNameof"].ToString();
-                        message.Body += "<p><strong>Residential Address : </strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();
-                        // message.Body += "<p><strong>Contact No. :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
-                        //   message.Body += "<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
-                        message.Body += "<p><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                        message.Body += "<p><strong>Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
-                        message.Body += "<p><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString();
-                        message.Body += "<p><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
-                        message.Body += "<p><strong>Amount in Figures : &nbsp;</strong></p>" + ds.Tables[0].Rows[0]["Amount"].ToString();
-                        message.Body += "<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString();
-                        message.Body += "<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong></p>" + ds.Tables[0].Rows[0]["PaymentMode"].ToString();
-                        message.Body += "<p><strong>Transaction Details : </strong></p>" + ds.Tables[0].Rows[0]["Description"].ToString();
-                        message.Body += "<p><strong>&nbsp;</strong></p>";
-                        message.Body += "<p><strong>&nbsp;</strong></p>";
-                        message.Body += "<p><strong>Received by</strong></p>" + "Pranav Bhonde";
-                        message.Body += "<p><strong>&nbsp;</strong></p>";
-                        message.Body += "<p><strong>&nbsp;</strong></p>";
-                        message.Body += "<ul>";
-                        message.Body += "<li><strong>Ankur Pratishthan expresses its gratitude towards your generous donation.</strong></li>";
-                        message.Body += "<li><strong>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</strong></li>";
-                        message.Body += "<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </strong></li>";
-                        message.Body += "</ul>";
-                        message.Body += "</body>";
-                        message.Body += "</html>";
-                        message.IsBodyHtml = true;
-                        message.To.Add(EmailID);
-                        try
+                        #region EmailAccept
+                        SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient.UseDefaultCredentials = true;
+                        smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient.EnableSsl = true;
+                        using (MailMessage message = new MailMessage())
                         {
+                            message.From = new MailAddress(Sender);
+                            message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
+                            //[START] for receipt
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append("<html>");
+                            sb.Append("<head></head>");
+                            sb.Append("<body>");
+                            sb.Append("<p style='text-align:center;'> <strong> ANKUR PRATISHTHAN </strong></p>");
+                            sb.Append("<p style='text-align: center;'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>");
+                            sb.Append("<p style='text-align: center;'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>");
+                            sb.Append("<p style='text-align: center;'><strong>Office Address :</strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>");
+                            sb.Append("<p style='text-align: center;'><strong>Contact No. :</strong> 9869866814 / 9819553390 | <strong>Email ID :</strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>");
+                            sb.Append("<p style='text-align: center;'>..................................................................................................................................................................................................................................................</p>");
+                            sb.Append("<p>&nbsp;</p>");
+                            sb.Append("<p><strong>Receipt No. : </strong></p>" + ReceiptNo);
+                            sb.Append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>" + ds.Tables[0].Rows[0]["DateOfDonation"].ToString());
+                            sb.Append("<p><strong>&nbsp;</strong></p>");
+                            sb.Append("<p><strong>Donated by :</strong></p>" + ds.Tables[0].Rows[0]["DonatedBy"].ToString());
+                            sb.Append("<p><strong>In the Name of :</strong></p" + ds.Tables[0].Rows[0]["IntheNameof"].ToString());
+                            sb.Append("<p><strong>Residential Address : </strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString());
+                            sb.Append ("<p><strong>Contact No. :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString());
+                            sb.Append ("<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString());
+                            sb.Append("<p><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString());
+                            sb.Append("<p><strong>Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString());
+                            sb.Append("<p><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString());
+                            sb.Append("<p><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString());
+                            sb.Append("<p><strong>Amount in Figures : &nbsp;</strong></p>" + ds.Tables[0].Rows[0]["Amount"].ToString());
+                            sb.Append("<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString());
+                            sb.Append("<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong></p>" + ds.Tables[0].Rows[0]["PaymentMode"].ToString());
+                            sb.Append("<p><strong>Transaction Details : </strong></p>" + ds.Tables[0].Rows[0]["Description"].ToString());
+                            sb.Append("<p><strong>&nbsp;</strong></p>");
+                            sb.Append("<p><strong>&nbsp;</strong></p>");
+                            sb.Append("<p><strong>Received by</strong></p>" +"Pranav Bhonde");
+                            sb.Append("<p><strong>&nbsp;</strong></p>");
+                            sb.Append("<p><strong>&nbsp;</strong></p>");
+                            sb.Append("<ul>");
+                            sb.Append("<li><strong>Ankur Pratishthan expresses its gratitude towards your generous donation.</strong></li>");
+                            sb.Append("<li><strong>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</strong></li>");
+                            sb.Append("<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </strong></li>");
+                            sb.Append("</ul>");
+                            sb.Append("</body>");
+                            sb.Append("</html>");                           
+                            StringReader sreceipt = new StringReader(sb.ToString());
+                            Document receiptdoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                            HTMLWorker htmlparser = new HTMLWorker(receiptdoc);
+                            using (MemoryStream memoryStreamreceipt = new MemoryStream())
+                            {
+                                PdfWriter recwriter = PdfWriter.GetInstance(receiptdoc, memoryStreamreceipt);
+                                receiptdoc.Open();
+                                htmlparser.Parse(sreceipt);
+                                receiptdoc.Close();
+                                byte[] rbytes = memoryStreamreceipt.ToArray();
+                                memoryStreamreceipt.Close();
+                                message.Attachments.Add(new Attachment(new MemoryStream(rbytes), "Donation Receipt(AnkurPratishthan).pdf"));
+                            }
+                            //[END] for receipt
+                            //[START] for thankyou
+                            StringBuilder sb1 = new StringBuilder();
+                            sb1.Append("<html>");
+                            //sb1.Append("<head><meta http-equiv=Content-Type content="text/html; charset=UTF-8">");
+                            sb1.Append("<style type='text/css'>");
+                            sb1.Append("</style>");
+                            //sb1.Append("<script type='text/javascript' src='14d58dd6-9049-11ea-8b25-0cc47a792c0a_id_14d58dd6-9049-11ea-8b25-0cc47a792c0a_files/wz_jsgraphics.js'></script>");
+                            sb1.Append("</head>");
+                            sb1.Append("<body>");
+                            sb1.Append("<div style='position:absolute;left:50%;margin-left:-297px;top:0px';'width:595px';'height:841px';'border-style:outset';'overflow:hidden'>");
+                            sb1.Append("<div style='position:absolute;left:0px;top:0px'>");
+                            //sb1.Append("<img src='14d58dd6-9049-11ea-8b25-0cc47a792c0a_id_14d58dd6-9049-11ea-8b25-0cc47a792c0a_files/background1.jpg' width='595' height='841'></div>");                                
+                            sb1.Append("<div style='position:absolute;left:443.28px;top:125.80px' class='cls_002'><span class='cls_002'>Date : 29. January 2020</span></div>");
+                            sb1.Append("<div style='position:absolute;left:36.00px;top:140.44px' class='cls_002'><span class='cls_002'>To,</span></div>");
+                            sb1.Append("<div style='position:absolute;left:36.00px;top:155.08px' class='cls_002'><span class='cls_002'>Shir/Smt.Ishaan Khot.</span></div>");
+                            sb1.Append("<div style='position:absolute;left:36.00px;top:169.72px' class='cls_002'><span class='cls_002'>Dadar(w).Mumbai.</span></div>");
+                            sb1.Append("<div style='position:absolute;left:141.48px;top:228.04px' class='cls_004'><span class='cls_004'>Sub. : </span><span class='cls_005'>Gratitude towards your contribution for a social cause.</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:268.00px' class='cls_002'><span class='cls_002'>Respected Sir / Madam,</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:296.44px' class='cls_002'><span class='cls_002'>Ankur Pratishthan is a Non Government Organization (NGO) working for the all-round development of</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:310.24px'  class='cls_002'><span class='cls_002'>destitute children. Skills development, emotional& moral support and inculcating best ethical habits from</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:324.04px'  class='cls_002'><span class='cls_002'>the basis of various projects & programmes that Ankur Pratishthan takes up to develop this neglected</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:337.84px'  class='cls_002'><span class='cls_002'>segment of the society. Various subject experts & supporters help Ankur Pratishthan to develop these</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:351.64px'  class='cls_002'><span class='cls_002'>destitute children into self supporting individuals. Ankur Pratishthan presently organizes various such</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:365.44px'class='cls_002'><span class='cls_002'>activities for about 500 children from 5 different shelters in Mumbai Metropolis.</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:391.96px' class='cls_002'><span class='cls_002'>On behalf of Ankur Pratishthan, here we would like to extend our gratitude for your generous donation of</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:405.64px' class='cls_002'><span class='cls_002'>Rs. 2,500/-only.</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:432.16px' class='cls_002'><span class='cls_002'>The amount of donation was of a great help to provide necessary amenities and material to our children and</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:445.96px' class='cls_002'><span class='cls_002'>volunteers. We are confident that a strong support with a thought from philanthropist would go a long way</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:459.76px' class='cls_002'><span class='cls_002'>in promoting these activities and inculcating good habits among the children.</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:486.16px' class='cls_002'><span class='cls_002'>We will keep you updated through our newsletters & website.</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:512.68px' class='cls_002'><span class='cls_002'>Thanks again for all you had done for Ankur Pratishthan.</span></div>");
+sb1.Append("<div style='position:absolute;left:48.00px;top:553.12px' class='cls_002'><span class='cls_002'>SincerelyYours,</span></div>");
+sb1.Append("<div style='position:absolute;left:48.00px;top:604.72px' class='cls_002'><span class='cls_002'>Pranav Bhonde</span></div>");
+sb1.Append("<div style='position:absolute;left:36.00px;top:618.52px' class='cls_002'><span class='cls_002'>( General Secretary)</span></div>");
+sb1.Append("</div>");
+sb1.Append("</body>");
+sb1.Append("</html>");
+                            
+                            sb1.Append("</body>");
+                            sb1.Append("</html>"); 
+                            StringReader srthanku = new StringReader(sb1.ToString());
+                            Document thankudoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                            HTMLWorker thtml = new HTMLWorker(thankudoc);
+                            using (MemoryStream memoryStreamthank = new MemoryStream())
+                            {
+                                PdfWriter twriter = PdfWriter.GetInstance(thankudoc, memoryStreamthank);
+                                thankudoc.Open();
+                                thtml.Parse(srthanku);
+                                thankudoc.Close();
+                                byte[] tbytes = memoryStreamthank.ToArray();
+                                memoryStreamthank.Close();
+                                message.Attachments.Add(new Attachment(new MemoryStream(tbytes), "Thank You Letter(AnkurPratishthan).pdf"));
+                            }
+                            //[END] for thankyou                           
+                            string path = AppDomain.CurrentDomain.BaseDirectory + "\\Ankur Pratishthan 12AA.pdf";
+                            message.Attachments.Add(new Attachment(path));
+                            message.IsBodyHtml = true;
+                            message.To.Add(EmailID);
                             smtpClient.Send(message);
-                           // result = "Receipt Email and SMS sent successfully";
                         }
-                        catch (Exception ex)
-                        {
-                            result = "Accept Receipt Email not sent";
-                        }
+
+                        #endregion EmailAccept
+
+                        #region SMSAccept
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
+                        WebRequest request = HttpWebRequest.Create(sURL1);
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Stream s = (Stream)response.GetResponseStream();
+                        StreamReader readStream = new StreamReader(s);
+                        string dataString = readStream.ReadToEnd();
+                        response.Close();
+                        s.Close();
+                        readStream.Close();
+
+                        string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9987088651&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                        WebRequest request1 = HttpWebRequest.Create(surl2);
+                        HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                        Stream s1 = (Stream)response1.GetResponseStream();
+                        StreamReader readstream1 = new StreamReader(s1);
+                        string datastring1 = readstream1.ReadToEnd();
+                        response1.Close();
+                        s1.Close();
+                        readstream1.Close();
+                        #endregion SMSAccept
+                        dsAccept = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 2);
+                        result = "Accept SMS and Email sent successfully";
+                    }
+                    catch (Exception)
+                    {
+                        return "Accept Email SMS not sent";
                     }
 
-                    //[END] ]********Email Accept thank you letter , receipt, 80 G attachment*********
+                    #endregion Accept                    
 
-                    result = "Accept Email and SMS Sent";
+
                 }
-                
-                else if (cmd ==2)
+                else if (cmd ==2)//[Decline]
                 {
-                    //[START] DEcline SMS
-                    string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear" + DonorName + "Your donation has been declined at Ankur Pratishthan.Our tema will get in touch with you for further proceedings&priority=1";
-                    WebRequest request3 = HttpWebRequest.Create(sURL3);
-                    HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
-                    Stream s3 = (Stream)response3.GetResponseStream();
-                    StreamReader readStream3 = new StreamReader(s3);
-                    string dataString1 = readStream3.ReadToEnd();
-                    response3.Close();
-                    s3.Close();
-                    readStream3.Close(); 
-                    
-                    //  result = "Decline SMS Sent";
-                    //[END] Decline SMS
+                    try
+                    {
+                        #region EmailDecline
+                        SmtpClient smtpClient1 = new SmtpClient(ServerName, PORTNO);
+                        smtpClient1.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient1.UseDefaultCredentials = true;
+                        smtpClient1.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient1.EnableSsl = true;
+                        using (MailMessage declinemessage = new MailMessage())
+                        {
+                            declinemessage.From = new MailAddress(Sender);
+                            declinemessage.Subject = "Support Ankur Pratishthan";
+                            declinemessage.Body = "Dear " + DonorName + ", your donation is declined. Our Team will get in touch with you for further proceedings.";
+                            declinemessage.IsBodyHtml = true;
+                            declinemessage.To.Add(EmailID);                           
+                            smtpClient1.Send(declinemessage);
+                        }
+                        #endregion EmailDecline 
 
-                    //[STARt]Decline Email
-                    string ServerName = "mail.smallmodule.com";
-                    int PORTNO = 25;  //25 //443 //587              
-                    string Sender = "ankursupport@smallmodule.com";
-                    string PASSWORD = "Ankur@456";
-                    SmtpClient smtpClient1 = new SmtpClient(ServerName, PORTNO);
-                    smtpClient1.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtpClient1.UseDefaultCredentials = true;
-                    smtpClient1.Credentials = new NetworkCredential(Sender, PASSWORD);
-                    smtpClient1.EnableSsl = true;
-                     using (MailMessage declinemessage = new MailMessage())
-                     {
-                         declinemessage.From = new MailAddress(Sender);
-                         declinemessage.Subject = "Support Ankur Pratishthan";
-                         declinemessage.Body = "Dear " + DonorName + ", your donation is declined. Our Team will get in touch with you for further proceedings.";
-                         declinemessage.IsBodyHtml = true;
-                         declinemessage.To.Add(EmailID);
-                         try
-                         {
-                             smtpClient1.Send(declinemessage);
-                             //result = "Decline Email Sent";
-                         }
-                         catch (Exception ex)
-                         {
-                             throw ex;
-                         }
-                     }
-                    //[END]Decline Email
-
-                     result = "Decline Email and SMS Sent";
+                        #region SMSDecline
+                        string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
+                        WebRequest request3 = HttpWebRequest.Create(sURL3);
+                        HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
+                        Stream s3 = (Stream)response3.GetResponseStream();
+                        StreamReader readStream3 = new StreamReader(s3);
+                        string dataString1 = readStream3.ReadToEnd();
+                        response3.Close();
+                        s3.Close();
+                        readStream3.Close();
+                        #endregion SMSDecline
+                        dsDecline = ap.ReceiptDonor(EmailID, DonorID, AddedBy,3);
+                        result = "Decline SMS and Email sent successfully";
+                    }
+                    catch (Exception ex)
+                    {
+                        result = "Decline SMS and Email not sent";
+                    }                                   
                 }
             }
             catch (Exception ex)
-            {
+            {                
                 throw ex;
             }
             return result;
         }
+        
 
         public string SendBirthdayEmailSMS(string EmailID, string Contact,int DonorID)
         {
