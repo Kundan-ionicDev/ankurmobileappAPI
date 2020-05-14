@@ -280,7 +280,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "DonationApproval")]
         [OperationContract]
-        string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy);
+        string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy, string Reason);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

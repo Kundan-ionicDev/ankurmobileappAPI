@@ -1565,15 +1565,16 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            string imgpath = "";
+            string imgpath = ""; string imgname = "";
             try
             {
 
                 if (Img != "" && Img != null)
                 {
                     System.Drawing.Image Image;
-                    string path = @"C:/Uploads/Volunteers/";                    
-                    string imgname = LoginID.ToString();
+                  //  string path = @"/Uploads/Volunteers/";   
+                    string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Volunteers/");
+                     imgname = LoginID.ToString();
                     imgpath = path + imgname;
                     Image = Base64ToImage(Img, imgpath, imgname);
                 }
@@ -1581,7 +1582,7 @@ namespace AnkurPrathisthan
                 {
                     imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
                 }
-                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, LoginID);
+                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath,imgname +".jpg", LoginID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1594,6 +1595,7 @@ namespace AnkurPrathisthan
                             ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             ImgPath = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
                             RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+                            Img = Convert.ToString(ds.Tables[0].Rows[0]["Img"]),
                         });
                 }
             }
@@ -1788,6 +1790,7 @@ namespace AnkurPrathisthan
                            Description = Convert.ToString(ds.Tables[0].Rows[i]["Description"]),
                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["TempFlag"]),
                            AcceptFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["AcceptFlag"]),
+                           DeclineReason = Convert.ToString(ds.Tables[0].Rows[i]["DeclineReason"]),
                        });
                     }
                 }
@@ -2032,7 +2035,7 @@ namespace AnkurPrathisthan
             return obj;
         }
 
-        public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy)
+        public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy,string Reason)
         {
             string result = ""; string ReceiptNo = "2020202105";
             clsAuthentication auth = new clsAuthentication();
@@ -2046,7 +2049,7 @@ namespace AnkurPrathisthan
                 int PORTNO = 25;              
                 string Sender = "ankursupport@smallmodule.com";
                 string PASSWORD = "Ankur@456";
-                ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1);
+                ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1,"");
                 string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 if(cmd ==1)  //[Accept]
                 {
@@ -2117,62 +2120,13 @@ namespace AnkurPrathisthan
                                 message.Attachments.Add(new Attachment(new MemoryStream(rbytes), "Donation Receipt(AnkurPratishthan).pdf"));
                             }
                             //[END] for receipt
-                            //[START] for thankyou
-                            StringBuilder sb1 = new StringBuilder();
-                            sb1.Append("<html>");
-                            //sb1.Append("<head><meta http-equiv=Content-Type content="text/html; charset=UTF-8">");
-                            sb1.Append("<style type='text/css'>");
-                            sb1.Append("</style>");
-                            //sb1.Append("<script type='text/javascript' src='14d58dd6-9049-11ea-8b25-0cc47a792c0a_id_14d58dd6-9049-11ea-8b25-0cc47a792c0a_files/wz_jsgraphics.js'></script>");
-                            sb1.Append("</head>");
-                            sb1.Append("<body>");
-                            sb1.Append("<div style='position:absolute;left:50%;margin-left:-297px;top:0px';'width:595px';'height:841px';'border-style:outset';'overflow:hidden'>");
-                            sb1.Append("<div style='position:absolute;left:0px;top:0px'>");
-                            //sb1.Append("<img src='14d58dd6-9049-11ea-8b25-0cc47a792c0a_id_14d58dd6-9049-11ea-8b25-0cc47a792c0a_files/background1.jpg' width='595' height='841'></div>");                                
-                            sb1.Append("<div style='position:absolute;left:443.28px;top:125.80px' class='cls_002'><span class='cls_002'>Date : 29. January 2020</span></div>");
-                            sb1.Append("<div style='position:absolute;left:36.00px;top:140.44px' class='cls_002'><span class='cls_002'>To,</span></div>");
-                            sb1.Append("<div style='position:absolute;left:36.00px;top:155.08px' class='cls_002'><span class='cls_002'>Shir/Smt.Ishaan Khot.</span></div>");
-                            sb1.Append("<div style='position:absolute;left:36.00px;top:169.72px' class='cls_002'><span class='cls_002'>Dadar(w).Mumbai.</span></div>");
-                            sb1.Append("<div style='position:absolute;left:141.48px;top:228.04px' class='cls_004'><span class='cls_004'>Sub. : </span><span class='cls_005'>Gratitude towards your contribution for a social cause.</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:268.00px' class='cls_002'><span class='cls_002'>Respected Sir / Madam,</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:296.44px' class='cls_002'><span class='cls_002'>Ankur Pratishthan is a Non Government Organization (NGO) working for the all-round development of</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:310.24px'  class='cls_002'><span class='cls_002'>destitute children. Skills development, emotional& moral support and inculcating best ethical habits from</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:324.04px'  class='cls_002'><span class='cls_002'>the basis of various projects & programmes that Ankur Pratishthan takes up to develop this neglected</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:337.84px'  class='cls_002'><span class='cls_002'>segment of the society. Various subject experts & supporters help Ankur Pratishthan to develop these</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:351.64px'  class='cls_002'><span class='cls_002'>destitute children into self supporting individuals. Ankur Pratishthan presently organizes various such</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:365.44px'class='cls_002'><span class='cls_002'>activities for about 500 children from 5 different shelters in Mumbai Metropolis.</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:391.96px' class='cls_002'><span class='cls_002'>On behalf of Ankur Pratishthan, here we would like to extend our gratitude for your generous donation of</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:405.64px' class='cls_002'><span class='cls_002'>Rs. 2,500/-only.</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:432.16px' class='cls_002'><span class='cls_002'>The amount of donation was of a great help to provide necessary amenities and material to our children and</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:445.96px' class='cls_002'><span class='cls_002'>volunteers. We are confident that a strong support with a thought from philanthropist would go a long way</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:459.76px' class='cls_002'><span class='cls_002'>in promoting these activities and inculcating good habits among the children.</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:486.16px' class='cls_002'><span class='cls_002'>We will keep you updated through our newsletters & website.</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:512.68px' class='cls_002'><span class='cls_002'>Thanks again for all you had done for Ankur Pratishthan.</span></div>");
-sb1.Append("<div style='position:absolute;left:48.00px;top:553.12px' class='cls_002'><span class='cls_002'>SincerelyYours,</span></div>");
-sb1.Append("<div style='position:absolute;left:48.00px;top:604.72px' class='cls_002'><span class='cls_002'>Pranav Bhonde</span></div>");
-sb1.Append("<div style='position:absolute;left:36.00px;top:618.52px' class='cls_002'><span class='cls_002'>( General Secretary)</span></div>");
-sb1.Append("</div>");
-sb1.Append("</body>");
-sb1.Append("</html>");
-                            
-                            sb1.Append("</body>");
-                            sb1.Append("</html>"); 
-                            StringReader srthanku = new StringReader(sb1.ToString());
-                            Document thankudoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
-                            HTMLWorker thtml = new HTMLWorker(thankudoc);
-                            using (MemoryStream memoryStreamthank = new MemoryStream())
-                            {
-                                PdfWriter twriter = PdfWriter.GetInstance(thankudoc, memoryStreamthank);
-                                thankudoc.Open();
-                                thtml.Parse(srthanku);
-                                thankudoc.Close();
-                                byte[] tbytes = memoryStreamthank.ToArray();
-                                memoryStreamthank.Close();
-                                message.Attachments.Add(new Attachment(new MemoryStream(tbytes), "Thank You Letter(AnkurPratishthan).pdf"));
-                            }
-                            //[END] for thankyou                           
-                            string path = AppDomain.CurrentDomain.BaseDirectory + "\\Ankur Pratishthan 12AA.pdf";
-                            message.Attachments.Add(new Attachment(path));
+                            //string certififcate = Path.GetFullPath("../Ankur Pratishthan 12AA.pdf");
+                            //Attachment attachment = new Attachment(certififcate);
+                           // message.Attachments.Add(attachment);                  
+                           // string path = AppDomain.CurrentDomain.BaseDirectory + "Ankur Pratishthan 12AA.pdf";
+                            //System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Ankur Pratishthan 12AA.pdf");
+                         
+                            //message.Attachments.Add(new Attachment(path, "Ankur Pratishthan 12AA.pdf"));
                             message.IsBodyHtml = true;
                             message.To.Add(EmailID);
                             smtpClient.Send(message);
@@ -2201,7 +2155,7 @@ sb1.Append("</html>");
                         s1.Close();
                         readstream1.Close();
                         #endregion SMSAccept
-                        dsAccept = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 2);
+                        dsAccept = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 2,"");
                         result = "Accept SMS and Email sent successfully";
                     }
                     catch (Exception)
@@ -2245,7 +2199,7 @@ sb1.Append("</html>");
                         s3.Close();
                         readStream3.Close();
                         #endregion SMSDecline
-                        dsDecline = ap.ReceiptDonor(EmailID, DonorID, AddedBy,3);
+                        dsDecline = ap.ReceiptDonor(EmailID, DonorID, AddedBy,3,Reason);
                         result = "Decline SMS and Email sent successfully";
                     }
                     catch (Exception ex)

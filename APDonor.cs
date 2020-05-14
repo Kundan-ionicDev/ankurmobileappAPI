@@ -321,18 +321,19 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet ReceiptDonor(string EmailID,int DonorID,string AddedBy,int Mode)
+        public DataSet ReceiptDonor(string EmailID,int DonorID,string AddedBy,int Mode,string Reason="")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.uspGetDonationReceipt";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[4];
+                oParam = new SqlParameter[5];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@DonorID", DonorID);
                 oParam[2] = new SqlParameter("@AddedBy", AddedBy);
-                oParam[3] = new SqlParameter("@Mode", Mode); 
+                oParam[3] = new SqlParameter("@Mode", Mode);
+                oParam[4] = new SqlParameter("@Reason", Reason);
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -407,20 +408,21 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string ImgPath,int LoginID)
+        public DataSet UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string ImgPath,string Img,int LoginID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.UpdateProfile";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[6];
+                oParam = new SqlParameter[7];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@ContactNo", ContactNo);
                 oParam[2] = new SqlParameter("@DOB", DOB);
                 oParam[3] = new SqlParameter("@LoginID", LoginID);
                 oParam[4] = new SqlParameter("@Address", Address);
                 oParam[5] = new SqlParameter("@ImgPath", ImgPath);
+                oParam[6] = new SqlParameter("@Img", Img);
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }

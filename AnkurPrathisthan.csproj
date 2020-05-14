@@ -112,6 +112,7 @@
   <ItemGroup>
     <Content Include="APService.svc" />
     <Content Include="Global.asax" />
+    <Content Include="thankyou.html" />
     <Content Include="Uploads\Books\AesopsFables.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02 %281%29.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02.jpg" />
@@ -127,6 +128,8 @@
     <Content Include="Uploads\Books\१५१ चातुर्य कथा.jpg" />
     <Content Include="Uploads\Books\१९७१ चे अभिमन्यू.jpg" />
     <Content Include="Uploads\Books\७५ गोष्टी श्रीकृष्णाच्या.jpg" />
+    <Content Include="Uploads\headerimg.jpg" />
+    <Content Include="Uploads\sign.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
