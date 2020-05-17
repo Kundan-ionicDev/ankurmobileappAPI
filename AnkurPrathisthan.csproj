@@ -112,6 +112,8 @@
   <ItemGroup>
     <Content Include="APService.svc" />
     <Content Include="Global.asax" />
+    <Content Include="headerimg.jpg" />
+    <Content Include="sign.jpg" />
     <Content Include="thankyou.html" />
     <Content Include="Uploads\Books\AesopsFables.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02 %281%29.jpg" />
