@@ -2120,14 +2120,16 @@ namespace AnkurPrathisthan
                             StringReader sreceipt = new StringReader(sb.ToString());
                             Document receiptdoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
                             HTMLWorker htmlparser = new HTMLWorker(receiptdoc);
-                            string urls1 = "https://ankurpratishthan.com/Uploads/sign.jpg";
-                            string urlh1 = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
+                         //   string urls1 = "https://ankurpratishthan.com/Uploads/sign.jpg";
+                           // string urlh1 = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
                             using (MemoryStream memoryStreamreceipt = new MemoryStream())
                             {
                                 PdfWriter recwriter = PdfWriter.GetInstance(receiptdoc, memoryStreamreceipt);
                                 receiptdoc.Open();
                                 //// For Header Image
-                                iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(new Uri(urlh1));
+                              //  iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(new Uri(urlh1));
+                                string headerimg = "headerimg.jpg";
+                                iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance((AppDomain.CurrentDomain.BaseDirectory + headerimg));
                                 jpg.ScaleToFit(550f, 850f);
                                 jpg.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
                                 jpg.IndentationLeft = 9f;
@@ -2194,15 +2196,17 @@ namespace AnkurPrathisthan
                             StringReader strReader = new StringReader(sb1.ToString());
                             Document thankdoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
                             HTMLWorker htmlparse = new HTMLWorker(thankdoc);
-                            string urls = "https://ankurpratishthan.com/Uploads/sign.jpg";
-                            string urlh = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
+                           // string urls = "https://ankurpratishthan.com/Uploads/sign.jpg";
+                            //string urlh = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
+                            string header = "headerimg.jpg";
+                            string sign = "sign.jpg";
 
                             using (MemoryStream memorystrem = new MemoryStream())
                             {
                                 PdfWriter twriter = PdfWriter.GetInstance(thankdoc, memorystrem);
                                 thankdoc.Open();
                                 // For Header Image
-                                iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(new Uri(urlh));
+                                iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance((AppDomain.CurrentDomain.BaseDirectory + header));
                                 jpg.ScaleToFit(550f, 900f);
                                 jpg.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
                                 jpg.IndentationLeft = 9f;
@@ -2212,7 +2216,7 @@ namespace AnkurPrathisthan
                            
 
                                 // For Signature Image
-                                iTextSharp.text.Image sjpg = iTextSharp.text.Image.GetInstance(new Uri(urls));
+                                iTextSharp.text.Image sjpg = iTextSharp.text.Image.GetInstance((AppDomain.CurrentDomain.BaseDirectory + sign));
                                 // sjpg.ScaleToFit(250f, 250f);
                                 sjpg.ScaleToFit(100f, 100f);
                                 //  sjpg.Alignment = iTextSharp.text.Image.TEXTWRAP | iTextSharp.text.Image.ALIGN_LEFT;
