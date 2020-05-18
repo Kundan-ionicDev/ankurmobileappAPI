@@ -2120,8 +2120,8 @@ namespace AnkurPrathisthan
                             StringReader sreceipt = new StringReader(sb.ToString());
                             Document receiptdoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
                             HTMLWorker htmlparser = new HTMLWorker(receiptdoc);
-                            string urls1 = "http://localhost:51582/Uploads/sign.jpg";
-                            string urlh1 = "http://localhost:51582/Uploads/headerimg.jpg";
+                            string urls1 = "https://ankurpratishthan.com/Uploads/sign.jpg";
+                            string urlh1 = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
                             using (MemoryStream memoryStreamreceipt = new MemoryStream())
                             {
                                 PdfWriter recwriter = PdfWriter.GetInstance(receiptdoc, memoryStreamreceipt);
@@ -2194,8 +2194,8 @@ namespace AnkurPrathisthan
                             StringReader strReader = new StringReader(sb1.ToString());
                             Document thankdoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
                             HTMLWorker htmlparse = new HTMLWorker(thankdoc);
-                            string urls = "http://localhost:51582/Uploads/sign.jpg";
-                            string urlh = "http://localhost:51582/Uploads/headerimg.jpg";
+                            string urls = "https://ankurpratishthan.com/Uploads/sign.jpg";
+                            string urlh = "https://ankurpratishthan.com/Uploads/headerimg.jpg";
 
                             using (MemoryStream memorystrem = new MemoryStream())
                             {
