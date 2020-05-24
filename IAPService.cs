@@ -288,6 +288,12 @@ namespace AnkurPrathisthan
         [OperationContract]
         string SendBirthdayEmailSMS(string EmailID, string Contact, int DonorID);
 
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetPDF")]
+        [OperationContract]
+        string GetPDF();
+
         #endregion AP Donor
 
     }

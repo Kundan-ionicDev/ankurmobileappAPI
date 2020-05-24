@@ -114,7 +114,6 @@
     <Content Include="Global.asax" />
     <Content Include="headerimg.jpg" />
     <Content Include="sign.jpg" />
-    <Content Include="thankyou.html" />
     <Content Include="Uploads\Books\AesopsFables.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02 %281%29.jpg" />
     <Content Include="Uploads\Books\Aesop%27s Fables  02.jpg" />
@@ -174,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="AnkurPratishthan12AA.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -22,6 +22,7 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
+//using EASendMail;
 //using iTextSharp.tool.xml;
 
 //using System.iTextSharp.text;
@@ -2043,6 +2044,147 @@ namespace AnkurPrathisthan
             return "Y";
         }
 
+        private AlternateView Mail_Body()
+        {
+           // string path = HttpContext.Current.Server.MapPath(@"~/sign.jpg");
+            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/sign.jpg");
+            string header = System.Web.Hosting.HostingEnvironment.MapPath("~/headerimg.jpg");
+            LinkedResource Img1 = new LinkedResource(header, MediaTypeNames.Image.Jpeg);
+            LinkedResource Img = new LinkedResource(path, MediaTypeNames.Image.Jpeg);
+            Img.ContentId = "MyImage";
+            Img1.ContentId = "Header";
+            string str = @"  <html>
+                             <head>                           
+                             </head>
+                             <body> 
+                            <p><img src=cid:Header  id='img' alt='' width='200px' height='200px'/></p>                            
+                             <h5><strong>Date:</strong></h5>
+                             <p><strong>To,</strong></p>
+                             <p><strong></p>
+                             <p><strong><u>Sub. : </u></strong><strong><u>Gratitude towards your contribution for a social cause.</u></strong></p>
+                             <p>Respected Sir / Madam,</p>
+                             <p>Ankur Pratishthan is a Non Government Organization (NGO) working for the all-round development of destitute children. Skills development, emotional &amp; moral support and inculcating best ethical habits from the basis of various projects &amp; programmes that Ankur Pratishthan takes up to develop this neglected segment of the society. Various subject experts &amp; supporters help Ankur Pratishthan to develop these destitute children into self supporting individuals. Ankur Pratishthan presently organizes various such activities for about 500 children from 5 different shelters in Mumbai Metropolis.</p>
+                             <p>On behalf of Ankur Pratishthan, here we would like to extend our gratitude for your generous donation of Rs.</p>
+                             <p><strong></p>
+                             <p>The amount of donation was of a great help to provide necessary amenities and material to our children and volunteers. We are confident that a strong support with a thought from philanthropist would go a long way in promoting these activities and inculcating good habits among the children.</p>
+                             <p>We will keep you updated through our newsletters &amp; website. Thanks again for all you had done for Ankur Pratishthan.</p>
+                             <p><strong>&nbsp;</strong></p>
+                             <p><strong>&nbsp;</strong></p>
+                             <p><strong>&nbsp;</strong></p>
+                             <p><strong>&nbsp;</strong></p>
+                             <p>SincerelyYours,</p>
+                             <p><strong>Pranav Bhonde</strong></p>
+                             <p>(General Secretary)</p>                                      
+                             <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
+                             <p>'https://ankurpratishthan.com/Uploads/DonationReceiptKundanSakpal.html'</p>  
+                             </body>
+                             </html>";
+            AlternateView AV = AlternateView.CreateAlternateViewFromString(str, null, MediaTypeNames.Text.Html);
+            //AlternateView AV1 = AlternateView.CreateAlternateViewFromString(str, null, MediaTypeNames.Text.Html);
+            AV.LinkedResources.Add(Img);
+            AV.LinkedResources.Add(Img1);
+
+            return AV;
+        } 
+
+        public string GetPDF()
+        {
+            string EmailID = "kundan.mobileappdev@gmail.com";
+            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/sign.jpg");
+            clsAuthentication auth = new clsAuthentication();
+            APDonor ap = new APDonor();
+            DataSet ds = new DataSet();
+            DataSet dsDecline = new DataSet();
+            DataSet dsAccept = new DataSet();
+            try
+            {
+                string ServerName = "mail.smallmodule.com";
+                int PORTNO = 25;
+                string Sender = "ankursupport@smallmodule.com";
+                string PASSWORD = "Ankur@456";
+              //  ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
+                //string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient.UseDefaultCredentials = true;
+                        smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient.EnableSsl = true;
+                        
+
+                //[start] receipt
+                 string html ="<html>";
+                 html +="<html>";
+                 html +="<head></head>";
+                 html +="<body>";
+                 html += "<img src='headerimg.jpg' alt='',height='100px',width='100px', align='left'>";
+                 html +="<p style='text-align:right;'> <strong> ANKUR PRATISHTHAN </strong></p>";
+                 html += "<p style='text-align: right;'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
+                 html += "<p style='text-align: right;'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
+                 html += "<p style='text-align: right;'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
+                 html += "<p style='text-align: right;'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>";
+                 html += "<p style='text-align: right;'>..................................................................................................................................................................................................................................................</p>";
+                 html +="<p>&nbsp;</p>";
+                 html +="<p><strong>Receipt No. : </strong></p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>";
+                 html +="<p><strong>&nbsp;</strong></p>";
+                 html +="<p><strong>Donated by :</strong></p>";
+                 html +="<p><strong>In the Name of :</strong></p>";
+                 html +="<p><strong>Residential Address :</strong></p>";
+                 html +="<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>";
+                 html +="<p><strong>Contact No.:</strong></p>";
+                 html +="<p><strong>Email ID : </strong></p>";
+                 html +="<p><strong>Date of Birth : (DD/MM/YY)</strong></p>";
+                 html +="<p><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>";
+                 html +="<p><strong>Amount in Figures : &nbsp;</strong></p>";
+                 html +="<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>";
+                 html +="<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong></p>";
+                 html +="<p><strong>Transaction Details : </strong></p>";
+                 html +="<p><strong>&nbsp;</strong></p>";
+                 html +="<p><strong>&nbsp;</strong></p>";
+                 html +="<p><strong>Received by</strong></p>" + "Pranav Bhonde";
+                 html += "<p>";
+                 html += "<img alt ='', src = 'sign.jpg', height ='100px', width ='100px'></img>";
+                 html += "</p>";
+                 html +="<p><strong>&nbsp;</strong></p>";
+                 html +="<p><strong>&nbsp;</strong></p>";
+                 html +="<ul>";
+                 html +="<li><strong>Ankur Pratishthan expresses its gratitude towards your generous donation.</strong></li>";
+                 html +="<li><strong>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</strong></li>";
+                 html += "<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </strong></li>";
+                 html +="</ul>";
+                 html +="</body>";
+                 html +="</html>";
+                 string receipt = "DonationReceipt" + "KundanSakpal";
+                 string prec = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/");
+                 File.WriteAllText(prec+""+receipt+".html",html);
+                //[end] receipt
+                //[start]thankyou letter
+                 using (MailMessage message = new MailMessage())
+                 {
+                     message.From = new MailAddress(Sender);
+                     message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
+                     message.IsBodyHtml = true;
+                     message.AlternateViews.Add(Mail_Body());
+                     //[end]thankyou letter
+
+                     //[start]80g ccertificate
+                     string certificate = System.Web.Hosting.HostingEnvironment.MapPath("~/AnkurPratishthan12AA.pdf");
+                     message.Attachments.Add(new Attachment(certificate));
+                     //[end]80g ccertificate
+
+                     message.To.Add(EmailID);
+                     smtpClient.Send(message);
+                     
+                 }
+
+            }
+            catch (Exception ex)
+            {                
+                throw ex;
+            }               
+
+            return "receipt";
+        }
+
         public string DonationApproval(int cmd, int DonorID, string EmailID, string Contact, string AddedBy, string Reason)
         {
             string result = ""; string ReceiptNo = "2020202105";
@@ -2333,6 +2475,7 @@ namespace AnkurPrathisthan
             return result;
         }
 
+       
 
         //public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
         //   string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,int Tempflag,
