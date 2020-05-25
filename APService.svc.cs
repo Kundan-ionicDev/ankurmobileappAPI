@@ -2056,7 +2056,7 @@ namespace AnkurPrathisthan
                              <head>                           
                              </head>
                              <body> 
-                            <p><img src=cid:Header  id='img' alt='' width='200px' height='200px'/></p>                            
+                             <p><img src=cid:Header id='img' alt='' width='100%' height='100%'/></p>                            
                              <h5><strong>Date:</strong></h5>" + Date +' '+ @" 
                              <p><strong>To,</strong></p>" + DonorName + ' ' + @" 
                              <p><strong></p>
@@ -2066,15 +2066,16 @@ namespace AnkurPrathisthan
                              <p>On behalf of Ankur Pratishthan, here we would like to extend our gratitude for your generous donation of Rs.</p>" + Amount + ' ' + @" 
                              <p><strong></p>
                              <p>The amount of donation was of a great help to provide necessary amenities and material to our children and volunteers. We are confident that a strong support with a thought from philanthropist would go a long way in promoting these activities and inculcating good habits among the children.</p>
-                             <p>We will keep you updated through our newsletters &amp; website. Thanks again for all you had done for Ankur Pratishthan.</p>
-                             <p><strong>&nbsp;</strong></p>
-                             <p><strong>&nbsp;</strong></p>
+                             <p>We will keep you updated through our newsletters &amp; website. Thanks again for all you had done for Ankur Pratishthan.</p>                             
                              <p><strong>&nbsp;</strong></p>
                              <p><strong>&nbsp;</strong></p>
                              <p>SincerelyYours,</p>
                              <p><strong>Pranav Bhonde</strong></p>
                              <p>(General Secretary)</p>                                      
                              <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
+                             <p><strong>&nbsp;</strong></p>
+                             <p><strong>&nbsp;</strong></p>
+                             <p><strong>Kindly click on the link below to find Ankur Pratishthan's Donation receipt.</p></strong>   
                             </body></html>";
           
                 AlternateView AV = AlternateView.CreateAlternateViewFromString(str + url, null, MediaTypeNames.Text.Html);
@@ -2093,6 +2094,8 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             DataSet dsDecline = new DataSet();
             DataSet dsAccept = new DataSet();
+            string ran = auth.CreateRec();
+            
             try
             {
                 string ServerName = "mail.smallmodule.com";
@@ -2112,9 +2115,9 @@ namespace AnkurPrathisthan
                      //[start] receipt
                      //DateTime date = DateTime.Now;
                      //string sDate = Convert.ToDateTime(date).ToString();
-                     string receipt = "DonationReceipt"+DonorID.ToString();// +sDate;
+                     string receipt = "DonationReceipt" + ran.Trim();// +sDate;
                    
-                    // string url = "http://localhost:51582/Uploads/receiptat.html";
+                    
                      string html = "<html>";
                      html += "<html>";
                      html += "<head></head>";
@@ -2127,12 +2130,11 @@ namespace AnkurPrathisthan
                      html += "<p style='text-align: right;'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>";
                      html += "<p style='text-align: left;'>..................................................................................................................................................................................................................................................</p>";
                      html += "<p>&nbsp;</p>";
-                     html += "<p><strong>Receipt No. : </strong></p>" + receipt + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
+                     html += "<p><strong>Receipt No. : </strong></p>" + receipt.Trim() + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><strong> Date :</strong></p>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
                      html += "<p><strong>&nbsp;</strong></p>";
                      html += "<p><strong>Donated by :</strong></p>" + DonorName;
                      html += "<p><strong>In the Name of :</strong></p>" +ds.Tables[0].Rows[0]["IntheNameof"].ToString();
-                     html += "<p><strong>Residential Address :</strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();
-                     html += "<p><strong>Date of Birth : (DD/MM/YY)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PAN (For Donations Exceeding Rs. 10 Thousand) :</strong></p>";
+                     html += "<p><strong>Residential Address :</strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();                   
                      html += "<p><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();
                      html += "<p><strong>Email ID : </strong></p>" + ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
                      html += "<p><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString();
@@ -2157,7 +2159,8 @@ namespace AnkurPrathisthan
                      html += "</body>";
                      html += "</html>";
 
-                     string url = "'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'";
+                     string url = "'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'";                      
+                     string  url1 = url.Replace(" ", "");
                      string prec = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/");
                      File.WriteAllText(prec + "" + receipt + ".html", html);
                      //[end] receipt
@@ -2167,7 +2170,7 @@ namespace AnkurPrathisthan
                          message.From = new MailAddress(Sender);
                          message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
                          message.IsBodyHtml = true;
-                         message.AlternateViews.Add(Mail_Body(url, ds.Tables[0].Rows[0]["DateOfDonation"].ToString(), DonorName, ds.Tables[0].Rows[0]["Amount"].ToString()));
+                         message.AlternateViews.Add(Mail_Body(url1, ds.Tables[0].Rows[0]["DateOfDonation"].ToString(), DonorName, ds.Tables[0].Rows[0]["Amount"].ToString()));
                          //[end]thankyou letter
 
                          //[start]80g ccertificate
