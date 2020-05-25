@@ -1756,6 +1756,7 @@ namespace AnkurPrathisthan
                            ContactNo = Convert.ToString(ds.Tables[0].Rows[i]["ContactNo"]),
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
                            BirthdayFlag = Convert.ToString(ds.Tables[0].Rows[i]["BdayFlag"]),
+                           DonorID = Convert.ToString(ds.Tables[0].Rows[i]["DonorID"]),
                        });
                     }
                 }
