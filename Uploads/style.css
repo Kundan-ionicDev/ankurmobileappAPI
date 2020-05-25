@@ -1,0 +1,39 @@
+﻿#invoice {
+            padding: 50px;
+            font-size: 0.9em
+        }
+
+        .invoice {
+            position: relative;
+            background-color: #FFF;
+            min-height: 680px;
+            padding: 15px
+        }
+
+        .invoice header {
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #3989c6
+        }
+
+        .invoice .company-details {
+            text-align: center
+        }
+
+        .invoice .company-details .name {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+        .invoice .invoice-details .invoice-id {
+            margin-top: 0;
+            color: #3989c6
+        }
+        .invoice main .notices {
+            padding-left: 6px;
+            border-left: 6px solid #3989c6
+        }
+
+        p {
+            margin: 0px;
+        }
