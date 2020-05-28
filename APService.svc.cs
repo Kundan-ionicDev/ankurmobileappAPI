@@ -1481,12 +1481,9 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            if (Img == string.Empty)
-            {
-                //if (Img == null)
-                //{
-                    Img = "https://ankurpratishthan.com/Uploads/Default.png";
-                //}                
+            if (Img != "" && Img != null)
+            {                
+                Img = "https://ankurpratishthan.com/Uploads/Default.png";                              
             }
             try
             {
@@ -1568,24 +1565,32 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            string imgpath = ""; string imgname = "";
+            string imgpath = ""; string imgname = ""; string url = "";
             try
             {
 
                 if (Img != "" && Img != null)
                 {
                     System.Drawing.Image Image;
+                    imgname = LoginID.ToString() + ".jpg";
                   //  string path = @"/Uploads/Volunteers/";   
-                    string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Volunteers/");
-                     imgname = LoginID.ToString();
+                  string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Volunteers/");
+                 //   string path = HttpContext.Current.Server.MapPath("~/Uploads/Volunteers/" + imgname);  
+                     
                     imgpath = path + imgname;
                     Image = Base64ToImage(Img, imgpath, imgname);
+                    //string serverp = "https://ankurpratishthan.com/Uploads/Volunteers/.png";
+                    //"'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'"; 
+                    url = "https://ankurpratishthan.com/Uploads/Volunteers/"+imgname;     
                 }
-                else
-                {
-                    imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
-                }
-                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath,imgname +".jpg", LoginID);
+                //else
+                //{
+                //   // imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
+                //    // here u are giving default path which is wrong...instead give here path of table value
+                //    //ill have to first check in db if there is an image na or do i have to check from the base64 u provide
+                //}
+             //   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
+                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname, LoginID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
