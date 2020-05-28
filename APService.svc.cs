@@ -1481,7 +1481,7 @@ namespace AnkurPrathisthan
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
             APDonor objdonor = new APDonor();
-            if (Img != "" && Img != null)
+            if (Img== "" && Img == null)
             {                
                 Img = "https://ankurpratishthan.com/Uploads/Default.png";                              
             }
