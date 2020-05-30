@@ -36,7 +36,7 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- UserLogin" + ex.Message, EmailID, Password);
+                throw ex;
             }
             return ds;
         }

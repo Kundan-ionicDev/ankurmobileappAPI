@@ -8,6 +8,7 @@ namespace AnkurPrathisthan.Entity
     public class userdetailsEntity
     {
         public string Message { get; set; }
+        public string OTP { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string EmailId { get; set; }
@@ -19,6 +20,7 @@ namespace AnkurPrathisthan.Entity
         public string ClusterName { get; set; }
         public string FullName{ get; set; }
         public int ClusterCode { get; set; }
+        public int UserID { get; set; }
         
     }
 

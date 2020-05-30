@@ -19,6 +19,7 @@ namespace AnkurPrathisthan.Entity
         public string Status { get; set; }
         public string AreaName { get; set; }
         public string Occassion { get; set; }
+        public string Prefix { get; set; }
 
     }
 

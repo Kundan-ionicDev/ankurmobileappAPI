@@ -111,7 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="APService.svc" />
+    <Content Include="footer.jpeg" />
     <Content Include="Global.asax" />
+    <Content Include="greeting1.jpeg" />
+    <Content Include="greeting2.jpeg" />
     <Content Include="headerimg.jpg" />
     <Content Include="HtmlPage1.html" />
     <Content Include="sign.jpg" />

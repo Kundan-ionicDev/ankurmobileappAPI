@@ -24,11 +24,11 @@ namespace AnkurPrathisthan
         [OperationContract]
         userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string platform, string FCMID, string IMEI);
 
-        [WebInvoke(Method = "POST",
-        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "UserLogout")]
-        [OperationContract]
-        string UserLogout(string EmailID);
+        //[WebInvoke(Method = "POST",
+        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        //UriTemplate = "UserLogout")]
+        //[OperationContract]
+        //string UserLogout(string EmailID);
 
         //[WebInvoke(Method = "POST",
         //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -41,13 +41,13 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SendOTPEmail")]
         [OperationContract]
-        string SendOTPEmail(string EmailID);
+        List<userdetailsEntity> SendOTPEmail(string EmailID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ValidateOTP")]
         [OperationContract]
-        string ValidateOTP(string EmailID, string OTP, string Password);
+        List<userdetailsEntity> ValidateOTP(string EmailID, string OTP, string Password);
         //[END] For Authentication
 
         //[STARt] For Book Management
@@ -218,8 +218,8 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageDonor")]
         [OperationContract]
         List<DonorEntity> ManageDonor(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
-            string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
-            int cmd, string DonorID, int Tempflag, string Description = "");
+        string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,
+        int cmd, string DonorID, int Tempflag, string Prefix, string Description = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -238,7 +238,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageCelebrateRequest")]
         [OperationContract]
         List<CelebrateEntity> ManageCelebrateRequest(int cmd, string FirstName, string LastName,
-        string EmailID, string Contact, string Date, string VolEmailID, int AreaID, int OccassionID, string ID);
+        string EmailID, string Contact, string Date, string VolEmailID, string Prefix, int AreaID, int OccassionID, string ID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

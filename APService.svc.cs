@@ -22,11 +22,7 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
-//using EASendMail;
-//using iTextSharp.tool.xml;
 
-//using System.iTextSharp.text;
-//using iTextSharp.text.pdf;
 
 
 
@@ -147,6 +143,7 @@ namespace AnkurPrathisthan
         
         #endregion Logs
 
+        #region AP Library Management System
         //[START] FOR login & logout
         public userdetailsEntity UserLogin(string EmailID, string Password, string deviceinfo, string platform, string FCMID, string IMEI)
         {
@@ -171,14 +168,12 @@ namespace AnkurPrathisthan
             clsAuthentication objGeneral = new clsAuthentication();
             userdetailsEntity entity = new userdetailsEntity();
             try
-            {
-              //  //WriteToFile("UserLogin", "[START]", EmailID);
+            {              
                 if (EmailID == null || Password == null)
                 { }
                 else
                 {
-                    ds = objGeneral.GetUserDetails(EmailID, Password, FCMID);
-                 //   //WriteToFile("UserLogin", "Login[START]", EmailID);
+                    ds = objGeneral.GetUserDetails(EmailID, Password, FCMID);               
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -193,13 +188,12 @@ namespace AnkurPrathisthan
                             }
                         }
                     }
-                }
-            //    //WriteToFile("UserLogin", "Login[END]", EmailID);
+                }            
             }              
 
             catch (Exception ex)
             {
-             //  //WriteToFile("UserLogin", ex.StackTrace, EmailID);                
+                throw ex;
             }
             finally
             {
@@ -207,41 +201,9 @@ namespace AnkurPrathisthan
                 ds.Dispose();
             }
             return entity;
-        }
-        public string UserLogout(string EmailID)
-        {
-            DataSet ds = new DataSet();
-            clsAuthentication objGeneral = new clsAuthentication();
-            string result = "";
-            try
-            {
-                if (EmailID == null)
-                {
-                   
-                }
+        }       
 
-                else
-                {
-                    ds = objGeneral.LogoutDetail(EmailID);
-                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            result = Convert.ToString(ds.Tables[0].Rows[i]["Message"]);
-                        }
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-             //  //WriteToFile("UserLogout" , ex.Message, EmailID);                
-            }
-            return result;
-        }
-
-
-        // This method will be used for Admin Registration or for Admin creation
+        // [start]This method will be used for Admin Registration or for Admin creation
         public List<userdetailsEntity> UserRegister(string FirstName, string LastName, string EmailID, string RoleID, string ClusterCode,
         string MobileNo = "")
         {
@@ -292,70 +254,86 @@ namespace AnkurPrathisthan
             return entity;
         }
         //[END] For Admin Creation
+
+
         //[START] FOR FORGOT PASSWORD VIA OTP ON EMAIL
-        public string SendOTPEmail(string EmailID)
+        public List<userdetailsEntity> SendOTPEmail(string EmailID)
         {
-            DataSet ds = new DataSet();
+            
             string newOTP = "";
-            string Message = ""; string objIsEmailSent = "";
+            string objIsEmailSent = "";
             DataSet dsInsert = new DataSet();
             clsAuthentication obj = new clsAuthentication();
-            userdetailsEntity entity = new userdetailsEntity();
+            List<userdetailsEntity> entity = new List<userdetailsEntity>();
             clsBookManagement bm = new clsBookManagement();
 
             try
             {               
-                newOTP = obj.CreateOTP();                
-               // objIsEmailSent = obj.SendOTPEmail(EmailID, newOTP);
+                newOTP = obj.CreateOTP();
                 dsInsert = obj.InsertOtp(newOTP, EmailID);
-                if (dsInsert.Tables.Count > 0 && dsInsert.Tables[0].Rows.Count > 0)
+                if (dsInsert.Tables.Count > 0)
                 {
-                    Message = dsInsert.Tables[0].Rows[0]["Message"].ToString();
-                    if (Message == "SUCCESS")
-                    {
-                        objIsEmailSent = obj.SendOTPEmail(EmailID, newOTP);
-                    }
-                }                
-            }
+                    entity.Add
+                        (new userdetailsEntity()
+                        {
+                            //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            OTP = Convert.ToString(dsInsert.Tables[0].Rows[0]["OTP"]),
+                            Firstname = Convert.ToString(dsInsert.Tables[0].Rows[0]["FirstName"]),
+                            Lastname = Convert.ToString(dsInsert.Tables[0].Rows[0]["LastName"]),
+                            EmailId = Convert.ToString(dsInsert.Tables[0].Rows[0]["EmailID"]),
+                            Message = Convert.ToString(dsInsert.Tables[0].Rows[0]["Message"]),
+                            UserID = Convert.ToInt32(dsInsert.Tables[0].Rows[0]["UserID"]),
+                            RoleID = Convert.ToInt32(dsInsert.Tables[0].Rows[0]["RoleID"]),
+                        });
+                }
+
+                objIsEmailSent = obj.SendOTPEmail(EmailID, dsInsert.Tables[0].Rows[0]["OTP"].ToString());
+                    
+              }                
+            
             catch (Exception ex)
             {
-                bm.InsertError(EmailID, "SendOTPEmail","Message"+ ex.Message + "StackTrace"+ex.StackTrace,"CreateOTP");        
+                throw ex;       
             }
-            return objIsEmailSent;
+            return entity;
         }
-        //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL        
 
-        public string ValidateOTP(string EmailID, string OTP, string Password)
+        public List<userdetailsEntity> ValidateOTP(string EmailID, string OTP, string Password)
         {
-            string Message = "";
+            List<userdetailsEntity> entity = new List<userdetailsEntity>();
             DataSet ds = new DataSet();
             clsAuthentication obj = new clsAuthentication();
             DataSet dspwdchange = new DataSet();
             try
-            {
-               // //WriteToFile("ValidateOTP", OTP, EmailID);
+            {               
                 ds = obj.ValidateOTP(EmailID, OTP);
                 if (ds.Tables.Count > 0)
                 {
-                    if (ds.Tables[0].Rows[0]["Message"].ToString() == "VALID")
-                    {
-                        dspwdchange = obj.PasswordReset(EmailID, Password);
-                        if (dspwdchange.Tables.Count > 0)
+                    entity.Add
+                        (new userdetailsEntity()
                         {
-                            Message = dspwdchange.Tables[0].Rows[0]["Message"].ToString();
-                        }
-                    }
-                }
-             //   //WriteToFile("ValidateOTP", "[END]", EmailID);
+                            //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+                            //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+                            //OTP = Convert.ToString(ds.Tables[0].Rows[0]["OTP"]),
+                            Firstname = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            Lastname = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
+                            EmailId = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+                            Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
+                            UserID = Convert.ToInt32(ds.Tables[0].Rows[0]["UserID"]),
+                            RoleID = Convert.ToInt32(ds.Tables[0].Rows[0]["RoleID"]),
+                        });
+                }           
             }
             catch (Exception ex)
             {
-              //  //WriteToFile("ValidateOTP", ex.StackTrace, ex.Message +"Email"+ EmailID);                
+                             
             }
-            return Message;
+            return entity;
         }
-            
-            
+
+        //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL  
+
         //[START] For Book Management        
         public List<BookDetailsEntity> GetBooks()
         {
@@ -1309,68 +1287,11 @@ namespace AnkurPrathisthan
         }
 
 
-
-        //[START] For Facebook
-
-        public List<GetLatestShayari> GetLatestShayari()
-        {
-            List<GetLatestShayari> entity = new List<GetLatestShayari>();
-            DataSet ds = new DataSet();
-            clsMemberManagement mem = new clsMemberManagement();
-            try
-            {
-                ds = mem.GetFbMsg();
-                if (ds.Tables.Count > 0)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        entity.Add
-                            (new GetLatestShayari()
-                            {
-                                Msg = Convert.ToString(ds.Tables[0].Rows[i]["Msg"]),
-                                Category = Convert.ToString(ds.Tables[0].Rows[i]["Category"]),
-                            });
-                    }                
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return entity;
-        }
-
-        public List<GetLatestShayari> SubmitLatestShayari(string msg, string EmailID, string Category)
-        {
-            List<GetLatestShayari> entity = new List<GetLatestShayari>();
-            DataSet ds = new DataSet();
-            clsMemberManagement mem = new clsMemberManagement();
-            try
-            {
-                ds = mem.InsertShayari(msg,EmailID,Category);
-                if (ds.Tables.Count > 0)
-                {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        entity.Add
-                            (new GetLatestShayari()
-                            {
-                                Msg = Convert.ToString(ds.Tables[0].Rows[i]["Msg"]),
-                                Category = Convert.ToString(ds.Tables[0].Rows[i]["Category"]),
-                            });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return entity;
-        }
-
-        //[END] for facebook
+        #endregion AP Library Management System
+      
 
         #region AP Donation Management System
+
         public List<VolunteerEntity> APLogin (string EmailID, string Password ,string FCM="")
         {
             List<VolunteerEntity> entity = new List<VolunteerEntity>();
@@ -1585,11 +1506,11 @@ namespace AnkurPrathisthan
                 }
                 //else
                 //{
-                //   // imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
+                //    imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
                 //    // here u are giving default path which is wrong...instead give here path of table value
                 //    //ill have to first check in db if there is an image na or do i have to check from the base64 u provide
                 //}
-             //   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
+             ////   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
                 ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname, LoginID);
                 if (ds.Tables.Count > 0)
                 {
@@ -1617,7 +1538,7 @@ namespace AnkurPrathisthan
 
         public List<DonorEntity> ManageDonor(string FullName,string Inthenameof, string EmailID, string ContactNo, string DOB,
             string Address,int Amount, string PaymentMode, string AdminEmailID,string DonationTowards, string PAN, string Amount1,
-            int cmd,string DonorID,int Tempflag, string Description="")
+            int cmd,string DonorID,int Tempflag,string Prefix, string Description="")
         {
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
@@ -1625,7 +1546,7 @@ namespace AnkurPrathisthan
             try
             {
                 ds = objdonor.handleDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
-                    PaymentMode, DonationTowards, PAN, Amount1, cmd, DonorID, Tempflag, Description);
+                    PaymentMode, DonationTowards, PAN, Amount1, cmd, DonorID, Tempflag, Prefix, Description);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1644,6 +1565,7 @@ namespace AnkurPrathisthan
                             PAN = Convert.ToString(ds.Tables[0].Rows[0]["PAN"]),
                             Amountinwords = Convert.ToString(ds.Tables[0].Rows[0]["AmountInWords"]),
                             DonationTowards = Convert.ToString(ds.Tables[0].Rows[0]["DonationTowards"]),
+                            Prefix = Convert.ToString(ds.Tables[0].Rows[0]["Prefix"]),
                             DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
                             TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
                         });
@@ -1651,7 +1573,7 @@ namespace AnkurPrathisthan
 
                 if (cmd == 1)
                 {
-                    string fullname = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                    string fullname = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                     //[START]SMS integration
                     if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
                     {
@@ -1726,7 +1648,9 @@ namespace AnkurPrathisthan
                            Description = Convert.ToString(ds.Tables[0].Rows[i]["Description"]),
                            TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["TempFlag"]),
                            AcceptFlag = Convert.ToInt32(ds.Tables[0].Rows[i]["AcceptFlag"]),
+                           AcceptFlagInWords = Convert.ToString(ds.Tables[0].Rows[i]["AcceptFlagInWords"]),
                            DeclineReason = Convert.ToString(ds.Tables[0].Rows[i]["DeclineReason"]),
+                           Prefix = Convert.ToString(ds.Tables[0].Rows[i]["Prefix"]),
                        });
                     }
                 }
@@ -1762,6 +1686,7 @@ namespace AnkurPrathisthan
                            DOB = Convert.ToString(ds.Tables[0].Rows[i]["DOB"]),
                            BirthdayFlag = Convert.ToString(ds.Tables[0].Rows[i]["BdayFlag"]),
                            DonorID = Convert.ToString(ds.Tables[0].Rows[i]["DonorID"]),
+                           Prefix = Convert.ToString(ds.Tables[0].Rows[i]["Prefix"]),
                        });
                     }
                 }
@@ -1776,7 +1701,7 @@ namespace AnkurPrathisthan
         //[START] View Celebrate WIth US
 
         public List<CelebrateEntity> ManageCelebrateRequest(int cmd,string FirstName, string LastName,
-            string EmailID,string Contact,string Date,string VolEmailID,int AreaID,int OccassionID,string ID)
+            string EmailID,string Contact,string Date,string VolEmailID,string Prefix,int AreaID,int OccassionID,string ID)
         {
             List<CelebrateEntity> entity = new List<CelebrateEntity>();
             DataSet ds = new DataSet();
@@ -1784,7 +1709,7 @@ namespace AnkurPrathisthan
             string mailsent = "";
             try
             {
-                ds = obj.SubmitCelebrateReqeusts(cmd, FirstName, LastName, EmailID, Contact,Date, VolEmailID,AreaID,OccassionID,ID);
+                ds = obj.SubmitCelebrateReqeusts(cmd,Prefix,FirstName, LastName, EmailID, Contact,Date, VolEmailID,AreaID,OccassionID,ID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1795,7 +1720,7 @@ namespace AnkurPrathisthan
                             FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
                             LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
                             Email = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
-                            //Contact = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+                            Prefix = Convert.ToString(ds.Tables[0].Rows[0]["Prefix"]),
                             //DateOfEvent = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
                             //AreaID = Convert.ToInt32(ds.Tables[0].Rows[0]["ContactNo"]),
                             //OccassionID = Convert.ToInt32(ds.Tables[0].Rows[0]["CreatedBy"]),                            
@@ -1805,7 +1730,7 @@ namespace AnkurPrathisthan
 
                 if (cmd == 1)
                 {
-                    string Fullname = FirstName + LastName;
+                    string Fullname = Prefix+' '+FirstName+' ' +LastName;
                     mailsent = obj.SendCelebrateEmail(EmailID, Fullname);
                     //[ENd]for email
 
@@ -1867,6 +1792,7 @@ namespace AnkurPrathisthan
                                 Status = Convert.ToString(ds.Tables[0].Rows[i]["Status"]),
                                 AreaName = Convert.ToString(ds.Tables[0].Rows[i]["AreaName"]),
                                 Occassion = Convert.ToString(ds.Tables[0].Rows[i]["Occassion"]),
+                                Prefix = Convert.ToString(ds.Tables[0].Rows[i]["Prefix"]),
                             });
                     }
                 }
@@ -1990,6 +1916,10 @@ namespace AnkurPrathisthan
                 message.Subject = "Support Ankur Pratishthan (Birthday Wishes)";
                 message.Body = "Ankur Pratishthan wishes you a very happy birthday and a long, healthy & prosperous life! May all your wishes come true! Continue to spread joy!";
                 message.IsBodyHtml = true;
+                string greeting1  = System.Web.Hosting.HostingEnvironment.MapPath("~/greeting1.jpeg");
+                message.Attachments.Add(new Attachment(greeting1));
+                string greeting2 = System.Web.Hosting.HostingEnvironment.MapPath("~/greeting2.jpeg");
+                message.Attachments.Add(new Attachment(greeting2));
                 message.To.Add(EmailID);
                 try
                 {
@@ -2054,10 +1984,13 @@ namespace AnkurPrathisthan
         {            
             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/sign.jpg");
             string header = System.Web.Hosting.HostingEnvironment.MapPath("~/headerimg.jpg");
+            string footer =System.Web.Hosting.HostingEnvironment.MapPath("~/footer.jpeg");
             LinkedResource Img1 = new LinkedResource(header, MediaTypeNames.Image.Jpeg);
             LinkedResource Img = new LinkedResource(path, MediaTypeNames.Image.Jpeg);
+            LinkedResource Img3 = new LinkedResource(footer, MediaTypeNames.Image.Jpeg);
             Img.ContentId = "MyImage";
             Img1.ContentId = "Header";
+            Img3.ContentId = "Footer";
             string str = @"  <html>
                              <head>                           
                              </head>
@@ -2079,8 +2012,7 @@ namespace AnkurPrathisthan
                              <p><strong>Pranav Bhonde</strong></p>
                              <p>(General Secretary)</p>                                      
                              <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
-                             <p><strong>&nbsp;</strong></p>
-                             <p><strong>&nbsp;</strong></p>
+                             <p><img src=cid:Footer  id='img' alt='' width='100%' height='100%'/></p>
                              <p><strong>Kindly click on the link below to find Ankur Pratishthan's Donation receipt.</p></strong>   
                             </body></html>";
           
@@ -2088,6 +2020,7 @@ namespace AnkurPrathisthan
             //AlternateView AV1 = AlternateView.CreateAlternateViewFromString(str, null, MediaTypeNames.Text.Html);
                         AV.LinkedResources.Add(Img);
                         AV.LinkedResources.Add(Img1);
+                        AV.LinkedResources.Add(Img3);
 
             return AV;
         }
@@ -2109,7 +2042,7 @@ namespace AnkurPrathisthan
                 string Sender = "ankursupport@smallmodule.com";
                 string PASSWORD = "Ankur@456";
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
-                string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
+                string DonorName = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
                         smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtpClient.UseDefaultCredentials = true;
@@ -2165,7 +2098,7 @@ namespace AnkurPrathisthan
                      html += "<br/>";
                      html += "<div style='margin-bottom: 5px;'><strong>Donated by :</strong>&nbsp;</div>" +DonorName;
                      html += "<div style='margin-bottom: 5px;'><strong>In the Name of :</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["IntheNameof"].ToString();
-                     html += "<div style='margin-bottom: 5px';><strong>Residential Address :</strong>&nbsp;" +ds.Tables[0].Rows[0]["IntheNameof"].ToString(); 
+                     html += "<div style='margin-bottom: 5px';><strong>Residential Address :</strong>&nbsp;" +ds.Tables[0].Rows[0]["Address"].ToString(); 
                      html += "</div>";
                      html += "<div style='margin-bottom: 5px;'>";
                      html += "<div style='float: left;'>";
@@ -2661,5 +2594,69 @@ namespace AnkurPrathisthan
         //}
         
         #endregion AP Donation Management System
+
+
+        #region Facebbok
+        //[START] For Facebook
+
+        public List<GetLatestShayari> GetLatestShayari()
+        {
+            List<GetLatestShayari> entity = new List<GetLatestShayari>();
+            DataSet ds = new DataSet();
+            clsMemberManagement mem = new clsMemberManagement();
+            try
+            {
+                ds = mem.GetFbMsg();
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.Add
+                            (new GetLatestShayari()
+                            {
+                                Msg = Convert.ToString(ds.Tables[0].Rows[i]["Msg"]),
+                                Category = Convert.ToString(ds.Tables[0].Rows[i]["Category"]),
+                            });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
+        public List<GetLatestShayari> SubmitLatestShayari(string msg, string EmailID, string Category)
+        {
+            List<GetLatestShayari> entity = new List<GetLatestShayari>();
+            DataSet ds = new DataSet();
+            clsMemberManagement mem = new clsMemberManagement();
+            try
+            {
+                ds = mem.InsertShayari(msg, EmailID, Category);
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.Add
+                            (new GetLatestShayari()
+                            {
+                                Msg = Convert.ToString(ds.Tables[0].Rows[i]["Msg"]),
+                                Category = Convert.ToString(ds.Tables[0].Rows[i]["Category"]),
+                            });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
+        //[END] for facebook
+        #endregion facebook
+
     }
 }

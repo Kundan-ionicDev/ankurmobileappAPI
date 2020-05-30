@@ -45,7 +45,9 @@ namespace AnkurPrathisthan.Entity
         public string VolEmailID { get; set; }
         public string CreatedBy { get; set; }
         public int AcceptFlag { get; set; }
-        public string  DeclineReason { get; set; } 
+        public string  DeclineReason { get; set; }
+        public string AcceptFlagInWords { get; set; }
+        public string Prefix { get; set; } 
     }
 
     public class GetSlides

@@ -138,14 +138,14 @@ namespace AnkurPrathisthan
 
         public DataSet handleDonors(string FullName, string Inthenameof, string EmailID, string DOB,
             string Address, string Contact, string AdminEmailID, int Amount, string PaymentMode, string DonationTowards, string PAN, 
-            string AmountInWords,int cmd, string DonorID,int Tempflag, string Description = "")
+            string AmountInWords,int cmd, string DonorID,int Tempflag, string Prefix,string Description = "")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.ManageDonors";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[16];
+                oParam = new SqlParameter[17];
                 oParam[0] = new SqlParameter("@Donatedby", FullName);
                 oParam[1] = new SqlParameter("@Inthenameof", Inthenameof);
                 oParam[2] = new SqlParameter("@Contact", Contact);
@@ -162,6 +162,7 @@ namespace AnkurPrathisthan
                 oParam[13] = new SqlParameter("@cmd", cmd);
                 oParam[14] = new SqlParameter("@DonorID", DonorID);
                 oParam[15] = new SqlParameter("@TempFlag", Tempflag);
+                oParam[16] = new SqlParameter("@Prefix", Prefix);
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
@@ -209,14 +210,14 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet SubmitCelebrateReqeusts(int cmd,string FirstName, string LastName, string EmailID, string Contact,string Date,string VolEmailID,int AreaID,int OccassionID, string ID)
+        public DataSet SubmitCelebrateReqeusts(int cmd,string Prefix,string FirstName, string LastName, string EmailID, string Contact,string Date,string VolEmailID,int AreaID,int OccassionID, string ID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.RegisterRequest";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[10];
+                oParam = new SqlParameter[11];
                 oParam[0] = new SqlParameter("@cmd", cmd);
                 oParam[1] = new SqlParameter("@FirstName", FirstName);
                 oParam[2] = new SqlParameter("@LastName", LastName);
@@ -227,6 +228,7 @@ namespace AnkurPrathisthan
                 oParam[7] = new SqlParameter("@AreaID", AreaID);
                 oParam[8] = new SqlParameter("@OccassionID", OccassionID);
                 oParam[9] = new SqlParameter("@ID", ID);
+                oParam[10] = new SqlParameter("@Prefix",Prefix);
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
