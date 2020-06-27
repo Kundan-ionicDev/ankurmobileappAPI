@@ -29,14 +29,15 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet HandleLibrarians(int cmd, string FirstName, string LastName,string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,string AdminEmailID, string LibrarianID="",string ImagePath="",string DOB="")
+        public DataSet HandleLibrarians(int cmd, string FirstName, string LastName,string EmailID, string Address, string MobileNo, string AltMobileNo,string ClusterID,
+            string AdminEmailID, string Password, string LibrarianID="",string ImagePath="",string DOB="")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.uspManageLibrarians";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[12];
+                oParam = new SqlParameter[13];
 
                 oParam[0] = new SqlParameter("@cmd", cmd);
                 oParam[1] = new SqlParameter("@FirstName", FirstName);
@@ -50,6 +51,7 @@ namespace AnkurPrathisthan
                 oParam[9] = new SqlParameter("@LibrarianID", LibrarianID);
                 oParam[10] = new SqlParameter("@Image", ImagePath);
                 oParam[11] = new SqlParameter("@DOB", DOB);
+                oParam[12] = new SqlParameter("@Password", Password);
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
                 

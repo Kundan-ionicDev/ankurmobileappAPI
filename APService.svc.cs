@@ -253,7 +253,7 @@ namespace AnkurPrathisthan
             }
             return entity;
         }
-        //[END] For Admin Creation
+       
 
 
         //[START] FOR FORGOT PASSWORD VIA OTP ON EMAIL
@@ -332,7 +332,7 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        //[END] FOR FORGOT PASSWORD VIA OTP ON EMAIL  
+        
 
         //[START] For Book Management        
         public List<BookDetailsEntity> GetBooks()
@@ -446,21 +446,17 @@ namespace AnkurPrathisthan
         }
 
         public List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
-        string LanguageID, string PublisherID,string BookDescription,string ThumbImg64,string Img1, string BookID = "")
+        string LanguageID, string PublisherID,string BookDescription,string ThumbImg64,string Img2, string BookID = "")
         {
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();
             clsBookManagement bm = new clsBookManagement();
             clsQRCode qrc = new clsQRCode();
-          // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Books\" ;
-            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Books\";           
-            string DBPath = "/Uploads/Books/";
-            string ThumbImgPath = "", Image2Path="";
-            System.Drawing.Image ThumbImg, Image2;
-            if (EmailID == null)
-                EmailID = "";
-            if (Price == null)
-                Price = "";
+            string ThumbImgPath = "";
+            System.Drawing.Image ThumbImg;
+            string Imgname;
+            if (EmailID == null)                EmailID = "";
+            if (Price == null)                Price = "";
             if (Author == null)
                 Author = "";
             if (Stock == null) Stock = "";
@@ -471,37 +467,27 @@ namespace AnkurPrathisthan
             if (PublisherID == null)
                 PublisherID = "";
             try
-            {
-                //WriteToFile("ManageBooks","START",EmailID);
+            {                
                 if (BookName == null || cmd == null)
                 {
                    
                 }
                     else
-                    {
-                        string DBImgPath1 = "";
-                        string DBImgPath2 = "";
+                    {                      
                         if (cmd.Trim() == "1" || cmd.Trim() == "2")
                         {
                             if (ThumbImg64 != "" && ThumbImg64 != null && BookName!=null  && BookName!= "")
                             {
                                 try
                                 {
-                                    //[START] unique thumb image id 
-                                    string ThumbID = GenerateImageID();
-                                    //[END] unique thumb  image id
-                                    string ThumbImgName1 = BookName + ThumbID; //ThumbImgNAme
-                                    ThumbImg = Base64ToImage(ThumbImg64, filepath, ThumbImgName1);//ThumbImgNAme PNG
-                                    ThumbImgPath = filepath + ThumbImgName1;////ThumbImgNAme Path;
-                                    string Image2ID = GenerateImageID(); //unique image2 id
-                                    string ImgName2 = BookName + Image2ID; //image2 name
-                                    Image2 = Base64ToImage(Img1, filepath, ImgName2); //Image 2 PNG 
-                                    Image2Path = filepath+ImgName2; //Image 2 Path
-
-                                    DBImgPath1 = DBPath + ThumbImgName1;//DB path Img1
-                                    DBImgPath2 = DBPath + ImgName2;//DB path Img2
-
-                                    //WriteToFile("ManageBooks", DBImgPath2, EmailID);
+                                    clsAuthentication obj = new clsAuthentication();
+                                    string imgid = obj.BookImgID();
+                                    Imgname = BookName.ToString() + imgid + ".jpg"; 
+                                    string Imgname1 = Imgname.Replace(" ", "");
+                                    string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Books/");
+                                    ThumbImgPath = path + Imgname1;
+                                    ThumbImg = Base64ToImage(ThumbImg64, ThumbImgPath, Imgname1); 
+                                    
                                 }
                                 catch (Exception ex)
                                 {
@@ -510,8 +496,7 @@ namespace AnkurPrathisthan
                             }
                         }
                         ds = bm.HandleBooks(BookName, cmd, EmailID, Price, Author, Stock, CategoryID, LanguageID, PublisherID, BookID,
-                            BookDescription, DBImgPath1, DBImgPath2, "");
-                        //WriteToFile("ManageBooks", "Book added/deleted/updated", EmailID);
+                            BookDescription, ThumbImgPath, "", "");                       
                         
                         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {    
@@ -531,16 +516,15 @@ namespace AnkurPrathisthan
                                 BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),
                                 ThumbImage = Convert.ToString(ds.Tables[0].Rows[i]["ThumbImage"]),
                                 Image2= Convert.ToString(ds.Tables[0].Rows[i]["Image2"]),
-                               // qrcode = Convert.ToString(ds.Tables[0].Rows[i]["qrcode"])
+                               
                             });
                         } 
                     }
-                }
-              //  //WriteToFile("ManageBooks", "END", EmailID);
+                }              
             }
             catch (Exception ex)
             {
-               // //WriteToFile("ManageBooks",ex.Message,EmailID);
+                throw ex;  
             }
             return entity;
         }
@@ -754,10 +738,8 @@ namespace AnkurPrathisthan
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
             clsClusterManagement bm = new clsClusterManagement();
-            System.Drawing.Image Image; string ImagePath = ""; string DBImgPath = "";
-           // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Clusters\";
-            string DBPath = "/Uploads/Clusters/";
-            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Clusters\";           
+            string ThumbImgPath ="";
+           
             if (EmailID == null)
                 EmailID = "";
             if (ClusterName == null)
@@ -775,22 +757,21 @@ namespace AnkurPrathisthan
                 AdminEmailID = "";
 
             try
-            {
-                //WriteToFile("ManageClusters", "START", EmailID);          
+            {                      
                     if (cmd.Trim() == "1" || cmd.Trim() =="2")
                     {
                         if (Image64 != "" && Image64 != null)
                         {
                             try
                             {
-                                //[START] unique thumb image id 
-                                string ImageID = GenerateImageID();
-                                //[END] unique thumb  image id
-                                string ImageName = ClusterName + ImageID; //ThumbImgNAme
-                                Image = Base64ToImage(Image64, filepath, ImageName);//ThumbImgNAme PNG
-                                ImagePath = filepath + ImageName;////ThumbImgNAme Path;
-                                DBImgPath = DBPath + ImageName;
-                                //WriteToFile("ManageClusters", DBImgPath, EmailID);
+                                clsAuthentication obj = new clsAuthentication();
+                                System.Drawing.Image ThumbImg;
+                                string imgid = obj.BookImgID();
+                                string Imgname = ClusterName.ToString() + imgid + ".jpg";
+                                string Imgname1 = Imgname.Replace(" ", "");
+                                string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Clusters/");
+                                 ThumbImgPath = path + Imgname1;
+                                ThumbImg = Base64ToImage(Image64, ThumbImgPath, Imgname1);                              
                             }
                             catch (Exception ex)
                             {
@@ -798,7 +779,7 @@ namespace AnkurPrathisthan
                             }
                         }
                     }
-                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, DBImgPath);
+                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, ThumbImgPath);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     { 
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -816,17 +797,16 @@ namespace AnkurPrathisthan
                                 Image = Convert.ToString(ds.Tables[0].Rows[i]["Img"]),
                             });
                         }                        
-                    }
-                    //WriteToFile("ManageClusters", "END", EmailID);
+                    }                    
             }
             catch (Exception ex)
             {
-                //WriteToFile("ManageClusters", ex.Message, EmailID);
+                throw ex;
             }
             return entity;
         }
 
-        ////[START]For ClusterHead Role
+        //[START]For ClusterHead Role
         public List<ClusterHeadEntity> GetClusterHeads()
         {
             List<ClusterHeadEntity> entity = new List<ClusterHeadEntity>();
@@ -863,12 +843,9 @@ namespace AnkurPrathisthan
             }
             return entity;
         }        
+       
 
-        //[END] For CLuster Management
-
-        //[START] For Librarian Management        
-
-
+        //[START] For Librarian Management
         public List<LibrarianDetailsEntity> GetLibrarians()
         {
             List<LibrarianDetailsEntity> entity = new List<LibrarianDetailsEntity>();
@@ -911,11 +888,8 @@ namespace AnkurPrathisthan
             List<LibrarianDetailsEntity> entity = new List<LibrarianDetailsEntity>();
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
-            clsAuthentication objauth = new clsAuthentication();
-            // string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Librarian\";
-            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Librarian\";
-            string DBPath = "/Uploads/Librarian/";
-            System.Drawing.Image Image; string ImagePath = "";
+            clsAuthentication objauth = new clsAuthentication();       
+             string imgpath="";
             string Password = null;
             if (FirstName == null)
                 FirstName = "";
@@ -934,33 +908,38 @@ namespace AnkurPrathisthan
                 AdminEmailID = "";
 
             try
-            {
-                string DBImgPath = "";
-                //WriteToFile("ManageLibrarians", "START", EmailID);
+            {            
                 if (cmd == 1 || cmd == 2)
                 {
                     if (Image64 != "" && Image64 != null)
                     {
                         try
                         {
-                            //[START] unique thumb image id 
-                            string ImageID = GenerateImageID();
-                            //[END] unique thumb  image id
-                            string ImageName = EmailID + ImageID; //ThumbImgNAme
-                            Image = Base64ToImage(Image64, filepath, ImageName);//ThumbImgNAme PNG
-                            ImagePath = filepath + ImageName;////ThumbImgNAme Path; 
-                            DBImgPath = DBPath + ImageName;//DB pth                         
-                            
+                            System.Drawing.Image Image;
+                            clsAuthentication  obj  = new clsAuthentication();
+
+                            string Libimgid = obj.BookImgID();
+                            string imgname = EmailID.ToString() + Libimgid + ".jpg";                             
+                            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Librarian/");
+                            imgpath = path + imgname;
+                            Image = Base64ToImage(Image64, imgpath, imgname);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            //WriteToFile("ManageLibrarians", ex.Message, EmailID);
+                            throw ex;
                         }
+                    }
+
+
+                    if (cmd ==1)
+                    {
+                        clsAuthentication auth = new clsAuthentication();
+                        Password = auth.SendPasswordEmail(EmailID);                      
                     }
                 }
 
-                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, LibrarianID, DBImgPath, DOB);
-                //WriteToFile("ManageLibrarians", "Add/update/delete", EmailID);
+                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, Password,LibrarianID, imgpath, DOB);
+                
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -983,13 +962,15 @@ namespace AnkurPrathisthan
                     }                    
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //WriteToFile("ManageLibrarians", ex.Message, EmailID);
+               throw ex;
             }
             return entity;
         }
-        //[END] For Librarian Management
+        
+
+
         // [START] For Member Management
         public List<MemberDetailsEntity> GetMembers()
         {
@@ -1037,11 +1018,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsMemberManagement mem = new clsMemberManagement();
             clsAuthentication objauth = new clsAuthentication();
-            string Password = null;
-            System.Drawing.Image Image;
-            string filepath = @"C:\ankurmobileappAPI-Development\Uploads\Members";
-            //string filepath = @"F:\k_dev\AnkurPrathisthan\Uploads\Members\";
-            string DBPath = "/Uploads/Members/";
+            string Password = null;          
             string ImagePath = "";
             if (FirstName == null)
                 FirstName = "";
@@ -1058,32 +1035,41 @@ namespace AnkurPrathisthan
                 ClusterID = "";
             try
             {
-                string DBImgPath = "";
-                //WriteToFile("ManageMembers", "START", EmailID);
+                
                 if (cmd == 1 || cmd == 2)
                 {
                     if (Image64 != "" && Image64 != null)
                     {
                         try
                         {
-                            //[START] unique thumb image id 
-                            string ImageID = GenerateImageID();
-                            //[END] unique thumb  image id
-                            string ImageName = ImageID; //ThumbImgNAme
-                            Image = Base64ToImage(Image64, filepath,ImageName);//ThumbImgNAme PNG
-                            ImagePath = filepath + ImageName;////ThumbImgNAme Path;
-                            DBImgPath = DBPath + ImageName;
-                            //WriteToFile("ManageMembers", DBImgPath, EmailID);
+                            System.Drawing.Image Image;
+                            clsAuthentication obj = new clsAuthentication();
+
+                            string Libimgid = obj.BookImgID();
+                            string imgname = EmailID.ToString() + Libimgid + ".jpg";
+                            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Members/");
+                            ImagePath = path + imgname;
+                            Image = Base64ToImage(Image64, ImagePath, imgname);
                         }
                         catch (Exception ex)
                         {
                             throw ex;
                         }
                     }
+
+                    if (cmd == 1)
+                    {
+                        if (EmailID != null && EmailID != "")
+                        {
+                            clsAuthentication auth = new clsAuthentication();
+                            Password = auth.SendPasswordEmail(EmailID);
+                        }
+                        
+                    }
                 }
 
-                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, MemberID, DBImgPath);
-                //WriteToFile("ManageMembers", "Add/update/delete", EmailID);
+                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID,Password, MemberID, ImagePath);
+                
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1107,12 +1093,12 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-                //WriteToFile("ManageMembers", ex.Message, EmailID);
+                throw ex;
             }
             return entity;
         }
 
-        //[END] For Member Management
+       
 
         //[START] For Approvals
         public List<RequestsDetailsEntity> GetRequests(string EmailID)
@@ -1122,7 +1108,7 @@ namespace AnkurPrathisthan
             clsApprovals app = new clsApprovals();
             try
             {
-                //WriteToFile("GetRequests", "START", "admin");
+
                 ds = app.ShowRequests(EmailID);
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1177,10 +1163,10 @@ namespace AnkurPrathisthan
                         {
                             RequestID = Convert.ToString(ds.Tables[0].Rows[0]["RequestID"]),
                             Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),                          
-                        });                  
-                    //string FCM = Convert.ToString(ds.Tables[0].Rows[0]["FCM"]);                                     
+                        });              
+                                                       
                 }
-                //[START]to send book notification
+                /*[START]to send book notification
                 DataSet dsUser = new DataSet(); string ClusterFCM = "", LibFCM="", MemberFCM="";
                 dsUser = approvals.GetUser(MemberID);
                 if (dsUser.Tables.Count>0)
@@ -1195,8 +1181,7 @@ namespace AnkurPrathisthan
                     
                    
                 }                
-               // if (cmd==1)
-               // {   
+                 
                 if (cmd == 1)
                 {
                     messagebody = "Book Request Sent";
@@ -1213,8 +1198,8 @@ namespace AnkurPrathisthan
                     {
                         Message = approvals.SendNotification(ClusterFCM, LibFCM,MemberFCM, messagebody);
                     }
-             //   }
-                //[END]to send book notification
+          
+                //[END]to send book notification*/
             }
             catch (Exception ex)
             {
@@ -1253,38 +1238,38 @@ namespace AnkurPrathisthan
             string result =String.Format("{0:D3}", random+".jpeg");;
             return result;
         }
-        public string SendOTPEmailTest(string EmailID)
-        {
-            clsBookManagement bm = new clsBookManagement();
-            string IsEmailSent = "";
-            string ServerName = SMTPSERVER;
-            int PORTNO = 25;//gmail port string Sender = USERNAME; string credential = PASSWORD;
-            // OTP = CreateOTP(EmailID);
-            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
-            smtpClient.EnableSsl = true;
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
-            using (MailMessage message = new MailMessage())
-            {
-                message.From = new MailAddress(USERNAME);
-                message.Subject = "Ankur Pratishthan Password Reset";
-                message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   ";
-                message.IsBodyHtml = true;
-                message.To.Add(EmailID);
-                try
-                {
-                    smtpClient.Send(message);
-                    message.DeliveryNotificationOptions = System.Net.Mail.DeliveryNotificationOptions.OnSuccess;
-                    IsEmailSent = message.DeliveryNotificationOptions.ToString();
-                }
-                catch (Exception ex)
-                {
-                    bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "CreateOTP");
-                }
-            }
-            return "Y";
-        }
+        //public string SendOTPEmailTest(string EmailID)
+        //{
+        //    clsBookManagement bm = new clsBookManagement();
+        //    string IsEmailSent = "";
+        //    string ServerName = SMTPSERVER;
+        //    int PORTNO = 25;//gmail port string Sender = USERNAME; string credential = PASSWORD;
+           
+        //    SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+        //    smtpClient.EnableSsl = true;
+        //    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //    smtpClient.UseDefaultCredentials = false;
+        //    smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+        //    using (MailMessage message = new MailMessage())
+        //    {
+        //        message.From = new MailAddress(USERNAME);
+        //        message.Subject = "Ankur Pratishthan Password Reset";
+        //        message.Body = "Dear AnkurPratishthan User,Your One Time Password for Login::   ";
+        //        message.IsBodyHtml = true;
+        //        message.To.Add(EmailID);
+        //        try
+        //        {
+        //            smtpClient.Send(message);
+        //            message.DeliveryNotificationOptions = System.Net.Mail.DeliveryNotificationOptions.OnSuccess;
+        //            IsEmailSent = message.DeliveryNotificationOptions.ToString();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            bm.InsertError(EmailID, "SendOTPEmail", "Message" + ex.Message + "StackTrace" + ex.StackTrace, "CreateOTP");
+        //        }
+        //    }
+        //    return "Y";
+        //}
 
 
         #endregion AP Library Management System
@@ -1492,8 +1477,9 @@ namespace AnkurPrathisthan
 
                 if (Img != "" && Img != null)
                 {
+                    string id = auth.BookImgID();
                     System.Drawing.Image Image;
-                    imgname = LoginID.ToString() + ".jpg";
+                    imgname = LoginID.ToString() +id+ ".jpg";
                   //  string path = @"/Uploads/Volunteers/";   
                   string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Volunteers/");
                  //   string path = HttpContext.Current.Server.MapPath("~/Uploads/Volunteers/" + imgname);  

@@ -68,7 +68,7 @@ namespace AnkurPrathisthan
         UriTemplate = "ManageBooks")]
         [OperationContract]
         List<BookDetailsEntity> ManageBooks(string BookName, string cmd, string EmailID, string Price, string Author, string Stock, string CategoryID,
-        string LanguageID, string PublisherID, string BookDescription, string ThumbImg64, string Img1, string BookID = "");
+        string LanguageID, string PublisherID, string BookDescription, string ThumbImg64, string Img2, string BookID = "");
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

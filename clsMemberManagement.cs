@@ -30,14 +30,14 @@ namespace AnkurPrathisthan
         }
 
         public DataSet HandleMembers(int cmd, string FirstName, string LastName, string EmailID, string Address, string MobileNo, string AltMobileNo,
-            string ClusterID, string DOB, string AdminEmailID, string MemberID = "", string ImagePath="")
+            string ClusterID, string DOB, string AdminEmailID,string Password, string MemberID = "", string ImagePath="")
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.uspManageMembers";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[12];
+                oParam = new SqlParameter[13];
                 oParam[0] = new SqlParameter("@cmd", cmd);
                 oParam[1] = new SqlParameter("@FirstName", FirstName);
                 oParam[2] = new SqlParameter("@LastName", LastName);
@@ -50,6 +50,7 @@ namespace AnkurPrathisthan
                 oParam[9] = new SqlParameter("@AdminEmailID", AdminEmailID);               
                 oParam[10] = new SqlParameter("@MemberID", MemberID);
                 oParam[11] = new SqlParameter("@Image", ImagePath);
+                oParam[12] = new SqlParameter("@Password", Password);
 
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);

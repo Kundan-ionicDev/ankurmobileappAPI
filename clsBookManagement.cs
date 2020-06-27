@@ -33,7 +33,7 @@ namespace AnkurPrathisthan
         }
         
         public DataSet HandleBooks(string BookName, string cmd, string EmailID ="", string Price="" , string Author="", string Stock="" , string CategoryID="" ,
-        string LanguageID="" , string PublisherID="", string BookID="", string BookDescription="",string ThumbImagePath="",string Image2Path="",
+        string LanguageID="" , string PublisherID="", string BookID="", string BookDescription="",string ThumbImagePath="",string ImageID="",
         string qrcode="")
          {
             DataSet ds = new DataSet(); 
@@ -54,7 +54,7 @@ namespace AnkurPrathisthan
                 oParam[9] = new SqlParameter("@BookID", BookID);
                 oParam[10] = new SqlParameter("@Description", BookDescription);
                 oParam[11] = new SqlParameter("@ThumbImage", ThumbImagePath);
-                oParam[12] = new SqlParameter("@ImageID", Image2Path);
+                oParam[12] = new SqlParameter("@ImageID", ImageID);
                 oParam[13] = new SqlParameter("@QrCode", qrcode);
 
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName,oParam);  
