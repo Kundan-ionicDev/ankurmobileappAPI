@@ -452,11 +452,11 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsBookManagement bm = new clsBookManagement();
             clsQRCode qrc = new clsQRCode();
-            string ThumbImgPath = "";
+            string ThumbImgPath = "", Imgname1 ="";
             System.Drawing.Image ThumbImg;
             string Imgname;
-            if (EmailID == null)                EmailID = "";
-            if (Price == null)                Price = "";
+            if (EmailID == null) EmailID = "";
+            if (Price == null) Price = "";
             if (Author == null)
                 Author = "";
             if (Stock == null) Stock = "";
@@ -483,7 +483,7 @@ namespace AnkurPrathisthan
                                     clsAuthentication obj = new clsAuthentication();
                                     string imgid = obj.BookImgID();
                                     Imgname = BookName.ToString() + imgid + ".jpg"; 
-                                    string Imgname1 = Imgname.Replace(" ", "");
+                                     Imgname1 = Imgname.Replace(" ", "");
                                     string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Books/");
                                     ThumbImgPath = path + Imgname1;
                                     ThumbImg = Base64ToImage(ThumbImg64, ThumbImgPath, Imgname1); 
@@ -496,7 +496,7 @@ namespace AnkurPrathisthan
                             }
                         }
                         ds = bm.HandleBooks(BookName, cmd, EmailID, Price, Author, Stock, CategoryID, LanguageID, PublisherID, BookID,
-                            BookDescription, ThumbImgPath, "", "");                       
+                            BookDescription, Imgname1, "", "");                       
                         
                         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {    
@@ -738,7 +738,7 @@ namespace AnkurPrathisthan
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
             clsClusterManagement bm = new clsClusterManagement();
-            string ThumbImgPath ="";
+            string ThumbImgPath ="", Imgname1="" ;
            
             if (EmailID == null)
                 EmailID = "";
@@ -768,7 +768,7 @@ namespace AnkurPrathisthan
                                 System.Drawing.Image ThumbImg;
                                 string imgid = obj.BookImgID();
                                 string Imgname = ClusterName.ToString() + imgid + ".jpg";
-                                string Imgname1 = Imgname.Replace(" ", "");
+                                Imgname1 = Imgname.Replace(" ", "");
                                 string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Clusters/");
                                  ThumbImgPath = path + Imgname1;
                                 ThumbImg = Base64ToImage(Image64, ThumbImgPath, Imgname1);                              
@@ -779,7 +779,7 @@ namespace AnkurPrathisthan
                             }
                         }
                     }
-                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, ThumbImgPath);
+                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, Imgname1);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     { 
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -889,7 +889,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
             clsAuthentication objauth = new clsAuthentication();       
-             string imgpath="";
+             string imgpath="", imgname ="";
             string Password = null;
             if (FirstName == null)
                 FirstName = "";
@@ -919,7 +919,7 @@ namespace AnkurPrathisthan
                             clsAuthentication  obj  = new clsAuthentication();
 
                             string Libimgid = obj.BookImgID();
-                            string imgname = EmailID.ToString() + Libimgid + ".jpg";                             
+                            imgname = EmailID.ToString() + Libimgid + ".jpg";                             
                             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Librarian/");
                             imgpath = path + imgname;
                             Image = Base64ToImage(Image64, imgpath, imgname);
@@ -938,7 +938,7 @@ namespace AnkurPrathisthan
                     }
                 }
 
-                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, Password,LibrarianID, imgpath, DOB);
+                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, Password, LibrarianID, imgname, DOB);
                 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1019,7 +1019,7 @@ namespace AnkurPrathisthan
             clsMemberManagement mem = new clsMemberManagement();
             clsAuthentication objauth = new clsAuthentication();
             string Password = null;          
-            string ImagePath = "";
+            string ImagePath = "",imgname="";
             if (FirstName == null)
                 FirstName = "";
             if (LastName == null)
@@ -1046,7 +1046,7 @@ namespace AnkurPrathisthan
                             clsAuthentication obj = new clsAuthentication();
 
                             string Libimgid = obj.BookImgID();
-                            string imgname = EmailID.ToString() + Libimgid + ".jpg";
+                            imgname = EmailID.ToString() + Libimgid + ".jpg";
                             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Members/");
                             ImagePath = path + imgname;
                             Image = Base64ToImage(Image64, ImagePath, imgname);
@@ -1068,7 +1068,7 @@ namespace AnkurPrathisthan
                     }
                 }
 
-                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID,Password, MemberID, ImagePath);
+                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, Password, MemberID, imgname);
                 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1207,6 +1207,64 @@ namespace AnkurPrathisthan
             }
             return requests;
         }
+
+
+        //public List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, int LoginID, string Img = "")
+        //{
+        //    List<VolunteerEntity> entity = new List<VolunteerEntity>();
+        //    DataSet ds = new DataSet();
+        //    clsAuthentication auth = new clsAuthentication();
+        //    DataSet dsEmail = new DataSet();
+        //    APDonor objdonor = new APDonor();
+        //    string imgpath = ""; string imgname = ""; string url = "";
+        //    try
+        //    {
+
+        //        if (Img != "" && Img != null)
+        //        {
+        //            string id = auth.BookImgID();
+        //            System.Drawing.Image Image;
+        //            imgname = LoginID.ToString() + id + ".jpg";
+        //            //  string path = @"/Uploads/Volunteers/";   
+        //            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Volunteers/");
+        //            //   string path = HttpContext.Current.Server.MapPath("~/Uploads/Volunteers/" + imgname);  
+
+        //            imgpath = path + imgname;
+        //            Image = Base64ToImage(Img, imgpath, imgname);
+        //            //string serverp = "https://ankurpratishthan.com/Uploads/Volunteers/.png";
+        //            //"'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'"; 
+        //            url = "https://ankurpratishthan.com/Uploads/Volunteers/" + imgname;
+        //        }
+        //        //else
+        //        //{
+        //        //    imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
+        //        //    // here u are giving default path which is wrong...instead give here path of table value
+        //        //    //ill have to first check in db if there is an image na or do i have to check from the base64 u provide
+        //        //}
+        //        ////   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
+        //        ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname, LoginID);
+        //        if (ds.Tables.Count > 0)
+        //        {
+        //            entity.Add
+        //                (new VolunteerEntity()
+        //                {
+        //                    LoginID = Convert.ToString(ds.Tables[0].Rows[0]["LoginID"]),
+        //                    EmailID = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
+        //                    DOB = Convert.ToString(ds.Tables[0].Rows[0]["DOB"]),
+        //                    Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
+        //                    ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
+        //                    ImgPath = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
+        //                    RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
+        //                    Img = Convert.ToString(ds.Tables[0].Rows[0]["Img"]),
+        //                });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return entity;
+        //}
 
         private static System.Drawing.Image Base64ToImage(string base64string, string filepath,string imgname)
         {
@@ -2037,85 +2095,129 @@ namespace AnkurPrathisthan
 
                  if (cmd ==1)
                  {
-                     //[start] receipt
-                     //DateTime date = DateTime.Now;
-                     //string sDate = Convert.ToDateTime(date).ToString();
-                     string receipt = "FY2020-"+"2021"+DonorID+ran.Trim();// +sDate;
-                   
-                    
+                     //[start] receipt           
+                     string receipt = "FY2020-"+"2021"+DonorID+ran.Trim();
                      string html = "<html>";
                      html += "<html>";
                      html += "<head>";
+                     html += "<title>Receipt</title>";
                      html += "<link href='style.css' rel='stylesheet'>";
                      html += "</head>";
-                     html += "</head>";
                      html += "<body>";
-                     html += "<div class='invoice overflow-auto'>";
-                     html += "<div>";
-                     html += "<header>";
-                     html += "<div class='row'>";
-                     html += "<div style='width: 20% ;float: left;'>";
-                     html += "<a target='_blank' href='http://www.ankurpratishthan.org'/>";
-                     html += "<img src='http://www.ankurpratishthan.org/wp-content/uploads/2019/09/Logo-Ankur.jpg' height=100px width='auto' data-holder-rendered=true />";
-                     html += "</a>";
-                     html += "</div>";
-                     html += "<div class='company-details'>";
-                     html += "<h2 class='name'>";
-                     html += "<a target='_blank' href='http://www.ankurpratishthan.org/'>";
-                     html += "ANKUR PRATISHTHAN";
-                     html += "</a>";
-                     html += "</h2>";
-                     html += "<div><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society :Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></div>";
-                     html += "<div><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No.: </strong></div>";
-                     html += "<div><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</div>";
-                     html += "<div><strong>Contact No. : </strong> 9869866814 / 9819553390 | <strong>Email ID : </strong>ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</div>";
-                     html += "</div>";
-                     html += "</div>";
-                     html += "</header>";
-                     html += "<main>";
-                     html += "<div style='margin-bottom: 5px;'>";
-                     html += "<div style='float: left;'>";
-                     html += "<div><strong>Receipt No. :</strong>&nbsp;</div>" +receipt;
-                     html += "</div>";
-                     html += "<div style='float: right;'>";
-                     html += "<div><strong> Date :</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
-                     html += "</div>";
-                     html += "</div>";
-                     html += "<br/>";
-                     html += "<div style='margin-bottom: 5px;'><strong>Donated by :</strong>&nbsp;</div>" +DonorName;
-                     html += "<div style='margin-bottom: 5px;'><strong>In the Name of :</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["IntheNameof"].ToString();
-                     html += "<div style='margin-bottom: 5px';><strong>Residential Address :</strong>&nbsp;" +ds.Tables[0].Rows[0]["Address"].ToString(); 
-                     html += "</div>";
-                     html += "<div style='margin-bottom: 5px;'>";
-                     html += "<div style='float: left;'>";
-                     html += "<p><strong>Date of Birth :</strong>&nbsp;</div>" + ds.Tables[0].Rows[0]["DOB"].ToString();
-                     html += "</div>";
-                     html += "<div style='float: right;'>.</p>";
-                     html += "<strong>PAN (For Donations Exceeding Rs. 10 Thousand) :</strong>&nbsp;</p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
-                     html += "</div>";
-                     html += "</div>";
-                     html += "<div style='margin-bottom: 5px;'><strong>Contact No.:</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                     html += "<div style='margin-bottom: 5px;'><strong>Email ID : </strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
-                     html += "<div style='margin-bottom: 5px;'><strong>Amount in Figures : </strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["Amount"].ToString();;
-                     html += "<div style='margin-bottom: 5px;'><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong>&nbsp;Projects</div>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString(); ;
-                     html += "<div style='margin-bottom: 5px;'><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong>&nbsp;Cash</div>" +ds.Tables[0].Rows[0]["PaymentMode"].ToString();;
-                     html += "<div style='margin-bottom: 5px;'><strong>Transaction Details : </strong>&nbsp;Temp</div>" +ds.Tables[0].Rows[0]["Description"].ToString();;
-                     html += "<br/>";
-                     html += "<div style= 'margin-bottom: 5px;'><strong>Received by</strong></div>Pranav Bhonde<p><img width='150px' src='sign.jpg' height='80px' , width='100px'></img></p>";
-                     html += "<br />";
-                     html += "<div class='notices'>";
-                     html += "<div>NOTICE:</div>";
-                     html += "<ul>";
-                     html += "<li class='notice'>Ankur Pratishthan expresses its gratitude towards your generous donation.</li>";
-                     html += "<li class='notice'>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</li>";
-                     html += "<li class='notice'>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </li>";
-                     html += "</ul>";
-                     html += "</div>";
-                     html += "</main>";
-                     html += "</div>";
-                     html += "</div>";
-                     html += "</body>";
-                     html += "</html>";
+                     html +="<p class='center'><img src='logo.png'/></p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p class='center title'><strong> ANKUR PRATISHTHAN </strong></p>";
+                     html +="<p class='center'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
+                     html +="<p class='center'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
+                     html +="<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
+                     html +="<p class='center'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
+                     html +="<div class='hr'></div>";
+                     html +="<p class='left'><strong>Receipt No. : </strong>DonationReceipt</p>";
+                     html +="<p class='right'><strong> Date :</strong>12-05-2020 13:33:53</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Donated by :</strong>Kundan Dilip Sakpal</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>In the Name of :</strong>Tax saving</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Residential Address :</strong>Chakala</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p class='left'><strong>Contact No.:</strong>9960097184</p>";
+                     html +="<p class='right'><strong>Email ID : </strong>kundan.mobileappdev@gmail.com</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p class='left'><strong>Date of Birth : (DD/MM/YY)</strong>14-05-2020</p>";
+                     html +="<p class='right'><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong>AFMPL01099B</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Amount in Figures :</strong>2000</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong>Corpus</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong>UPI</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p><strong>Transaction Details : </strong> Donation For Corpus through Google Pay testing temporary save</p>";
+                     html +="<div class='clear'></div>";
+                     html +="<p class='right'><strong>Received by</strong><br /><br />Pranav Bhonde<br /><br/>";
+                     html +="<img src='sign.jpg' height='80px' width='180px'></img></p>";
+                     html +="<div class='clear'></div>";
+                     html +="<ul>";
+                     html +="<li><strong>Ankur Pratishthan expresses its gratitude towards your generous donation.</strong></li>";
+                     html +="<li><strong>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</strong></li>";
+                     html +="<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </strong></li>";
+                     html +="</ul>";
+                     html +="</body>";
+                     html +="</html>";
+                     
+                     //html += "<html>";
+                     //html += "<head>";
+                     //html += "<link href='style.css' rel='stylesheet'>";
+                     //html += "</head>";
+                     //html += "</head>";
+                     //html += "<body>";
+                     //html += "<div class='invoice overflow-auto'>";
+                     //html += "<div>";
+                     //html += "<header>";
+                     //html += "<div class='row'>";
+                     //html += "<div style='width: 20% ;float: left;'>";
+                     //html += "<a target='_blank' href='http://www.ankurpratishthan.org'/>";
+                     //html += "<img src='http://www.ankurpratishthan.org/wp-content/uploads/2019/09/Logo-Ankur.jpg' height=100px width='auto' data-holder-rendered=true />";
+                     //html += "</a>";
+                     //html += "</div>";
+                     //html += "<div class='company-details'>";
+                     //html += "<h2 class='name'>";
+                     //html += "<a target='_blank' href='http://www.ankurpratishthan.org/'>";
+                     //html += "ANKUR PRATISHTHAN";
+                     //html += "</a>";
+                     //html += "</h2>";
+                     //html += "<div><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society :Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></div>";
+                     //html += "<div><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No.: </strong></div>";
+                     //html += "<div><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</div>";
+                     //html += "<div><strong>Contact No. : </strong> 9869866814 / 9819553390 | <strong>Email ID : </strong>ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</div>";
+                     //html += "</div>";
+                     //html += "</div>";
+                     //html += "</header>";
+                     //html += "<main>";
+                     //html += "<div style='margin-bottom: 5px;'>";
+                     //html += "<div style='float: left;'>";
+                     //html += "<div><strong>Receipt No. :</strong>&nbsp;</div>" +receipt;
+                     //html += "</div>";
+                     //html += "<div style='float: right;'>";
+                     //html += "<div><strong> Date :</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
+                     //html += "</div>";
+                     //html += "</div>";
+                     //html += "<br/>";
+                     //html += "<div style='margin-bottom: 5px;'><strong>Donated by :</strong>&nbsp;</div>" +DonorName;
+                     //html += "<div style='margin-bottom: 5px;'><strong>In the Name of :</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["IntheNameof"].ToString();
+                     //html += "<div style='margin-bottom: 5px';><strong>Residential Address :</strong>&nbsp;" +ds.Tables[0].Rows[0]["Address"].ToString(); 
+                     //html += "</div>";
+                     //html += "<div style='margin-bottom: 5px;'>";
+                     //html += "<div style='float: left;'>";
+                     //html += "<p><strong>Date of Birth :</strong>&nbsp;</div>" + ds.Tables[0].Rows[0]["DOB"].ToString();
+                     //html += "</div>";
+                     //html += "<div style='float: right;'>.</p>";
+                     //html += "<strong>PAN (For Donations Exceeding Rs. 10 Thousand) :</strong>&nbsp;</p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
+                     //html += "</div>";
+                     //html += "</div>";
+                     //html += "<div style='margin-bottom: 5px;'><strong>Contact No.:</strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                     //html += "<div style='margin-bottom: 5px;'><strong>Email ID : </strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["DonorEmailID"].ToString();
+                     //html += "<div style='margin-bottom: 5px;'><strong>Amount in Figures : </strong>&nbsp;</div>" +ds.Tables[0].Rows[0]["Amount"].ToString();;
+                     //html += "<div style='margin-bottom: 5px;'><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong>&nbsp;Projects</div>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString(); ;
+                     //html += "<div style='margin-bottom: 5px;'><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong>&nbsp;Cash</div>" +ds.Tables[0].Rows[0]["PaymentMode"].ToString();;
+                     //html += "<div style='margin-bottom: 5px;'><strong>Transaction Details : </strong>&nbsp;Temp</div>" +ds.Tables[0].Rows[0]["Description"].ToString();;
+                     //html += "<br/>";
+                     //html += "<div style= 'margin-bottom: 5px;'><strong>Received by</strong></div>Pranav Bhonde<p><img width='150px' src='sign.jpg' height='80px' , width='100px'></img></p>";
+                     //html += "<br />";
+                     //html += "<div class='notices'>";
+                     //html += "<div>NOTICE:</div>";
+                     //html += "<ul>";
+                     //html += "<li class='notice'>Ankur Pratishthan expresses its gratitude towards your generous donation.</li>";
+                     //html += "<li class='notice'>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</li>";
+                     //html += "<li class='notice'>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </li>";
+                     //html += "</ul>";
+                     //html += "</div>";
+                     //html += "</main>";
+                     //html += "</div>";
+                     //html += "</div>";
+                     //html += "</body>";
+                     //html += "</html>";
 
                      string url = "'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'";                      
                      string  url1 = url.Replace(" ", "");

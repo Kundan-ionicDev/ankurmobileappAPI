@@ -117,6 +117,7 @@
     <Content Include="greeting2.jpeg" />
     <Content Include="headerimg.jpg" />
     <Content Include="HtmlPage1.html" />
+    <Content Include="logo.png" />
     <Content Include="sign.jpg" />
     <Content Include="style.css" />
     <Content Include="Uploads\Books\AesopsFables.jpg" />
