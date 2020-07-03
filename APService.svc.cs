@@ -1950,7 +1950,7 @@ namespace AnkurPrathisthan
         public string SendBirthdayEmailSMS(string EmailID, string Contact, int DonorID)
         {
             string result = "";
-            string ServerName = "smtp.ankurpratishthan.com";
+            string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
             string Sender = "admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
@@ -2001,7 +2001,7 @@ namespace AnkurPrathisthan
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "smtp.ankurpratishthan.com";
+            string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
             string Sender = "admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
@@ -2086,7 +2086,7 @@ namespace AnkurPrathisthan
             
             try
             {
-                string ServerName = "smtp.ankurpratishthan.com";
+                string ServerName = "mail.ankurpratishthan.com";
                 int PORTNO = 25;
                // string Sender = "admin@ankurpratishthan.com";
                 string Sender = "admin@ankurpratishthan.com";
@@ -2333,7 +2333,7 @@ namespace AnkurPrathisthan
             DataSet dsAccept = new DataSet();
             try
             {
-                string ServerName = "smtp.ankurpratishthan.com";
+                string ServerName = "mail.ankurpratishthan.com";
                 int PORTNO = 25;
                 string Sender = "admin@ankurpratishthan.com";
                 string PASSWORD = "Nokia@86";

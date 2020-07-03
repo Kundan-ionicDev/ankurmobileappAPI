@@ -456,7 +456,7 @@ namespace AnkurPrathisthan
 
         public string RegisterEmail(string EmailID,string FullName)
         {
-            string ServerName = "smtp.ankurpratishthan.com";
+            string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
             string Sender = "admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma

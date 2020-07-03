@@ -191,7 +191,7 @@ namespace AnkurPrathisthan
         public string SendOTPEmail(string EmailID, string OTP)
         {           
             string IsEmailSent = "";
-            string ServerName = "smtp.ankurpratishthan.com";
+            string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
             string Sender = "admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
