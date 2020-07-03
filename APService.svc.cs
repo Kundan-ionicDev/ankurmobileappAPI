@@ -452,7 +452,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsBookManagement bm = new clsBookManagement();
             clsQRCode qrc = new clsQRCode();
-            string ThumbImgPath = "", Imgname1 ="";
+            string ThumbImgPath = "", Imgname1 ="", Dbpath="";
             System.Drawing.Image ThumbImg;
             string Imgname;
             if (EmailID == null) EmailID = "";
@@ -483,10 +483,11 @@ namespace AnkurPrathisthan
                                     clsAuthentication obj = new clsAuthentication();
                                     string imgid = obj.BookImgID();
                                     Imgname = BookName.ToString() + imgid + ".jpg"; 
-                                     Imgname1 = Imgname.Replace(" ", "");
+                                    Imgname1 = Imgname.Replace(" ", "");
                                     string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Books/");
                                     ThumbImgPath = path + Imgname1;
-                                    ThumbImg = Base64ToImage(ThumbImg64, ThumbImgPath, Imgname1); 
+                                    ThumbImg = Base64ToImage(ThumbImg64, ThumbImgPath, Imgname1);
+                                    Dbpath = "/Uploads/Books/" + Imgname1; // for returning path in api enttity response
                                     
                                 }
                                 catch (Exception ex)
@@ -496,7 +497,7 @@ namespace AnkurPrathisthan
                             }
                         }
                         ds = bm.HandleBooks(BookName, cmd, EmailID, Price, Author, Stock, CategoryID, LanguageID, PublisherID, BookID,
-                            BookDescription, Imgname1, "", "");                       
+                            BookDescription, Dbpath, "", "");                       
                         
                         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {    
@@ -738,7 +739,7 @@ namespace AnkurPrathisthan
             List<ClusterDetailsEntity> entity = new List<ClusterDetailsEntity>();
             DataSet ds = new DataSet();
             clsClusterManagement bm = new clsClusterManagement();
-            string ThumbImgPath ="", Imgname1="" ;
+            string ThumbImgPath ="", Imgname1="",DbPath="" ;
            
             if (EmailID == null)
                 EmailID = "";
@@ -770,8 +771,9 @@ namespace AnkurPrathisthan
                                 string Imgname = ClusterName.ToString() + imgid + ".jpg";
                                 Imgname1 = Imgname.Replace(" ", "");
                                 string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Clusters/");
-                                 ThumbImgPath = path + Imgname1;
-                                ThumbImg = Base64ToImage(Image64, ThumbImgPath, Imgname1);                              
+                                ThumbImgPath = path + Imgname1;
+                                ThumbImg = Base64ToImage(Image64, ThumbImgPath, Imgname1);
+                                DbPath = "/Uploads/Clusters/" + Imgname1; // returning dbpath for api entity response
                             }
                             catch (Exception ex)
                             {
@@ -779,7 +781,7 @@ namespace AnkurPrathisthan
                             }
                         }
                     }
-                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, Imgname1);
+                    ds = bm.HandleClusters(ClusterName, ClusterCode, cmd, EmailID, Address, MobileNo, LibrarianID, Members, AdminEmailID, ClusterID, DbPath);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     { 
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -889,7 +891,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsLibrarianManagement lm = new clsLibrarianManagement();
             clsAuthentication objauth = new clsAuthentication();       
-             string imgpath="", imgname ="";
+             string imgpath="", imgname ="", Dbpath ="";
             string Password = null;
             if (FirstName == null)
                 FirstName = "";
@@ -923,6 +925,8 @@ namespace AnkurPrathisthan
                             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Librarian/");
                             imgpath = path + imgname;
                             Image = Base64ToImage(Image64, imgpath, imgname);
+                            Dbpath = "/Uploads/Librarian/" + imgname;
+
                         }
                         catch (Exception ex)
                         {
@@ -938,7 +942,7 @@ namespace AnkurPrathisthan
                     }
                 }
 
-                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, Password, LibrarianID, imgname, DOB);
+                ds = lm.HandleLibrarians(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, AdminEmailID, Password, LibrarianID, Dbpath, DOB);
                 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1019,7 +1023,7 @@ namespace AnkurPrathisthan
             clsMemberManagement mem = new clsMemberManagement();
             clsAuthentication objauth = new clsAuthentication();
             string Password = null;          
-            string ImagePath = "",imgname="";
+            string ImagePath = "",imgname="", DbPath ="";
             if (FirstName == null)
                 FirstName = "";
             if (LastName == null)
@@ -1050,6 +1054,7 @@ namespace AnkurPrathisthan
                             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Members/");
                             ImagePath = path + imgname;
                             Image = Base64ToImage(Image64, ImagePath, imgname);
+                            DbPath = "/Uploads/Members/" + imgname;
                         }
                         catch (Exception ex)
                         {
@@ -1068,7 +1073,7 @@ namespace AnkurPrathisthan
                     }
                 }
 
-                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, Password, MemberID, imgname);
+                ds = mem.HandleMembers(cmd, FirstName, LastName, EmailID, Address, MobileNo, AltMobileNo, ClusterID, DOB, AdminEmailID, Password, MemberID, DbPath);
                 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
