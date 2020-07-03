@@ -1950,10 +1950,10 @@ namespace AnkurPrathisthan
         public string SendBirthdayEmailSMS(string EmailID, string Contact, int DonorID)
         {
             string result = "";
-            string ServerName = "mail.smallmodule.com";
+            string ServerName = "smtp.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "ankursupport@smallmodule.com";
-            string PASSWORD = "Ankur@456"; //sevadharma
+            string Sender = "admin@ankurpratishthan.com";
+            string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
@@ -2001,10 +2001,10 @@ namespace AnkurPrathisthan
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "mail.smallmodule.com";
+            string ServerName = "smtp.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "ankursupport@smallmodule.com";
-            string PASSWORD = "Ankur@456"; //sevadharma
+            string Sender = "admin@ankurpratishthan.com";
+            string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
@@ -2086,10 +2086,11 @@ namespace AnkurPrathisthan
             
             try
             {
-                string ServerName = "mail.smallmodule.com";
+                string ServerName = "smtp.ankurpratishthan.com";
                 int PORTNO = 25;
-                string Sender = "ankursupport@smallmodule.com";
-                string PASSWORD = "Ankur@456";
+               // string Sender = "admin@ankurpratishthan.com";
+                string Sender = "admin@ankurpratishthan.com";
+                string PASSWORD = "Nokia@86";
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
                 string DonorName = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
@@ -2332,10 +2333,10 @@ namespace AnkurPrathisthan
             DataSet dsAccept = new DataSet();
             try
             {
-                string ServerName = "mail.smallmodule.com";
+                string ServerName = "smtp.ankurpratishthan.com";
                 int PORTNO = 25;
-                string Sender = "ankursupport@smallmodule.com";
-                string PASSWORD = "Ankur@456";
+                string Sender = "admin@ankurpratishthan.com";
+                string PASSWORD = "Nokia@86";
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
                 string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 if (cmd == 1)  //[Accept]

@@ -191,10 +191,10 @@ namespace AnkurPrathisthan
         public string SendOTPEmail(string EmailID, string OTP)
         {           
             string IsEmailSent = "";
-            string ServerName = "mail.smallmodule.com";
+            string ServerName = "smtp.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "ankursupport@smallmodule.com";
-            string PASSWORD = "Ankur@456"; //sevadharma
+            string Sender = "admin@ankurpratishthan.com";
+            string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
