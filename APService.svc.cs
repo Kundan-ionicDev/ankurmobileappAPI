@@ -1623,32 +1623,32 @@ namespace AnkurPrathisthan
                 if (cmd == 1)
                 {
                     string fullname = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                    //[START]SMS integration
-                    if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
-                    {
-                        string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
+                    ////[START]SMS integration
+                    //if (ds.Tables[0].Rows[0]["ContactNo"].ToString() != null && ds.Tables[0].Rows[0]["ContactNo"].ToString() != "")
+                    //{
+                    //    string volname = ds.Tables[0].Rows[0]["FullName"].ToString();
 
-                        string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                        string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + ContactNo + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation and will issue a receipt of the same after realization.&priority=1";
-                        WebRequest request = HttpWebRequest.Create(sURL);
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        Stream s = (Stream)response.GetResponseStream();
-                        StreamReader readStream = new StreamReader(s);
-                        string dataString = readStream.ReadToEnd();
-                        response.Close();
-                        s.Close();
-                        readStream.Close();
-                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9869866814&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
-                        WebRequest request1 = HttpWebRequest.Create(sURL1);
-                        HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-                        Stream s1 = (Stream)response1.GetResponseStream();
-                        StreamReader readStream1 = new StreamReader(s1);
-                        string dataString1 = readStream1.ReadToEnd();
-                        response1.Close();
-                        s1.Close();
-                        readStream1.Close();
-                    }
-                    //[END]SMS integration
+                    //    string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                    //    string sURL = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=" + ContactNo + "&msg=Dear " + fullname + ",  Thank you for your support.  Ankur Pratishthan acknowledges your donation and will issue a receipt of the same after realization.&priority=1";
+                    //    WebRequest request = HttpWebRequest.Create(sURL);
+                    //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    //    Stream s = (Stream)response.GetResponseStream();
+                    //    StreamReader readStream = new StreamReader(s);
+                    //    string dataString = readStream.ReadToEnd();
+                    //    response.Close();
+                    //    s.Close();
+                    //    readStream.Close();
+                    //    string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=AnkurPratishthanSMS&dest=9869866814&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                    //    WebRequest request1 = HttpWebRequest.Create(sURL1);
+                    //    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                    //    Stream s1 = (Stream)response1.GetResponseStream();
+                    //    StreamReader readStream1 = new StreamReader(s1);
+                    //    string dataString1 = readStream1.ReadToEnd();
+                    //    response1.Close();
+                    //    s1.Close();
+                    //    readStream1.Close();
+                    //}
+                    ////[END]SMS integration
 
                     //[START]Email 
                     string email = objdonor.RegisterEmail(EmailID, fullname);
@@ -1783,29 +1783,29 @@ namespace AnkurPrathisthan
                     mailsent = obj.SendCelebrateEmail(EmailID, Fullname);
                     //[ENd]for email
 
-                    //[Start]for sms
-                    //string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
-                    WebRequest request = HttpWebRequest.Create(url);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Stream s = (Stream)response.GetResponseStream();
-                    StreamReader readStream = new StreamReader(s);
-                    string dataString = readStream.ReadToEnd();
-                    response.Close();
-                    s.Close();
-                    readStream.Close();
+                    ////[Start]for sms
+                    ////string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                    //string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                    //WebRequest request = HttpWebRequest.Create(url);
+                    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    //Stream s = (Stream)response.GetResponseStream();
+                    //StreamReader readStream = new StreamReader(s);
+                    //string dataString = readStream.ReadToEnd();
+                    //response.Close();
+                    //s.Close();
+                    //readStream.Close();
 
-                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9869866814&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings.&priority=1";
-                    WebRequest request1 = HttpWebRequest.Create(url1);
-                    HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-                    Stream s1 = (Stream)response1.GetResponseStream();
-                    StreamReader readStream1 = new StreamReader(s1);
-                    string dataString1 = readStream1.ReadToEnd();
-                    response1.Close();
-                    s1.Close();
-                    readStream1.Close();
+                    //string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9869866814&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings.&priority=1";
+                    //WebRequest request1 = HttpWebRequest.Create(url1);
+                    //HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                    //Stream s1 = (Stream)response1.GetResponseStream();
+                    //StreamReader readStream1 = new StreamReader(s1);
+                    //string dataString1 = readStream1.ReadToEnd();
+                    //response1.Close();
+                    //s1.Close();
+                    //readStream1.Close();
 
-                    //[end]for sms
+                    ////[end]for sms
                 }
             }
             catch (Exception ex)
@@ -1974,15 +1974,15 @@ namespace AnkurPrathisthan
                 {
                     smtpClient.Send(message);
                     //[START] SMS
-                    string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
-                    WebRequest request = HttpWebRequest.Create(sms);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Stream s = (Stream)response.GetResponseStream();
-                    StreamReader readStream = new StreamReader(s);
-                    string dataString = readStream.ReadToEnd();
-                    response.Close();
-                    s.Close();
-                    readStream.Close();
+                    //string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
+                    //WebRequest request = HttpWebRequest.Create(sms);
+                    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    //Stream s = (Stream)response.GetResponseStream();
+                    //StreamReader readStream = new StreamReader(s);
+                    //string dataString = readStream.ReadToEnd();
+                    //response.Close();
+                    //s.Close();
+                    //readStream.Close();
                     //[END]SMS
                     result = "Y";
 
@@ -2083,6 +2083,15 @@ namespace AnkurPrathisthan
             DataSet dsDecline = new DataSet();
             DataSet dsAccept = new DataSet();
             string ran = auth.CreateRec();
+            if (Contact != null && Contact != "")
+            {
+                Contact = "";
+            }
+
+            if (Reason != null && Reason != "")
+            {
+                Reason = "";
+            }
             
             try
             {
@@ -2110,7 +2119,7 @@ namespace AnkurPrathisthan
                      html += "<link href='style.css' rel='stylesheet'>";
                      html += "</head>";
                      html += "<body>";
-                     html +="<p class='center'><img src='logo.png'/></p>";
+                     html += "<p class='center'><img src='headerimg.jpg' height=100px width='auto'/></p>";
                      html +="<div class='clear'></div>";
                      html +="<p class='center title'><strong> ANKUR PRATISHTHAN </strong></p>";
                      html +="<p class='center'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
@@ -2118,28 +2127,28 @@ namespace AnkurPrathisthan
                      html +="<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
                      html +="<p class='center'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
                      html +="<div class='hr'></div>";
-                     html +="<p class='left'><strong>Receipt No. : </strong>DonationReceipt</p>";
-                     html +="<p class='right'><strong> Date :</strong>12-05-2020 13:33:53</p>";
+                     html += "<p class='left'><strong>Receipt No. : </strong>DonationReceipt</p>" + receipt;
+                     html +="<p class='right'><strong> Date :</strong>12-05-2020 13:33:53</p>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Donated by :</strong>Kundan Dilip Sakpal</p>";
+                     html += "<p><strong>Donated by :</strong></p>" + DonorName;
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>In the Name of :</strong>Tax saving</p>";
+                     html += "<p><strong>In the Name of :</strong></p>" + ds.Tables[0].Rows[0]["IntheNameof"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Residential Address :</strong>Chakala</p>";
+                     html += "<p><strong>Residential Address :</strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p class='left'><strong>Contact No.:</strong>9960097184</p>";
-                     html +="<p class='right'><strong>Email ID : </strong>kundan.mobileappdev@gmail.com</p>";
+                     html += "<p class='left'><strong>Contact No.:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                     html += "<p class='right'><strong>Email ID : </strong></p>" + EmailID;
                      html +="<div class='clear'></div>";
-                     html +="<p class='left'><strong>Date of Birth : (DD/MM/YY)</strong>14-05-2020</p>";
-                     html +="<p class='right'><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong>AFMPL01099B</p>";
+                     html += "<p class='left'><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString();
+                     html += "<p class='right'><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Amount in Figures :</strong>2000</p>";
+                     html += "<p><strong>Amount in Figures :</strong>2000</p>" + ds.Tables[0].Rows[0]["Amount"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong>Corpus</p>";
+                     html += "<p><strong>Donation Towards : Projects / Corpus / Membership Subscription / Administration:</strong></p>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong>UPI</p>";
+                     html += "<p><strong>Mode of Donation : Cash / Cheque / Net Banking / Payment Gateway:</strong></p>" + ds.Tables[0].Rows[0]["PaymentMode"].ToString();
                      html +="<div class='clear'></div>";
-                     html +="<p><strong>Transaction Details : </strong> Donation For Corpus through Google Pay testing temporary save</p>";
+                     html += "<p><strong>Transaction Details : </strong> </p>" + ds.Tables[0].Rows[0]["Description"].ToString();
                      html +="<div class='clear'></div>";
                      html +="<p class='right'><strong>Received by</strong><br /><br />Pranav Bhonde<br /><br/>";
                      html +="<img src='sign.jpg' height='80px' width='180px'></img></p>";
@@ -2248,27 +2257,27 @@ namespace AnkurPrathisthan
                          smtpClient.Send(message);
                      }
 
-                     #region SMSAccept
-                     string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
-                     WebRequest request = HttpWebRequest.Create(sURL1);
-                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                     Stream s = (Stream)response.GetResponseStream();
-                     StreamReader readStream = new StreamReader(s);
-                     string dataString = readStream.ReadToEnd();
-                     response.Close();
-                     s.Close();
-                     readStream.Close();
+                     //#region SMSAccept
+                     //string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
+                     //WebRequest request = HttpWebRequest.Create(sURL1);
+                     //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                     //Stream s = (Stream)response.GetResponseStream();
+                     //StreamReader readStream = new StreamReader(s);
+                     //string dataString = readStream.ReadToEnd();
+                     //response.Close();
+                     //s.Close();
+                     //readStream.Close();
 
-                     string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
-                     WebRequest request1 = HttpWebRequest.Create(surl2);
-                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
-                     Stream s1 = (Stream)response1.GetResponseStream();
-                     StreamReader readstream1 = new StreamReader(s1);
-                     string datastring1 = readstream1.ReadToEnd();
-                     response1.Close();
-                     s1.Close();
-                     readstream1.Close();
-                     #endregion SMSAccept
+                     //string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                     //WebRequest request1 = HttpWebRequest.Create(surl2);
+                     //HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
+                     //Stream s1 = (Stream)response1.GetResponseStream();
+                     //StreamReader readstream1 = new StreamReader(s1);
+                     //string datastring1 = readstream1.ReadToEnd();
+                     //response1.Close();
+                     //s1.Close();
+                     //readstream1.Close();
+                     //#endregion SMSAccept
                      dsAccept = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 2, "");
                      result = "Accept SMS and Email sent successfully";
                  } 
@@ -2294,17 +2303,17 @@ namespace AnkurPrathisthan
                             }
                             #endregion EmailDecline
 
-                            #region SMSDecline
-                            string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
-                            WebRequest request3 = HttpWebRequest.Create(sURL3);
-                            HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
-                            Stream s3 = (Stream)response3.GetResponseStream();
-                            StreamReader readStream3 = new StreamReader(s3);
-                            string dataString1 = readStream3.ReadToEnd();
-                            response3.Close();
-                            s3.Close();
-                            readStream3.Close();
-                            #endregion SMSDecline
+                            //#region SMSDecline
+                            //string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=PRPSMS&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
+                            //WebRequest request3 = HttpWebRequest.Create(sURL3);
+                            //HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
+                            //Stream s3 = (Stream)response3.GetResponseStream();
+                            //StreamReader readStream3 = new StreamReader(s3);
+                            //string dataString1 = readStream3.ReadToEnd();
+                            //response3.Close();
+                            //s3.Close();
+                            //readStream3.Close();
+                            //#endregion SMSDecline
 
                             dsDecline = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 3, Reason);
                             result = "Decline SMS and Email sent successfully";
