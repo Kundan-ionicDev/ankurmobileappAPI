@@ -1700,6 +1700,7 @@ namespace AnkurPrathisthan
                            AcceptFlagInWords = Convert.ToString(ds.Tables[0].Rows[i]["AcceptFlagInWords"]),
                            DeclineReason = Convert.ToString(ds.Tables[0].Rows[i]["DeclineReason"]),
                            Prefix = Convert.ToString(ds.Tables[0].Rows[i]["Prefix"]),
+                        //   RoleID = Convert.ToString(ds.Tables[0].Rows[i]["RoleID"]),
                        });
                     }
                 }
@@ -2116,7 +2117,49 @@ namespace AnkurPrathisthan
                      html += "<html>";
                      html += "<head>";
                      html += "<title>Receipt</title>";
-                     html += "<link href='style.css' rel='stylesheet'>";
+                    // html += "<link href='style.css' rel='stylesheet'>";
+                     html += @"<style>
+                                body {
+                                    font-family: Arial;
+                                    font-size: 12px;
+                                    color: #000;
+                                    width:750px;
+                                    margin:0 auto;
+                                    border:1px solid #808080;
+                                    padding:5px 10px;
+                                }
+
+                                .title {
+                                    font-size: 20px;
+                                    font-weight: bold;
+                                }
+
+                                .center {
+                                    text-align: center;
+                                }
+
+                                .hr {
+                                    border-bottom: 1px dashed #000;
+                                    width: 100%;
+                                }
+
+                                .left{
+                                    float:left;
+                                }
+                                .right{
+                                    float:right;
+                                }
+
+                                .clear {
+                                    width: 100%;
+                                    height: 0px;
+                                    clear: both;
+                                }
+                                p{
+                                    margin:8px 0;
+                                }
+      
+                            </style>";
                      html += "</head>";
                      html += "<body>";
                      html += "<p class='center'><img src='headerimg.jpg' height=100px width='auto'/></p>";
