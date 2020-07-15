@@ -410,14 +410,14 @@ namespace AnkurPrathisthan
             return ds;
         }
 
-        public DataSet UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string ImgPath,string Img,int LoginID)
+        public DataSet UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string ImgPath,string Img,string FirstName, string LastName,int LoginID)
         {
             DataSet ds = new DataSet();
             try
             {
                 string ProcName = "ankurmobileapp.UpdateProfile";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[7];
+                oParam = new SqlParameter[9];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@ContactNo", ContactNo);
                 oParam[2] = new SqlParameter("@DOB", DOB);
@@ -425,6 +425,8 @@ namespace AnkurPrathisthan
                 oParam[4] = new SqlParameter("@Address", Address);
                 oParam[5] = new SqlParameter("@ImgPath", ImgPath);
                 oParam[6] = new SqlParameter("@Img", Img);
+                oParam[7] = new SqlParameter("@FirstName", FirstName);
+                oParam[8] = new SqlParameter("@LastName", LastName);
 
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }

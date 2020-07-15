@@ -1527,7 +1527,7 @@ namespace AnkurPrathisthan
             return entity;
         }
 
-        public List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address,int LoginID,string Img="")
+        public List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address,string FirstName,string LastName,int LoginID,string Img="")
         {
             List<VolunteerEntity> entity = new List<VolunteerEntity>();
             DataSet ds = new DataSet();
@@ -1560,7 +1560,7 @@ namespace AnkurPrathisthan
                 //    //ill have to first check in db if there is an image na or do i have to check from the base64 u provide
                 //}
              ////   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
-                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname, LoginID);
+                ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname,FirstName,LastName, LoginID);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -1574,6 +1574,8 @@ namespace AnkurPrathisthan
                             ImgPath = Convert.ToString(ds.Tables[0].Rows[0]["ImgPath"]),
                             RoleID = Convert.ToString(ds.Tables[0].Rows[0]["RoleID"]),
                             Img = Convert.ToString(ds.Tables[0].Rows[0]["Img"]),
+                            FirstName = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
+                            LastName = Convert.ToString(ds.Tables[0].Rows[0]["LastName"])
                         });
                 }
             }

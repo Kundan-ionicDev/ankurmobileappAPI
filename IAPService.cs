@@ -197,7 +197,7 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "UpdateProfile")]
         [OperationContract]
-        List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, int LoginID, string Img = "");
+        List<VolunteerEntity> UpdateProfile(string EmailID, string ContactNo, string DOB, string Address, string FirstName, string LastName, int LoginID, string Img = "");
 
         //[WebInvoke(Method = "POST",
         //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
