@@ -255,6 +255,37 @@ namespace AnkurPrathisthan
         }
         //[END] [For email send for new volunteer registration]
 
+        public string SendRequestEmail(string EmailID, string Message)
+        {
+            string Password = ""; string ServerName = SMTPSERVER;
+            int PORTNO = 25;//25 //443 //587       
+            string Sender = USERNAME; string credential = PASSWORD;
+            Password = CreateRandomPassword();
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
+            smtpClient.EnableSsl = true;
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(USERNAME);
+                message.Subject = "Support Ankur Pratishthan (Book Request)";
+                message.Body += Message;
+                message.Body += "";
+                message.IsBodyHtml = true;
+                message.To.Add(EmailID);
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return Password;
+        }
+
         //[START]to create password
         private static string CreateRandomPassword()
         {              

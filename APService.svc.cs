@@ -1156,7 +1156,7 @@ namespace AnkurPrathisthan
             List<AnkurPrathisthan.clsApprovals.FCMID> fcm = new List<AnkurPrathisthan.clsApprovals.FCMID>();
             DataSet ds = new DataSet();
             clsApprovals approvals = new clsApprovals();
-            string Message =null;string messagebody=null;
+            string messagebody = null; string emailflag = null;
             try
             {
 
@@ -1167,10 +1167,49 @@ namespace AnkurPrathisthan
                        (new RequestsDetailsEntity()
                         {
                             RequestID = Convert.ToString(ds.Tables[0].Rows[0]["RequestID"]),
-                            Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),                          
+                            Message = Convert.ToString(ds.Tables[0].Rows[0]["Message"]),
+                          //  RequestID = Convert.ToString(ds.Tables[0].Rows[i]["RequestID"]),
+                            RequestedDate = Convert.ToString(ds.Tables[0].Rows[0]["RequestedDate"]),
+                            RequestAcceptDate = Convert.ToString(ds.Tables[0].Rows[0]["RequestAcceptDate"]),
+                            RequestRetDate = Convert.ToString(ds.Tables[0].Rows[0]["RequestRetDate"]),
+                            Status = Convert.ToString(ds.Tables[0].Rows[0]["Status"]),
+                            RequestStatus = Convert.ToString(ds.Tables[0].Rows[0]["RequestStatus"]),
+                            BookID = Convert.ToString(ds.Tables[0].Rows[0]["BookID"]),
+                            BookName = Convert.ToString(ds.Tables[0].Rows[0]["BookName"]),
+                            Stock = Convert.ToString(ds.Tables[0].Rows[0]["Stock"]),
+                            BooksUnAvailable = Convert.ToString(ds.Tables[0].Rows[0]["Sold"]),
+                            BooksAvailable = Convert.ToString(ds.Tables[0].Rows[0]["BooksAvailable"]),
+                            ClusterID = Convert.ToString(ds.Tables[0].Rows[0]["ClusterID"]),
+                            ClusterName = Convert.ToString(ds.Tables[0].Rows[0]["ClusterName"]),
+                            ClusterContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ClusterContactNo"]),
+                            MemberID = Convert.ToString(ds.Tables[0].Rows[0]["MemberID"]),
+                            MemberName = Convert.ToString(ds.Tables[0].Rows[0]["MemberName"]),
+                            LibrarianID = Convert.ToString(ds.Tables[0].Rows[0]["LibrarianID"]),
+                            LibrarianName = Convert.ToString(ds.Tables[0].Rows[0]["LibrarianName"]), 
                         });              
                                                        
                 }
+
+
+                //if (EmailID != null && EmailID != "")
+                //{
+                if (cmd == 1)
+                {
+                    messagebody = "Book Request Sent";
+                }
+                else if (cmd == 3)
+                {
+                    messagebody = "Book Returned";
+                }
+                else if (cmd == 4)
+                {
+                    messagebody = "Book Request Approved";
+                }
+                clsAuthentication auth = new clsAuthentication();
+                emailflag = auth.SendRequestEmail("kundan.mobileappdev@gmail.com", messagebody);
+
+                   
+               // }
                 /*[START]to send book notification
                 DataSet dsUser = new DataSet(); string ClusterFCM = "", LibFCM="", MemberFCM="";
                 dsUser = approvals.GetUser(MemberID);
