@@ -26,7 +26,7 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in API-- ShowBooks" + ex.Message);
+               
             }
 
             return ds;

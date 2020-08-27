@@ -37,11 +37,11 @@ namespace AnkurPrathisthan
         public static string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
         public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
         public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
-        //[END] For Email sending
+       
 
         //[START]FOR NOTIFICATION SENDING
         public static string serverapikey = System.Configuration.ConfigurationManager.AppSettings["serverapikey"].ToString();
-        //[END] FOR NOTIFICATION SENDING
+       
         #region Logs
         
 
@@ -307,7 +307,7 @@ namespace AnkurPrathisthan
             DataSet dspwdchange = new DataSet();
             try
             {               
-                ds = obj.ValidateOTP(EmailID, OTP);
+                ds = obj.ValidateOTP(EmailID, OTP,Password);
                 if (ds.Tables.Count > 0)
                 {
                     entity.Add
@@ -315,7 +315,7 @@ namespace AnkurPrathisthan
                         {
                             //ContactNo = Convert.ToString(ds.Tables[0].Rows[0]["ContactNo"]),
                             //Address = Convert.ToString(ds.Tables[0].Rows[0]["Address"]),
-                            //OTP = Convert.ToString(ds.Tables[0].Rows[0]["OTP"]),
+                            ClusterCode = Convert.ToInt32(ds.Tables[0].Rows[0]["ClusterCode"]),
                             Firstname = Convert.ToString(ds.Tables[0].Rows[0]["FirstName"]),
                             Lastname = Convert.ToString(ds.Tables[0].Rows[0]["LastName"]),
                             EmailId = Convert.ToString(ds.Tables[0].Rows[0]["EmailID"]),
@@ -341,8 +341,7 @@ namespace AnkurPrathisthan
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();
             try
-            {
-                //WriteToFile("GetBooks","[START]", "Admin");
+            {               
                 ds = objbook.ShowBooks();
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -367,11 +366,11 @@ namespace AnkurPrathisthan
                         });
                     }
                 }
-              //  //WriteToFile("GetBooks", "[END]", "Admin");
+             
             }
             catch (Exception ex)
             {
-                //WriteToFile("GetBooks-----", ex.ToString(), "ADmin");
+               
             }
             return entity;
 
@@ -517,6 +516,7 @@ namespace AnkurPrathisthan
                                 BookDescription = Convert.ToString(ds.Tables[0].Rows[i]["BookDescription"]),
                                 ThumbImage = Convert.ToString(ds.Tables[0].Rows[i]["ThumbImage"]),
                                 Image2= Convert.ToString(ds.Tables[0].Rows[i]["Image2"]),
+                                Message = Convert.ToString(ds.Tables[0].Rows[i]["Message"]),
                                
                             });
                         } 
@@ -2043,8 +2043,8 @@ namespace AnkurPrathisthan
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "mail.ankurpratishthan.com";
-            int PORTNO = 25;  //25 //443 //587       
+            string ServerName = "smtp.ankurpratishthan.com";// "mail.ankurpratishthan.com";
+            int PORTNO = 465;  //25 //443 //587       
             string Sender = "admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);

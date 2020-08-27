@@ -169,21 +169,22 @@ namespace AnkurPrathisthan
             return (new string(chars));
         }
 
-        public DataSet ValidateOTP(string EmailID, string otp)
+        public DataSet ValidateOTP(string EmailID, string otp,string Password)
         {
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "ValidateOTP";
+                string ProcName = "ankurmobileapp.ValidateOTP";
                 SqlParameter[] oParam = null;
-                oParam = new SqlParameter[2];
+                oParam = new SqlParameter[3];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
                 oParam[1] = new SqlParameter("@OTP", otp);
+                oParam[2] = new SqlParameter("@Password", Password);
                 ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);                                
             }
             catch (Exception ex)
             {
-                Console.WriteLine("APService----Error in ValidateOTP" + ex.Message, EmailID, otp);
+                
             }
             return ds;
         }
