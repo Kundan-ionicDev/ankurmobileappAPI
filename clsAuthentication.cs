@@ -194,13 +194,13 @@ namespace AnkurPrathisthan
             string IsEmailSent = "";
             string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "admin@ankurpratishthan.com";
+            string Sender = "Admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;//true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
@@ -235,7 +235,7 @@ namespace AnkurPrathisthan
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;//true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
@@ -266,7 +266,7 @@ namespace AnkurPrathisthan
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;//true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);

@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+//using System.Web.Http.Cors;
 using Gma.QrCodeNet.Encoding;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -37,8 +38,9 @@ namespace AnkurPrathisthan
         public static string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
         public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
         public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
-       
 
+        //Microsoft.AspNet.WebApi.Cors nuget package
+       // EnableCorsAttribute cors = new EnableCorsAttribute("*","*");
         //[START]FOR NOTIFICATION SENDING
         public static string serverapikey = System.Configuration.ConfigurationManager.AppSettings["serverapikey"].ToString();
        
@@ -388,8 +390,7 @@ namespace AnkurPrathisthan
             List<CategoryDetails> objCategories = new List<CategoryDetails>();
             List<Images> objImages = new List<Images>();
             try
-            {
-                //WriteToFile("GetBooksData", "START", "Admin");
+            {                
                 ds = bm.GetData();
 
                 if (ds.Tables[0].Rows.Count > 0)
@@ -433,11 +434,11 @@ namespace AnkurPrathisthan
                     Publishers = objPublishers,                   
 
                 });
-                //WriteToFile("GetBooksData", "END", "Admin");
+                
             }
             catch (Exception ex)
             {
-                //WriteToFile("GetBooksData", ex.Message, "");
+                
             }
 
             return objBooks;
@@ -573,15 +574,13 @@ namespace AnkurPrathisthan
                 Email = "";
 
             try
-            {
-              //  //WriteToFile("ManageCategories", "START", Email);
+            {             
                 if (cmd == null || CategoryName == null)
                 {                   
                 }
                 else
                 {
-                    ds = bm.HandleCategories(cmd, CategoryName, Email, CategoryID);
-                 //   //WriteToFile("ManageCategories","Add/Delete",Email);
+                    ds = bm.HandleCategories(cmd, CategoryName, Email, CategoryID);                
                     //For adding
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -599,15 +598,16 @@ namespace AnkurPrathisthan
                         }
                     }
                 }
-               // //WriteToFile("ManageCategories", "END", Email);
+               
             }
             catch (Exception ex)
             {
-              //  //WriteToFile("ManageCategories", ex.Message, Email);
+             
             }
 
             return entity;
-        }//WriteToFile
+        }
+
         public List<LanguageDetails> ManageLanguages(string cmd, string LanguageName, string Email, string LanguageID = "")
         {
             List<LanguageDetails> entity = new List<LanguageDetails>();
@@ -1994,13 +1994,13 @@ namespace AnkurPrathisthan
             string result = "";
             string ServerName = "mail.ankurpratishthan.com";
             int PORTNO = 25;  //25 //443 //587       
-            string Sender = "admin@ankurpratishthan.com";
+            string Sender = "Admin@ankurpratishthan.com";
             string PASSWORD = "Nokia@86"; //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false; //true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(Sender);
@@ -2043,15 +2043,15 @@ namespace AnkurPrathisthan
         public string SendEmail(string EmailID = "kundan.mobileappdev@gmail.com")
         {
             clsBookManagement bm = new clsBookManagement();
-            string ServerName = "smtp.ankurpratishthan.com";// "mail.ankurpratishthan.com";
-            int PORTNO = 465;  //25 //443 //587       
-            string Sender = "admin@ankurpratishthan.com";
-            string PASSWORD = "Nokia@86"; //sevadharma
+            string ServerName = "mail.ankurpratishthan.com"; //"mail.smallmodule.com";//"smtp.ankurpratishthan.com"; //smtp.ankurpratishthan.com
+            int PORTNO = 25;  //25 //443 //587  //465     
+            string Sender = "Admin@ankurpratishthan.com";// "ankursupport@smallmodule.com";//
+            string PASSWORD = "Nokia@86"; //"Ankur@456";// //sevadharma
             SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;//true;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(Sender);
@@ -2065,6 +2065,7 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
+                  //  ex.StackTrace();
                     throw ex;
                 }
             }
@@ -2140,7 +2141,7 @@ namespace AnkurPrathisthan
                 string ServerName = "mail.ankurpratishthan.com";
                 int PORTNO = 25;
                // string Sender = "admin@ankurpratishthan.com";
-                string Sender = "admin@ankurpratishthan.com";
+                string Sender = "Admin@ankurpratishthan.com";
                 string PASSWORD = "Nokia@86";
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
                 string DonorName = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ ds.Tables[0].Rows[0]["DonatedBy"].ToString();
@@ -2148,7 +2149,7 @@ namespace AnkurPrathisthan
                         smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtpClient.UseDefaultCredentials = true;
                         smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
-                        smtpClient.EnableSsl = true;
+                        smtpClient.EnableSsl = false;//true;
 
                  if (cmd ==1)
                  {
