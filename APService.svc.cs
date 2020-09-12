@@ -1572,6 +1572,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             clsAuthentication auth = new clsAuthentication();
             DataSet dsEmail = new DataSet();
+            DataSet dsImg = new DataSet();
             APDonor objdonor = new APDonor();
             string imgpath = ""; string imgname = ""; string url = "";
             try
@@ -1592,13 +1593,14 @@ namespace AnkurPrathisthan
                     //"'https://ankurpratishthan.com/Uploads/"+receipt+' '+".html'"; 
                     url = "https://ankurpratishthan.com/Uploads/Volunteers/"+imgname;     
                 }
-                //else
-                //{
-                //    imgpath = "https://ankurpratishthan.com/Uploads/Default.png";
-                //    // here u are giving default path which is wrong...instead give here path of table value
-                //    //ill have to first check in db if there is an image na or do i have to check from the base64 u provide
-                //}
-             ////   ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, imgpath, imgname, LoginID);
+
+                else
+                {                   
+                    dsImg = objdonor.GetCurrentImg(LoginID);
+                    url = Convert.ToString(dsImg.Tables[0].Rows[0]["ImgPath"]);
+                    imgname = Convert.ToString(dsImg.Tables[0].Rows[0]["Img"]);
+                }
+            
                 ds = objdonor.UpdateProfile(EmailID, ContactNo, DOB, Address, url, imgname,FirstName,LastName, LoginID);
                 if (ds.Tables.Count > 0)
                 {

@@ -435,8 +435,28 @@ namespace AnkurPrathisthan
                 throw ex;
             }
             return ds;
-        } 
-        
+        }
+
+
+        public DataSet GetCurrentImg(int LoginID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.GetExistingImg";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@LoginID", LoginID);
+
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
+        }
+
         public DataSet SendBday(int DonorID)
         {
             DataSet ds = new DataSet();
