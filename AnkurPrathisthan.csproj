@@ -180,6 +180,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="AnkurPratishthan12AA.pdf" />
+    <Content Include="Ankur 80G.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
