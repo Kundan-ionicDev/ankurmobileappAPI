@@ -2130,13 +2130,9 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             DataSet dsDecline = new DataSet();
             DataSet dsAccept = new DataSet();
-            string ran = auth.CreateRec();
-            if (Contact != null && Contact != "")
-            {
-                Contact = "";
-            }
+            string ran = auth.CreateRec();           
 
-            if (Reason != null && Reason != "")
+            if (Reason == null && Reason == "")
             {
                 Reason = "";
             }
@@ -2218,9 +2214,15 @@ namespace AnkurPrathisthan
                      html +="<p class='center'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
                      html +="<div class='hr'></div>";
                      html += "<div class='clear'></div>";
-                     html += "<p class='left'><strong>Receipt No: </strong></p>" + receipt;
+                     html += "<p class='left'><strong>Receipt No: </strong></p>";// + receipt;
+                    // html += "<br><pre>"; 
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     html += receipt;
                      html += "<div class='clear'></div>";
-                     html +="<p class='left'><strong> Date : </strong></p>" +ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
+                     html += "<p class='left'><strong> Date : </strong></p>";
+                    // html += "<br><pre>";
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     html += ds.Tables[0].Rows[0]["DateOfDonation"].ToString();
                      html +="<div class='clear'></div>";
                      html += "<p><strong>Donated by :</strong></p>" + DonorName;
                      html +="<div class='clear'></div>";
@@ -2228,13 +2230,25 @@ namespace AnkurPrathisthan
                      html +="<div class='clear'></div>";
                      html += "<p><strong>Residential Address :</strong></p>" + ds.Tables[0].Rows[0]["Address"].ToString();
                      html +="<div class='clear'></div>";
-                     html += "<p class='left'><strong>Contact No:</strong></p>" + ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                     html += "<p class='left'><strong>Contact No:</strong></p>";
+                    // html += "<br><pre>";
                      html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
-                     html += "<p class='left'><strong>Email ID : </strong></p>" + EmailID;
+                     html += ds.Tables[0].Rows[0]["ContactNo"].ToString();
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     html += "<p class='left'><strong>Email ID:</strong></p>";
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     // html += "<br><pre>";                    
+                     html += EmailID;
                      html +="<div class='clear'></div>";
-                     html += "<p class='left'><strong>Date of Birth : (DD/MM/YY)</strong></p>" + ds.Tables[0].Rows[0]["DOB"].ToString();
+                     html += "<p class='left'><strong>Date of Birth : (DD/MM/YY)</strong></p>";
+                    // html += "<br><pre>";
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     html += ds.Tables[0].Rows[0]["DOB"].ToString();
                      html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
-                     html += "<p class='left'><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>" + ds.Tables[0].Rows[0]["PAN"].ToString();
+                     html += "<p class='left'><strong>PAN (For Donations Exceeding Rs. 10 Thousand):</strong></p>";                    
+                     html += "<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>";
+                     html += ds.Tables[0].Rows[0]["PAN"].ToString();
+                     // html += "<br><pre>";
                      html +="<div class='clear'></div>";
                      html += "<p><strong>Amount in Figures :</strong></p>" + ds.Tables[0].Rows[0]["Amount"].ToString();
                      html +="<div class='clear'></div>";
@@ -2250,7 +2264,8 @@ namespace AnkurPrathisthan
                      html +="<ul>";
                      html +="<li><strong>Ankur Pratishthan expresses its gratitude towards your generous donation.</strong></li>";
                      html +="<li><strong>In case of donations by Cheque / DD the validity of this receipt is subject to clearance.</strong></li>";
-                     html +="<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999. Contact our office for further assistance. </strong></li>";
+                     html +="<li><strong>Donations made to Ankur Pratishthan are exempted under Section 80G of Income Tax Act 1999.</li>"; 
+                     html +="<li>Contact our office for further assistance. </strong></li>";
                      html +="</ul>";
                      html +="</body>";
                      html +="</html>";
