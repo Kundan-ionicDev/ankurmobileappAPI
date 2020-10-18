@@ -2343,7 +2343,7 @@ namespace AnkurPrathisthan
                          //[end]thankyou letter
 
                          //[start]80g ccertificate
-                         string certificate = System.Web.Hosting.HostingEnvironment.MapPath("~/AnkurPratishthan12AA.pdf");
+                         string certificate = System.Web.Hosting.HostingEnvironment.MapPath("~/Ankur 80G.pdf");
                          message.Attachments.Add(new Attachment(certificate));
                          //[end]80g ccertificate
 
