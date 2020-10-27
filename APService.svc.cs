@@ -2348,7 +2348,7 @@ namespace AnkurPrathisthan
                      using (MailMessage message = new MailMessage())
                      {
                          message.From = new MailAddress(Sender);
-                         message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
+                         message.Subject = "Support Ankur Pratishthan (Donation Receipt,12AA 80G Certificate, Thank You Letter)";
                          message.IsBodyHtml = true;
                          message.AlternateViews.Add(Mail_Body(url1, ds.Tables[0].Rows[0]["DateOfDonation"].ToString(), DonorName, ds.Tables[0].Rows[0]["Amount"].ToString()));
                          //[end]thankyou letter
@@ -2357,6 +2357,11 @@ namespace AnkurPrathisthan
                          string certificate = System.Web.Hosting.HostingEnvironment.MapPath("~/Ankur 80G.pdf");
                          message.Attachments.Add(new Attachment(certificate));
                          //[end]80g ccertificate
+
+                         //[start] 12AA
+                         string AA = System.Web.Hosting.HostingEnvironment.MapPath("~/AnkurPratishthan12AA.pdf");
+                         message.Attachments.Add(new Attachment(AA));
+                         //[end]12 AA
 
                          message.To.Add(EmailID);
                          smtpClient.Send(message);
