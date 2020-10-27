@@ -1829,8 +1829,8 @@ namespace AnkurPrathisthan
 
                     ////[Start]for sms
                     string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                   // string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
-                    string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                   string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                  //  string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
                     WebRequest request = HttpWebRequest.Create(url);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                     Stream s = (Stream)response.GetResponseStream();
@@ -1840,7 +1840,7 @@ namespace AnkurPrathisthan
                     s.Close();
                     readStream.Close();
 
-                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&est=9869866814&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings.&priority=1";
+                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=9869866814&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings&priority=1";
                     WebRequest request1 = HttpWebRequest.Create(url1);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                     Stream s1 = (Stream)response1.GetResponseStream();
@@ -1945,10 +1945,7 @@ namespace AnkurPrathisthan
                         obj.Add(new GetSlides
                         {
                             ID = Convert.ToString(ds.Tables[0].Rows[i]["ID"]),
-                            PDFPath = Convert.ToString(ds.Tables[0].Rows[i]["PDFPath"]),
-                            // ImagePath = "https://ankurpratishthan.com/Uploads/Books/Economics57865400.jpeg",
-                            //  ImagePath = " http://localhost:51582/Uploads/Books/Economics57865400.jpeg",
-                            //  Title = "slider 1"
+                            PDFPath = Convert.ToString(ds.Tables[0].Rows[i]["PDFPath"]),                           
                             Title = Convert.ToString(ds.Tables[0].Rows[i]["PDFName"]),
                             Shareable = Convert.ToString(ds.Tables[0].Rows[i]["ShareableFlag"]),
                         });
@@ -2020,7 +2017,7 @@ namespace AnkurPrathisthan
                     smtpClient.Send(message);
                     //[START] SMS
                    // string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&PRPSMSsend=KALERT&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
-                    string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
+                    string sms = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Ankur Pratishthan wishes you a very happy birthday and a long,healthy and prosperous life!May all your wishes come true! Continue to spread joy!&priority=1";
                     
                     WebRequest request = HttpWebRequest.Create(sms);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -2070,7 +2067,6 @@ namespace AnkurPrathisthan
                 }
                 catch (Exception ex)
                 {
-                  //  ex.StackTrace();
                     throw ex;
                 }
             }
@@ -2367,8 +2363,8 @@ namespace AnkurPrathisthan
                      }
 
                      //#region SMSAccept
-                    // string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
-                     string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
+                     string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
+                    // string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=We are dispatching your donation receipt via email and courier. Ankur Pratishthan is grateful to you and looks forward to continuing this association!&priority=1";
                     
                      WebRequest request = HttpWebRequest.Create(sURL1);
                      HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -2379,8 +2375,8 @@ namespace AnkurPrathisthan
                      s.Close();
                      readStream.Close();
 
-                    // string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
-                     string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                   // string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
                     
                      WebRequest request1 = HttpWebRequest.Create(surl2);
                      HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
@@ -2417,8 +2413,8 @@ namespace AnkurPrathisthan
                             #endregion EmailDecline
 
                             //#region SMSDecline
-                            // string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
-                            string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
+                             string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
+                           // string sURL3 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Dear " + DonorName + ", Your donation has been declined at Ankur Pratishthan. Our team will get in touch with you for further proceedings.&priority=1";
                            
                             WebRequest request3 = HttpWebRequest.Create(sURL3);
                             HttpWebResponse response3 = (HttpWebResponse)request3.GetResponse();
