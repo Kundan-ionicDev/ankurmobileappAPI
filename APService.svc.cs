@@ -2207,9 +2207,9 @@ namespace AnkurPrathisthan
                      html +="<div class='clear'></div>";
                      html +="<p class='center title'><strong> ANKUR PRATISHTHAN </strong></p>";
                      html +="<p class='center'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
-                     html += "<p class='center'><strong>PAN : AADTA0477E | 12 AA Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
+                     html += "<p class='center'><strong>PAN : AADTA0477E | 12 AA Registration No. :</strong>2019-20/A/10285 | <strong>80G Registration No.:</strong> 2020-21/A/10154 </strong></p>";
                      html +="<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
-                     html +="<p class='center'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
+                     html += "<p class='center'><strong>Contact No. : </strong> 9969607247 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
                      html +="<div class='hr'></div>";
                      html += "<div class='clear'></div>";
                      html += "<p class='left'><strong>Receipt No: </strong></p>";// + receipt;
