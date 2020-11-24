@@ -168,6 +168,12 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetAreaDetails")]
+        [OperationContract]
+        List<AreaDetailsEntity> GetAreaDetails();
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "SubmitLatestShayari")]
         [OperationContract]
         List<GetLatestShayari> SubmitLatestShayari(string msg, string EmailID, string Category);

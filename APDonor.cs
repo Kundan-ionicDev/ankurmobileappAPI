@@ -269,7 +269,7 @@ namespace AnkurPrathisthan
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
-            smtpClient.EnableSsl = true;
+            smtpClient.EnableSsl = false;
             using (MailMessage message = new MailMessage())
             {
                 message.From = new MailAddress(USERNAME);
@@ -505,6 +505,21 @@ namespace AnkurPrathisthan
                 }
             }
             return "Y";
+        }
+
+        public DataSet GetAreaDetails()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "GetAreaDetails";
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, null);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
         }
 
     }

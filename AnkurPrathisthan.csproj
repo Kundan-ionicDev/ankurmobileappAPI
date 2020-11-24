@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -155,6 +157,7 @@
     <Compile Include="clsPDF.cs" />
     <Compile Include="clsQRCode.cs" />
     <Compile Include="clsSQL.cs" />
+    <Compile Include="Entity\AreaDetailsEntity.cs" />
     <Compile Include="Entity\BookDetailsEntity.cs" />
     <Compile Include="Entity\CelebrateEntity.cs" />
     <Compile Include="Entity\ClusterDetailsEntity.cs" />

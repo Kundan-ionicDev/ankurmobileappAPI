@@ -1663,7 +1663,9 @@ namespace AnkurPrathisthan
                         });
                 }
 
-                if (cmd == 1)
+                string tempflag = ds.Tables[0].Rows[0]["TempFlag"].ToString();
+
+                if (cmd == 1 && tempflag == "0")
                 {
                     string fullname = ds.Tables[0].Rows[0]["Prefix"].ToString()+' '+ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                     ////[START]SMS integration
@@ -1743,7 +1745,7 @@ namespace AnkurPrathisthan
                            AcceptFlagInWords = Convert.ToString(ds.Tables[0].Rows[i]["AcceptFlagInWords"]),
                            DeclineReason = Convert.ToString(ds.Tables[0].Rows[i]["DeclineReason"]),
                            Prefix = Convert.ToString(ds.Tables[0].Rows[i]["Prefix"]),
-                        //   RoleID = Convert.ToString(ds.Tables[0].Rows[i]["RoleID"]),
+                           //  RoleID = Convert.ToString(ds.Tables[0].Rows[i]["RoleID"]),
                        });
                     }
                 }
@@ -1829,7 +1831,7 @@ namespace AnkurPrathisthan
 
                     ////[Start]for sms
                     string contact = ds.Tables[0].Rows[0]["ContactNo"].ToString();
-                   string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
+                   string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=KALERT&dest=" + Contact + "&msg=Dear " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
                   //  string url = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=KALERT&dest=" + Contact + "&msg=Dear  " + Fullname + ",The central office of Ankur Pratishthan has taken note of your application to Celebrate with Us. We'll soon get in touch.%20SMS&priority=1";
                     WebRequest request = HttpWebRequest.Create(url);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -2105,7 +2107,7 @@ namespace AnkurPrathisthan
                              <p><strong>Pranav Bhonde</strong></p>
                              <p>(General Secretary)</p>                                      
                              <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
-                             <p><img src=cid:Footer  id='img' alt='' width='100%' height='100%'/></p>
+                             <p><img src=cid:Footer  id='img' alt='' width='100%' height=''/></p>
                              <p><strong>Kindly click on the link below to find Ankur Pratishthan's Donation receipt.</p></strong>   
                             </body></html>";
           
@@ -2205,7 +2207,7 @@ namespace AnkurPrathisthan
                      html +="<div class='clear'></div>";
                      html +="<p class='center title'><strong> ANKUR PRATISHTHAN </strong></p>";
                      html +="<p class='center'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
-                     html +="<p class='center'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
+                     html += "<p class='center'><strong>PAN : AADTA0477E | 12 AA Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>";
                      html +="<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
                      html +="<p class='center'><strong>Contact No. : </strong> 9869866814 / 9819553390 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
                      html +="<div class='hr'></div>";
@@ -2738,7 +2740,7 @@ namespace AnkurPrathisthan
             return result;
         }
 
-       
+
 
         //public List<DonorEntity> AddDonors(string FullName, string Inthenameof, string EmailID, string ContactNo, string DOB,
         //   string Address, int Amount, string PaymentMode, string AdminEmailID, string DonationTowards, string PAN, string Amount1,int Tempflag,
@@ -2811,7 +2813,37 @@ namespace AnkurPrathisthan
         //    }
         //    return entity;
         //}
-        
+
+        public List<AreaDetailsEntity> GetAreaDetails()
+        {
+            List<AreaDetailsEntity> entity = new List<AreaDetailsEntity>();
+            DataSet ds = new DataSet();
+            APDonor objdonor = new APDonor();
+            try
+            {
+                ds = objdonor.GetAreaDetails();
+                if (ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        entity.Add
+                       (new AreaDetailsEntity()
+                       {
+                           Id = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]),
+                           AreaName = Convert.ToString(ds.Tables[0].Rows[i]["Area"]),
+                           IsActive = Convert.ToBoolean(ds.Tables[0].Rows[i]["isActive"])
+                       });
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return entity;
+        }
+
         #endregion AP Donation Management System
 
 
