@@ -2086,11 +2086,35 @@ namespace AnkurPrathisthan
             Img.ContentId = "MyImage";
             Img1.ContentId = "Header";
             Img3.ContentId = "Footer";
+            //string str = @"  <html>
+            //                 <head>                           
+            //                 </head>
+            //                 <body> 
+            //                 <p><img src=cid:Header id='img' alt='' width='100%' height='100%'/></p>                            
+            //                 <h5><strong>Date:</strong></h5>" + Date + ' ' + @" 
+            //                 <p><strong>To,</strong></p>" + DonorName + ' ' + @" 
+            //                 <p><strong></p>
+            //                 <p><strong><u>Sub. : </u></strong><strong><u>Gratitude towards your contribution for a social cause.</u></strong></p>
+            //                 <p>Respected Sir / Madam,</p>
+            //                 <p>Ankur Pratishthan is a Non Government Organization (NGO) working for the all-round development of destitute children. Skills development, emotional &amp; moral support and inculcating best ethical habits from the basis of various projects &amp; programmes that Ankur Pratishthan takes up to develop this neglected segment of the society. Various subject experts &amp; supporters help Ankur Pratishthan to develop these destitute children into self supporting individuals. Ankur Pratishthan presently organizes various such activities for about 500 children from 5 different shelters in Mumbai Metropolis.</p>
+            //                 <p>On behalf of Ankur Pratishthan, here we would like to extend our gratitude for your generous donation of Rs.</p>" + Amount + ' ' + @" 
+            //                 <p><strong></p>
+            //                 <p>The amount of donation was of a great help to provide necessary amenities and material to our children and volunteers. We are confident that a strong support with a thought from philanthropist would go a long way in promoting these activities and inculcating good habits among the children.</p>
+            //                 <p>We will keep you updated through our newsletters &amp; website. Thanks again for all you had done for Ankur Pratishthan.</p>                             
+            //                 <p><strong>&nbsp;</strong></p>
+            //                 <p><strong>&nbsp;</strong></p>
+            //                 <p>SincerelyYours,</p>
+            //                 <p><strong>Pranav Bhonde</strong></p>
+            //                 <p>(General Secretary)</p>                                      
+            //                 <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
+            //                 <p><img src=cid:Footer  id='img' alt='' width='100%' height=''/></p>
+            //                 <p><strong>Kindly click on the link below to find Ankur Pratishthan's Donation receipt.</p></strong>   
+            //                </body></html>";
+
             string str = @"  <html>
                              <head>                           
                              </head>
-                             <body> 
-                             <p><img src=cid:Header id='img' alt='' width='100%' height='100%'/></p>                            
+                             <body>                     
                              <h5><strong>Date:</strong></h5>" + Date + ' ' + @" 
                              <p><strong>To,</strong></p>" + DonorName + ' ' + @" 
                              <p><strong></p>
@@ -2107,7 +2131,6 @@ namespace AnkurPrathisthan
                              <p><strong>Pranav Bhonde</strong></p>
                              <p>(General Secretary)</p>                                      
                              <p><img src=cid:MyImage  id='img' alt='' width='100px' height='100px'/></p> 
-                             <p><img src=cid:Footer  id='img' alt='' width='100%' height=''/></p>
                              <p><strong>Kindly click on the link below to find Ankur Pratishthan's Donation receipt.</p></strong>   
                             </body></html>";
 
@@ -2153,7 +2176,7 @@ namespace AnkurPrathisthan
                 if (cmd == 1)
                 {
                     //[start] receipt           
-                    string receipt = "FY2020-" + "2021" + DonorID + ran.Trim();
+                    string receipt = "FY20-" + "21" + DonorID + ran.Trim();
                     string html = "<html>";
                     html += "<html>";
                     html += "<head>";
@@ -2217,8 +2240,8 @@ namespace AnkurPrathisthan
                     html += "<p class='center title' style='font - size: 18px;'><strong> ANKUR PRATISHTHAN </strong></p>";
                     html += "<p class='center'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>";
                     html += "<p class='center'><strong>PAN : AADTA0477E | 12 AA Registration No. :</strong>2019-20/A/10285 | <strong>80G Registration No.:</strong> 2020-21/A/10154 </strong></p>";
-                    html += "<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>";
-                    html += "<p class='center'><strong>Contact No. : </strong> 9969607247 |  <strong>Email ID : </strong> <a href='mailto:ngoankur@gmail.com'> ngoankur@gmail.com </a>| <strong>Website :</strong><a href='http://www.ankurpratishthan.org'> www.ankurpratishthan.org</a>";
+                    html += "<p class='center'><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Prabhadevi, Mumbai &ndash; 400025</p>";
+                    html += "<p class='center'><strong>Contact No. : </strong> 9969607247 | <strong>Email ID : </strong>ngoankur@gmail.com | <strong>Website :</strong>www.ankurpratishthan.org";
                     html += "</td>";
                     html += "</tr>";
                     html += "</table>";
@@ -2278,7 +2301,7 @@ namespace AnkurPrathisthan
                     //html += ds.Tables[0].Rows[0]["PAN"].ToString();
                     // html += "<br><pre>";
                     html += "<div class='clear'></div>";
-                    html += "<p class='left'><strong>Amount in Figures : Rs.  </strong>" + ds.Tables[0].Rows[0]["Amount"].ToString() + "</p>";
+                    html += "<p class='left'><strong>Amount in Figures : </strong> Rs. " + ds.Tables[0].Rows[0]["Amount"].ToString() + "</p>";
                     html += "<p class='right'><strong>Amount in Words : </strong>" + ds.Tables[0].Rows[0]["Amountinwords"].ToString() + "Only. </p>";                    
                     html += "<div class='clear'></div>";
                     html += "<p><strong>Donation Towards : </strong>" + ds.Tables[0].Rows[0]["DonationTowards"].ToString() + "</p>";

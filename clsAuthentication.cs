@@ -158,7 +158,7 @@ namespace AnkurPrathisthan
         public string CreateRec()
         {
             DataSet ds = new DataSet();
-            int length = 9;
+            int length = 4;
             string validChars = "0123456789";
             Random random = new Random();
             char[] chars = new char[length];
