@@ -23,9 +23,7 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
-
-
-
+//using System.Web.Http.Cors;
 
 namespace AnkurPrathisthan
 {
@@ -974,7 +972,6 @@ namespace AnkurPrathisthan
         }
 
 
-
         // [START] For Member Management
         public List<MemberDetailsEntity> GetMembers()
         {
@@ -1149,6 +1146,50 @@ namespace AnkurPrathisthan
             }
             return requests;
         }
+
+        //public List<RequestsDetailsEntity> GetBookReqStatus(string BookID)
+        //{
+        //    DataSet ds = new DataSet();
+        //    List<RequestsDetailsEntity> requests = new List<RequestsDetailsEntity>();
+        //    clsApprovals app = new clsApprovals();
+        //    try
+        //    {
+
+        //        ds = app.ShowBookReqStatus(BookID);
+        //        if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+        //        {
+        //            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+        //            {
+        //                requests.Add(new RequestsDetailsEntity
+        //                {
+        //                    RequestID = Convert.ToString(ds.Tables[0].Rows[i]["RequestID"]),
+        //                    RequestedDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestedDate"]),
+        //                    RequestAcceptDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestAcceptDate"]),
+        //                    RequestRetDate = Convert.ToString(ds.Tables[0].Rows[i]["RequestRetDate"]),
+        //                    Status = Convert.ToString(ds.Tables[0].Rows[i]["Status"]),
+        //                    RequestStatus = Convert.ToString(ds.Tables[0].Rows[i]["RequestStatus"]),
+        //                    BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]),
+        //                    BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),
+        //                    Stock = Convert.ToString(ds.Tables[0].Rows[i]["Stock"]),
+        //                    BooksUnAvailable = Convert.ToString(ds.Tables[0].Rows[i]["Sold"]),
+        //                    BooksAvailable = Convert.ToString(ds.Tables[0].Rows[i]["BooksAvailable"]),
+        //                    ClusterID = Convert.ToString(ds.Tables[0].Rows[i]["ClusterID"]),
+        //                    ClusterName = Convert.ToString(ds.Tables[0].Rows[i]["ClusterName"]),
+        //                    ClusterContactNo = Convert.ToString(ds.Tables[0].Rows[i]["ClusterContactNo"]),
+        //                    MemberID = Convert.ToString(ds.Tables[0].Rows[i]["MemberID"]),
+        //                    MemberName = Convert.ToString(ds.Tables[0].Rows[i]["MemberName"]),
+        //                    LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]),
+        //                    LibrarianName = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianName"]),
+        //                });
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return requests;
+        //}
 
         public List<RequestsDetailsEntity> ManageRequests(int cmd, string BookID, string MemberID, string senderEmailID, string RequestID = "")
         {

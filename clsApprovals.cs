@@ -35,6 +35,25 @@ namespace AnkurPrathisthan
             return ds;
         }
 
+
+        //public DataSet ShowBookReqStatus(string BookID)
+        //{
+        //    DataSet ds = new DataSet();
+        //    try
+        //    {
+        //        string ProcName = "ankurmobileapp.uspGetRequests";
+        //        SqlParameter[] oParam = null;
+        //        oParam = new SqlParameter[1];
+        //        oParam[0] = new SqlParameter("@BookId", BookID);
+        //        ds = SqlHelper.ExecuteDataset(SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return ds;
+        //}
+
         public DataSet HandleRequests(int cmd, string BookID, string EmailID,string MemberID, string RequestID)
         {
             DataSet ds = new DataSet();
