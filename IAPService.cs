@@ -172,11 +172,11 @@ namespace AnkurPrathisthan
         List<RequestsDetailsEntity> ManageRequests(int cmd, string BookID, string MemberID, string senderEmailID, string RequestID = "");
 
 
-        //[WebInvoke(Method = "POST",
-        //RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        //UriTemplate = "GetBookReqStatus")]
-        //[OperationContract]
-        //List<RequestsDetailsEntity> GetBookReqStatus(string BookID);
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetBookReqStatus")]
+        [OperationContract]
+        List<RequestsDetailsEntity> GetBookReqStatus(string BookID);
 
 
         //[END] For Approvals Module
