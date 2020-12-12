@@ -1179,6 +1179,7 @@ namespace AnkurPrathisthan
                             MemberName = Convert.ToString(ds.Tables[0].Rows[i]["MemberName"]),
                             LibrarianID = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianID"]),
                             LibrarianName = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianName"]),
+                            LibrarianMobNo = Convert.ToString(ds.Tables[0].Rows[i]["LibrarianMobNo"])
                         });
                     }
                 }

@@ -8,6 +8,7 @@ namespace AnkurPrathisthan.Entity
     public class RequestsDetailsEntity
     {
         public string LibrarianName {get; set;}
+        public string LibrarianMobNo { get; set; }
         public string BookName { get; set; }        
         public string ClusterName { get; set; }
         public string LibrarianID { get; set; }
