@@ -1242,6 +1242,9 @@ namespace AnkurPrathisthan
                 {
                     messagebody = "Book Request Sent";
                 }
+                else if(cmd == 2){
+                    messagebody = "Book Request Cancelled";
+                }
                 else if (cmd == 3)
                 {
                     messagebody = "Book Returned";
