@@ -11,10 +11,20 @@ using System.Data;
 using System.Data.Sql;
 using System.Collections;
 using System.Drawing;
+//using System.Web.Http.Cors;
+//using System.Web.Http.Cors;
+
 namespace AnkurPrathisthan
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
+
+    //[EnableCors(origins: "https://ankurpratishthan.com/APService.svc/,http://localhost:4200,http://localhost:8100,http://localhost:50315", headers: "*", methods: "*")]
+
+    ////[EnableCors(origins: "http://example.com", headers: "*", methods: "*")]
+    ////[EnableCors(origins: "https://ankurpratishthan.com/APService.svc/,http://localhost:4200,http://localhost:8100,http://localhost:50315", headers: "*", methods: "*", exposedHeaders: "authtoken")]
+    //// NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
+    //[EnableCors(origins: "https://ankurpratishthan.com/APService.svc/,http://localhost:4200,http://localhost:8100,http://localhost:51582", headers: "*", methods: "*")]
+
     public interface IAPService
     {
         //[START] For Authentication
@@ -147,6 +157,9 @@ namespace AnkurPrathisthan
         //[END] For Member Management
 
         //[START] For Approvals Module
+        
+        
+        
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "GetRequests")]
@@ -157,7 +170,16 @@ namespace AnkurPrathisthan
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageRequests")]
         [OperationContract]
-        List<RequestsDetailsEntity> ManageRequests(int cmd, string BookID, string MemberID, string senderEmailID, string RequestID = "");  
+        List<RequestsDetailsEntity> ManageRequests(int cmd, string BookID, string MemberID, string senderEmailID, string RequestID = "");
+
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetBookReqStatus")]
+        [OperationContract]
+        List<RequestsDetailsEntity> GetBookReqStatus(string BookID);
+
+
         //[END] For Approvals Module
 
         [WebInvoke(Method = "POST",
