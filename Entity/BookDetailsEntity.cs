@@ -26,7 +26,15 @@ namespace AnkurPrathisthan.Entity
         public string BookDescription { get; set; }
         public string Image2 { get; set; }
         public string qrcodepath { get; set; }
-        public string mailsent { get; set; }
+        public string IsQrPrinted { get; set; }
+    }
+
+    public class BookID
+    {
+        public string IsQrPrinted { get; set; }
+        public string BookName { get; set; }
+       // public string BookID { get; set; }
+        public string EmailID { get; set; }
     }
 
     public class Images

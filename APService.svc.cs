@@ -23,11 +23,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 9a593441c00124de6cf5c29126cbea0ac71c1b44
 namespace AnkurPrathisthan
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
@@ -542,7 +538,7 @@ namespace AnkurPrathisthan
             return strQRCode;
         }
 
-        public List<BookDetailsEntity> GetQrCodes(string EmailID)
+        public List<BookDetailsEntity> GetBooksPrint(string EmailID)
         {
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();
@@ -554,14 +550,49 @@ namespace AnkurPrathisthan
                 {
                     entity.Add(new BookDetailsEntity
                     {
-                        qrcode = Convert.ToString(ds.Tables[0].Rows[i]["QrCode"]),
-                        qrcodepath = Convert.ToString(ds.Tables[0].Rows[i]["QrCodePath"]),
-                        mailsent = Convert.ToString(ds.Tables[0].Rows[i]["MailSent"]),
+                       // qrcode = Convert.ToString(ds.Tables[0].Rows[i]["QrCode"]),
+                        //qrcodepath = Convert.ToString(ds.Tables[0].Rows[i]["QrCodePath"]),
+                        IsQrPrinted = Convert.ToString(ds.Tables[0].Rows[i]["IsQrPrinted"]),
                         BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]),
                         BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),
-                        EmailID = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
+                        //EmailID = Convert.ToString(ds.Tables[0].Rows[i]["CreatedBy"]),
                     });
                 }
+            }
+           
+            return entity;
+        }
+
+        public List<BookDetailsEntity> ManageQrPrint(string EmailID)
+        {
+            List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
+            DataSet ds = new DataSet();            
+            clsQRCode qrc = new clsQRCode();
+            
+            try
+            {             
+                    
+                
+                
+                
+                    ds = qrc.UpdateQrStatus(EmailID);
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            entity.Add(new BookDetailsEntity
+                            {
+                                BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]),
+                                BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),                               
+                                EmailID = Convert.ToString(ds.Tables[0].Rows[i]["AddedBy"]),                               
+
+                            });
+                        }
+                    }
+                }         
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return entity;
         }

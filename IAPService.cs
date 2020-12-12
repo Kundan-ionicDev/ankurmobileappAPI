@@ -82,9 +82,9 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "GetQrCodes")]
+        UriTemplate = "GetBooksPrint")]
         [OperationContract]
-        List<BookDetailsEntity> GetQrCodes(string EmailID);
+        List<BookDetailsEntity> GetBooksPrint(string EmailID);
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,

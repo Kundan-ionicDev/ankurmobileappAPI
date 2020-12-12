@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Data;
 using System.Data.SqlClient;
+using AnkurPrathisthan.Entity;
 
 namespace AnkurPrathisthan
 {
@@ -79,6 +80,8 @@ namespace AnkurPrathisthan
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[1];
                 oParam[0] = new SqlParameter("@EmailID", EmailID);
+              //  oParam[1] = new SqlParameter("@Mode", Mode);
+                //oParam[2] = new SqlParameter("@BookID", Mode);
                 ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
             }
             catch (Exception ex)
@@ -87,6 +90,26 @@ namespace AnkurPrathisthan
             }
             return ds;
 
+        }
+
+        public DataSet UpdateQrStatus(string EmailID)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                string ProcName = "ankurmobileapp.ManageQRCodes";
+                SqlParameter[] oParam = null;
+                oParam = new SqlParameter[1];
+                oParam[0] = new SqlParameter("@EmailID", EmailID);
+                //  oParam[1] = new SqlParameter("@Mode", Mode);
+                //oParam[2] = new SqlParameter("@BookID", Mode);
+                ds = AnkurPrathisthan.clsSQL.SqlHelper.ExecuteDataset(AnkurPrathisthan.clsSQL.SqlHelper.ConnectionString(1), CommandType.StoredProcedure, ProcName, oParam);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ds;
         }
     }
 
