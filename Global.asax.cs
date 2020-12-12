@@ -20,18 +20,19 @@ namespace AnkurPrathisthan
 
         }
         //[Start]:Added for CORS
-        //protected void Application_BeginRequest(object sender, EventArgs e)
-        //{
-        //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        //    //if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
-        //    //{
-        //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "POST, PUT, DELETE,GET");
-        //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
-        //    HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
-        //    HttpContext.Current.Response.End();
-        //    //}
-        //}
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
+            {
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "POST, PUT, DELETE,GET");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+                HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
+                HttpContext.Current.Response.End();
+            }
+        }
+
         //  //[END]:Added for CORS
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {

@@ -41,7 +41,7 @@ namespace AnkurPrathisthan
             DataSet ds = new DataSet();
             try
             {
-                string ProcName = "ankurmobileapp.uspGetRequests";
+                string ProcName = "ankurmobileapp.uspGetBookReqStatus";
                 SqlParameter[] oParam = null;
                 oParam = new SqlParameter[1];
                 oParam[0] = new SqlParameter("@BookId", BookID);

@@ -53,8 +53,6 @@ C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Microsoft.P
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Newtonsoft.Json.dll
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Collections.Immutable.dll
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Net.Http.Formatting.dll
-C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Cors.dll
-C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Http.Cors.dll
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Http.dll
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Bricks.Core.xml
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Bricks.SMS.xml
@@ -71,9 +69,9 @@ C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Newtonsoft.
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Collections.Immutable.xml
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Net.Http.Formatting.xml
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Http.xml
-C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Http.Cors.xml
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\obj\Debug\AnkurPrathisthan.csproj.CoreCompileInputs.cache
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\obj\Debug\AnkurPrathisthan.csproj.CopyComplete
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\obj\Debug\AnkurPrathisthan.dll
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\obj\Debug\AnkurPrathisthan.pdb
 C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\obj\Debug\AnkurPrathisthan.csprojAssemblyReference.cache
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\System.Web.Cors.dll

@@ -12,6 +12,7 @@ using System.Data.Sql;
 using System.Collections;
 using System.Drawing;
 //using System.Web.Http.Cors;
+//using System.Web.Http.Cors;
 
 namespace AnkurPrathisthan
 {
