@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-//using System.Web.Http.Cors;
 using Gma.QrCodeNet.Encoding;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -23,7 +22,6 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
-
 
 
 
@@ -1204,6 +1202,11 @@ namespace AnkurPrathisthan
                 else if (cmd == 4)
                 {
                     messagebody = "Book Request Approved";
+                }
+
+                else if (cmd == 5)
+                {
+                    messagebody = "Book Delivered";
                 }
                 clsAuthentication auth = new clsAuthentication();
                 emailflag = auth.SendRequestEmail("kundan.mobileappdev@gmail.com", messagebody);
