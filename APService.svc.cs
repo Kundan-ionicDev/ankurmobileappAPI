@@ -22,6 +22,7 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
+//using System.IO.FileStream;
 
 
 namespace AnkurPrathisthan
@@ -570,11 +571,16 @@ namespace AnkurPrathisthan
             clsQRCode qrc = new clsQRCode();
             
             try
-            {             
-                    
-                
-                
-                
+            {
+                Document Document = new Document();
+                PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Clusters/QrCode.pdf"), FileMode.Create));
+                BarcodeQRCode barcodeQRCode = new BarcodeQRCode("12345", 50, 50, null);
+                iTextSharp.text.Image codeQrImage = barcodeQRCode.GetImage();
+                codeQrImage.ScaleAbsolute(100, 100);
+                Document.Open();
+                Document.Add(codeQrImage);
+                Document.Close();                           
+                //email sending function appending pdf 
                     ds = qrc.UpdateQrStatus(EmailID);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -634,7 +640,7 @@ namespace AnkurPrathisthan
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
 
             return entity;

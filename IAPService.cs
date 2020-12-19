@@ -88,6 +88,12 @@ namespace AnkurPrathisthan
 
         [WebInvoke(Method = "POST",
         RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "ManageQrPrint")]
+        [OperationContract]
+        List<BookDetailsEntity> ManageQrPrint(string EmailID);
+
+        [WebInvoke(Method = "POST",
+        RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "ManageCategories")]
         [OperationContract]
         List<CategoryDetails> ManageCategories(string cmd, string CategoryName, string Email, string CategoryID = "");
