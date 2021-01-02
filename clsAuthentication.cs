@@ -19,6 +19,7 @@ namespace AnkurPrathisthan
         public string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
         public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
         public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
+        public static int PORTNO = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString());
         //[END] For Email sending
 
         public DataSet GetUserDetails(string EmailID, string Password, string FCMID)
@@ -191,15 +192,11 @@ namespace AnkurPrathisthan
         //[EMAIL for forgot paasword otp]
         public string SendOTPEmail(string EmailID, string OTP)
         {           
-            string IsEmailSent = "";
-            string ServerName = "mail.ankurpratishthan.com";
-            int PORTNO = 25;  //25 //443 //587       
-            string Sender = "Admin@ankurpratishthan.com";
-            string PASSWORD = "Nokia@86"; //sevadharma
-            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            string IsEmailSent = "";            
+            SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
-            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
             smtpClient.EnableSsl = false;//true;
             using (MailMessage message = new MailMessage())
             {
@@ -226,12 +223,9 @@ namespace AnkurPrathisthan
 
         //[START][For Email send for new volunteer regsitrations]
         public string SendPasswordEmail(string EmailID)
-        {            
-            string Password = ""; string ServerName = SMTPSERVER;
-            int PORTNO = 25;//25 //443 //587       
-            string Sender = USERNAME; string credential = PASSWORD;
-            Password = CreateRandomPassword();
-            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+        {   
+            string Password = CreateRandomPassword();
+            SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);

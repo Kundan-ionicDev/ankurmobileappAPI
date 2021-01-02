@@ -33,10 +33,11 @@ namespace AnkurPrathisthan
     public class APService : IAPService
     {
         //[START] For Email sending          
-        public static string PORTNO = System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString();
+        public static int PORTNO = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString());
         public static string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
         public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
         public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
+        public static string ADMINCONTACT = System.Configuration.ConfigurationManager.AppSettings["ADMINCONTACT"].ToString();
 
         //Microsoft.AspNet.WebApi.Cors nuget package
         // EnableCorsAttribute cors = new EnableCorsAttribute("*","*");
@@ -585,58 +586,22 @@ namespace AnkurPrathisthan
             try
             {
                 DataSet dsgetqr = new DataSet();
-                dsgetqr = qrc.GetCode(EmailID);
-
-                Document Document = new Document();
-                PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf"), FileMode.Create));
-                Document.Open();
-
-              // document.open();  iTextSharp.text.Image codeQrImage;
-
-              //  string base64 = Convert.ToBase64String(byteImage);
-              //  byte[] imageBytes = Convert.FromBase64String(base64);
-              //  iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(imageBytes);
-              //  using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream())
-              //  {
-              //      Document document = new Document(PageSize.A4, 0f, 0f, 0f, 0f);
-              //      PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-              //      document.Open();
-              //      document.Add(image);
-              //      document.Close();
-              //      byte[] bytes = memoryStream.ToArray();
-              //      memoryStream.Close();
-
-              //  }
-
-              ////  Document Document = new Document(PageSize.A4,0,0,0,0);
-                
-              //  //PdfPage page = Document();
-              //  // PdfReader reader = nedfReader("1.pdf");
-              //  //PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf"), FileMode.Create));
-              //  //Document.Open();
-              //  //Document.NewPage();
-
-                
-
-
+                dsgetqr = qrc.GetCode(EmailID);              
                 if (dsgetqr.Tables.Count > 0 && dsgetqr.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < dsgetqr.Tables[0].Rows.Count; i++)
                     {
                         string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
-                       // BarcodeQRCode barcodeQRCode = new BarcodeQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()), 1000, 1000, null);
-                       //// codeQrImage = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString(),"");
-                       // codeQrImage = barcodeQRCode.GetImage();
-                       // codeQrImage.ScaleAbsolute(100, 100);
-                        //Document.Add(qrcode);                        
-                    }                   
+                                              
+                    }  
+                 
+
+
                 }
 
-                //if ((Document.IsOpen() == true))
-                //{
-                //    Document.Close();
-                //}
-                
+
+
+               
                 flag1 = true;                         
                 // [start] email sending function appending pdf 
                 string qrcodepdf = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf");
@@ -644,7 +609,7 @@ namespace AnkurPrathisthan
                 {
                     if  (flag1 == true)                    
                     {
-                         using (MailMessage message = new MailMessage())                
+                         using (MailMessage message = new MailMessage())               
                              
                          {  
                             message.From = new MailAddress(Sender);
@@ -1842,9 +1807,7 @@ namespace AnkurPrathisthan
 
                      
                     
-                }
-
-                //.ToString();
+                }                
                 tempflag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]);
 
                 if (tempflag == 0)
@@ -1865,7 +1828,7 @@ namespace AnkurPrathisthan
                         response.Close();
                         s.Close();
                         readStream.Close();
-                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
                         WebRequest request1 = HttpWebRequest.Create(sURL1);
                         HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                         Stream s1 = (Stream)response1.GetResponseStream();
@@ -2024,7 +1987,7 @@ namespace AnkurPrathisthan
                     s.Close();
                     readStream.Close();
 
-                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9869866814&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings&priority=1";
+                    string url1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=Pranav has registered a celebration request for" + Fullname + " .Kindly check the details and initiate further proceedings&priority=1";
                     WebRequest request1 = HttpWebRequest.Create(url1);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                     Stream s1 = (Stream)response1.GetResponseStream();
@@ -2034,7 +1997,7 @@ namespace AnkurPrathisthan
                     s1.Close();
                     readStream1.Close();
 
-                    ////[end]for sms
+                    //[end]for sms
                 }
             }
             catch (Exception ex)
@@ -2341,18 +2304,13 @@ namespace AnkurPrathisthan
             }
 
             try
-            {
-                string ServerName = "mail.ankurpratishthan.com";
-                int PORTNO = 25;
-                // string Sender = "admin@ankurpratishthan.com";
-                string Sender = "Admin@ankurpratishthan.com";
-                string PASSWORD = "Nokia@86";
+            {                
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
                 string DonorName = ds.Tables[0].Rows[0]["Prefix"].ToString() + ' ' + ds.Tables[0].Rows[0]["DonatedBy"].ToString();
-                SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+                SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.UseDefaultCredentials = true;
-                smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+                smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
                 smtpClient.EnableSsl = false;//true;
 
                 if (cmd == 1)
@@ -2535,7 +2493,7 @@ namespace AnkurPrathisthan
                     //html += "<div><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society :Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></div>";
                     //html += "<div><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No.: </strong></div>";
                     //html += "<div><strong>Office Address : </strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</div>";
-                    //html += "<div><strong>Contact No. : </strong> 9869866814 / 9819553390 | <strong>Email ID : </strong>ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</div>";
+                    //html += "<div><strong>Contact No. : </strong> " + ADMINCONTACT+ " / 9819553390 | <strong>Email ID : </strong>ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</div>";
                     //html += "</div>";
                     //html += "</div>";
                     //html += "</header>";
@@ -2592,8 +2550,8 @@ namespace AnkurPrathisthan
                     //[start]thankyou letter
                     using (MailMessage message = new MailMessage())
                     {
-                        message.From = new MailAddress(Sender);
-                        message.Subject = "Support Ankur Pratishthan (Donation Receipt,12AA 80G Certificate, Thank You Letter)";
+                        message.From = new MailAddress(USERNAME);
+                        message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
                         message.IsBodyHtml = true;
                         message.AlternateViews.Add(Mail_Body(url1, ds.Tables[0].Rows[0]["DateOfDonation"].ToString(), DonorName, ds.Tables[0].Rows[0]["Amount"].ToString()));
                         //[end]thankyou letter
@@ -2605,10 +2563,10 @@ namespace AnkurPrathisthan
 
                         //[end]80g ccertificate
 
-                        //[start] 12AA
-                        string AA = System.Web.Hosting.HostingEnvironment.MapPath("~/AnkurPratishthan12AA.pdf");
-                        message.Attachments.Add(new Attachment(AA));
-                        //[end]12 AA
+                        ////[start] 12AA
+                        //string AA = System.Web.Hosting.HostingEnvironment.MapPath("~/AnkurPratishthan12AA.pdf");  
+                        //message.Attachments.Add(new Attachment(AA));
+                        ////[end]12 AA
 
                         message.To.Add(EmailID);
                         smtpClient.Send(message);
@@ -2627,8 +2585,8 @@ namespace AnkurPrathisthan
                     s.Close();
                     readStream.Close();
 
-                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
-                    // string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=ANKRPR&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                    string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                    // string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20201060&pass=Q9YKpqr9&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
 
                     WebRequest request1 = HttpWebRequest.Create(surl2);
                     HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
@@ -2648,14 +2606,14 @@ namespace AnkurPrathisthan
                     try
                     {
                         #region EmailDecline
-                        SmtpClient smtpClient1 = new SmtpClient(ServerName, PORTNO);
+                        SmtpClient smtpClient1 = new SmtpClient(SMTPSERVER, PORTNO);
                         smtpClient1.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtpClient1.UseDefaultCredentials = true;
-                        smtpClient1.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient1.Credentials = new NetworkCredential(USERNAME, PASSWORD);
                         smtpClient1.EnableSsl = true;
                         using (MailMessage declinemessage = new MailMessage())
                         {
-                            declinemessage.From = new MailAddress(Sender);
+                            declinemessage.From = new MailAddress(USERNAME);
                             declinemessage.Subject = "Support Ankur Pratishthan";
                             declinemessage.Body = "Dear " + DonorName + ", your donation is declined because " + Reason + " Our Team will get in touch with you for further proceedings.";
                             declinemessage.IsBodyHtml = true;
@@ -2704,11 +2662,7 @@ namespace AnkurPrathisthan
             DataSet dsDecline = new DataSet();
             DataSet dsAccept = new DataSet();
             try
-            {
-                string ServerName = "mail.ankurpratishthan.com";
-                int PORTNO = 25;
-                string Sender = "admin@ankurpratishthan.com";
-                string PASSWORD = "Nokia@86";
+            {                
                 ds = ap.ReceiptDonor(EmailID, DonorID, AddedBy, 1, "");
                 string DonorName = ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                 if (cmd == 1)  //[Accept]
@@ -2717,14 +2671,14 @@ namespace AnkurPrathisthan
                     try
                     {
                         #region EmailAccept
-                        SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+                        SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
                         smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtpClient.UseDefaultCredentials = true;
-                        smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
                         smtpClient.EnableSsl = true;
                         using (MailMessage message = new MailMessage())
                         {
-                            message.From = new MailAddress(Sender);
+                            message.From = new MailAddress(USERNAME);
                             message.Subject = "Support Ankur Pratishthan (Donation Receipt, 80G Certificate, Thank You Letter)";
                             message.Body = "Dear " + ds.Tables[0].Rows[0]["DonatedBy"].ToString() + ", Kindly find attached Donation Receipt, 80G Certificate and Thank You Letter";
 
@@ -2738,7 +2692,7 @@ namespace AnkurPrathisthan
                             sb.Append("<p style='text-align: center;'><strong>Registration No. : Trust : (F &ndash; 40378 &ndash; Mumbai) Society : Maharashtra State, Mumbai 2696, 2009 G.B.B.S.D.)</strong></p>");
                             sb.Append("<p style='text-align: center;'><strong>PAN : AADTA0477E | IT Registration No. : | TAX Exemption No. :&nbsp;&nbsp;&nbsp; &nbsp;</strong></p>");
                             sb.Append("<p style='text-align: center;'><strong>Office Address :</strong> 304, Hrishikesh Apartment, Veer Savarkar Road, Near Siddhivinayak Temple, Prabhadevi, Mumbai &ndash; 400025</p>");
-                            sb.Append("<p style='text-align: center;'><strong>Contact No. :</strong> 9869866814 / 9819553390 | <strong>Email ID :</strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>");
+                            sb.Append("<p style='text-align: center;'><strong>Contact No. :</strong> " + ADMINCONTACT+ " / 9819553390 | <strong>Email ID :</strong> ngoankur@gmail.com | <strong>Website :</strong> www.ankurpratishthan.org</p>");
                             sb.Append("<p style='text-align: center;'>..................................................................................................................................................................................................................................................</p>");
                             sb.Append("<p>&nbsp;</p>");
                             sb.Append("<p><strong>Receipt No. : </strong></p>" + ReceiptNo);
@@ -2915,7 +2869,7 @@ namespace AnkurPrathisthan
                         s.Close();
                         readStream.Close();
 
-                        string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9869866814&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
+                        string surl2 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=Dear Pranav, Our Central office is dispatching the donation receipt of " + DonorName + " via email and courier.&priority=1";
                         WebRequest request1 = HttpWebRequest.Create(surl2);
                         HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                         Stream s1 = (Stream)response1.GetResponseStream();
@@ -2942,14 +2896,14 @@ namespace AnkurPrathisthan
                     try
                     {
                         #region EmailDecline
-                        SmtpClient smtpClient1 = new SmtpClient(ServerName, PORTNO);
+                        SmtpClient smtpClient1 = new SmtpClient(SMTPSERVER, PORTNO);
                         smtpClient1.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtpClient1.UseDefaultCredentials = true;
-                        smtpClient1.Credentials = new NetworkCredential(Sender, PASSWORD);
+                        smtpClient1.Credentials = new NetworkCredential(USERNAME, PASSWORD);
                         smtpClient1.EnableSsl = true;
                         using (MailMessage declinemessage = new MailMessage())
                         {
-                            declinemessage.From = new MailAddress(Sender);
+                            declinemessage.From = new MailAddress(USERNAME);
                             declinemessage.Subject = "Support Ankur Pratishthan";
                             declinemessage.Body = "Dear " + DonorName + ", your donation is declined. Our Team will get in touch with you for further proceedings.";
                             declinemessage.IsBodyHtml = true;
@@ -3036,7 +2990,7 @@ namespace AnkurPrathisthan
         //            response.Close();
         //            s.Close();
         //            readStream.Close();
-        //            string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9869866814&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+        //            string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=" + ADMINCONTACT+ "&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
         //            WebRequest request1 = HttpWebRequest.Create(sURL1);
         //            HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
         //            Stream s1 = (Stream)response1.GetResponseStream();
