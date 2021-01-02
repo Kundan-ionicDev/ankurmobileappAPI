@@ -22,6 +22,7 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
+//using System.QRCoder;
 //using System.IO.FileStream;
 
 
@@ -542,6 +543,7 @@ namespace AnkurPrathisthan
         public List<BookDetailsEntity> GetBooksPrint(string EmailID)
         {
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
+           
             DataSet ds = new DataSet();
             clsQRCode objqrcode = new clsQRCode();
             ds = objqrcode.GetCode(EmailID);
@@ -569,18 +571,76 @@ namespace AnkurPrathisthan
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();            
             clsQRCode qrc = new clsQRCode();
+            bool flag, flag1;
+            string ServerName = "mail.ankurpratishthan.com";
+            int PORTNO = 25;      
+            string Sender = "Admin@ankurpratishthan.com";
+            string PASSWORD = "Nokia@86";       
             
+            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.EnableSsl = false;//true;            
             try
             {
-                Document Document = new Document();
-                PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/Clusters/QrCode.pdf"), FileMode.Create));
-                BarcodeQRCode barcodeQRCode = new BarcodeQRCode("12345", 50, 50, null);
-                iTextSharp.text.Image codeQrImage = barcodeQRCode.GetImage();
-                codeQrImage.ScaleAbsolute(100, 100);
+                DataSet dsgetqr = new DataSet();
+                dsgetqr = qrc.GetCode(EmailID);
+                iTextSharp.text.Image codeQrImage;
+                Document Document = new Document(PageSize.A4,0,0,0,0);
+                
+                //PdfPage page = Document();
+                // PdfReader reader = nedfReader("1.pdf");
+                PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf"), FileMode.Create));
                 Document.Open();
-                Document.Add(codeQrImage);
-                Document.Close();                           
-                //email sending function appending pdf 
+                Document.NewPage();
+                if (dsgetqr.Tables.Count > 0 && dsgetqr.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < dsgetqr.Tables[0].Rows.Count; i++)
+                    {
+                        string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
+                       // BarcodeQRCode barcodeQRCode = new BarcodeQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()), 1000, 1000, null);
+                       //// codeQrImage = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString(),"");
+                       // codeQrImage = barcodeQRCode.GetImage();
+                       // codeQrImage.ScaleAbsolute(100, 100);
+                        //Document.Add(qrcode);                        
+                    }                   
+                }
+
+                if ((Document.IsOpen() == true))
+                {
+                    Document.Close();
+                }
+                
+                flag1 = true;                         
+                // [start] email sending function appending pdf 
+                string qrcodepdf = System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf");
+                try
+                {
+                    if  (flag1 == true)                    
+                    {
+                         using (MailMessage message = new MailMessage())                
+                             
+                         {  
+                            message.From = new MailAddress(Sender);
+                            message.Subject = "Support Ankur Pratishthan (Donation Receipt,12AA 80G Certificate, Thank You Letter)";
+                            message.IsBodyHtml = true;
+                            message.Attachments.Add(new Attachment(qrcodepdf));
+                            message.To.Add(EmailID);
+                            smtpClient.Send(message);
+                        }                        
+
+                    }
+                    flag = true;
+                    
+                }
+                catch (Exception ex)
+                {                       
+                    throw ex;
+                }
+                //[end]email sending function appending pdf 
+                if (flag == true && flag1 == true)
+                {
                     ds = qrc.UpdateQrStatus(EmailID);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -589,13 +649,15 @@ namespace AnkurPrathisthan
                             entity.Add(new BookDetailsEntity
                             {
                                 BookID = Convert.ToString(ds.Tables[0].Rows[i]["BookID"]),
-                                BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),                               
-                                EmailID = Convert.ToString(ds.Tables[0].Rows[i]["AddedBy"]),                               
+                                BookName = Convert.ToString(ds.Tables[0].Rows[i]["BookName"]),
+                                EmailID = Convert.ToString(ds.Tables[0].Rows[i]["AddedBy"]),
 
                             });
                         }
                     }
-                }         
+                }
+                   
+           }         
             catch (Exception ex)
             {
                 throw ex;
@@ -1725,6 +1787,7 @@ namespace AnkurPrathisthan
             List<DonorEntity> entity = new List<DonorEntity>();
             DataSet ds = new DataSet();
             APDonor objdonor = new APDonor();
+            int tempflag ;
             try
             {
                 ds = objdonor.handleDonors(FullName, Inthenameof, EmailID, DOB, Address, ContactNo, AdminEmailID, Amount,
@@ -1751,11 +1814,15 @@ namespace AnkurPrathisthan
                             DonorID = Convert.ToString(ds.Tables[0].Rows[0]["DonorID"]),
                             TemporaryFlag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]),
                         });
+
+                     
+                    
                 }
 
-                string tempflag = ds.Tables[0].Rows[0]["TempFlag"].ToString();
+                //.ToString();
+                tempflag = Convert.ToInt32(ds.Tables[0].Rows[0]["TempFlag"]);
 
-                if (tempflag == "0")
+                if (tempflag == 0)
                 {
                     string fullname = ds.Tables[0].Rows[0]["Prefix"].ToString() + ' ' + ds.Tables[0].Rows[0]["DonatedBy"].ToString();
                     ////[START]SMS integration
@@ -2507,8 +2574,10 @@ namespace AnkurPrathisthan
                         //[end]thankyou letter
 
                         //[start]80g ccertificate
+                        
                         string certificate = System.Web.Hosting.HostingEnvironment.MapPath("~/Ankur 80G.pdf");
                         message.Attachments.Add(new Attachment(certificate));
+
                         //[end]80g ccertificate
 
                         //[start] 12AA
