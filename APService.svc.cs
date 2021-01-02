@@ -586,14 +586,39 @@ namespace AnkurPrathisthan
             {
                 DataSet dsgetqr = new DataSet();
                 dsgetqr = qrc.GetCode(EmailID);
-                iTextSharp.text.Image codeQrImage;
-                Document Document = new Document(PageSize.A4,0,0,0,0);
-                
-                //PdfPage page = Document();
-                // PdfReader reader = nedfReader("1.pdf");
+
+                Document Document = new Document();
                 PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf"), FileMode.Create));
                 Document.Open();
-                Document.NewPage();
+
+              // document.open();  iTextSharp.text.Image codeQrImage;
+
+              //  string base64 = Convert.ToBase64String(byteImage);
+              //  byte[] imageBytes = Convert.FromBase64String(base64);
+              //  iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(imageBytes);
+              //  using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream())
+              //  {
+              //      Document document = new Document(PageSize.A4, 0f, 0f, 0f, 0f);
+              //      PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+              //      document.Open();
+              //      document.Add(image);
+              //      document.Close();
+              //      byte[] bytes = memoryStream.ToArray();
+              //      memoryStream.Close();
+
+              //  }
+
+              ////  Document Document = new Document(PageSize.A4,0,0,0,0);
+                
+              //  //PdfPage page = Document();
+              //  // PdfReader reader = nedfReader("1.pdf");
+              //  //PdfWriter writer = PdfWriter.GetInstance(Document, new FileStream(System.Web.Hosting.HostingEnvironment.MapPath("~/Uploads/PDF/QrCode.pdf"), FileMode.Create));
+              //  //Document.Open();
+              //  //Document.NewPage();
+
+                
+
+
                 if (dsgetqr.Tables.Count > 0 && dsgetqr.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < dsgetqr.Tables[0].Rows.Count; i++)
@@ -607,10 +632,10 @@ namespace AnkurPrathisthan
                     }                   
                 }
 
-                if ((Document.IsOpen() == true))
-                {
-                    Document.Close();
-                }
+                //if ((Document.IsOpen() == true))
+                //{
+                //    Document.Close();
+                //}
                 
                 flag1 = true;                         
                 // [start] email sending function appending pdf 
@@ -1840,7 +1865,7 @@ namespace AnkurPrathisthan
                         response.Close();
                         s.Close();
                         readStream.Close();
-                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9869866814&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
+                        string sURL1 = "http://164.52.195.161/API/SendMsg.aspx?uname=20130910&pass=senderdemopro&send=ANKRPR&dest=9987088651&msg=" + volname + " has raised a new donation for " + fullname + ". Kindly check the details and initiate further proceedings.&priority=1";
                         WebRequest request1 = HttpWebRequest.Create(sURL1);
                         HttpWebResponse response1 = (HttpWebResponse)request1.GetResponse();
                         Stream s1 = (Stream)response1.GetResponseStream();
