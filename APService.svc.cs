@@ -24,7 +24,10 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
 //using System.QRCoder;
 //using System.IO.FileStream;
-
+//using Syncfusion.Pdf;
+//using Syncfusion.Pdf.Barcode;
+//using Syncfusion.Pdf.Graphics;
+//using System.Drawing;
 
 namespace AnkurPrathisthan
 {
@@ -32,17 +35,23 @@ namespace AnkurPrathisthan
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class APService : IAPService
     {
-        //[START] For Email sending          
-        public static int PORTNO = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString());
-        public static string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
-        public static string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
-        public static string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
-        public static string ADMINCONTACT = System.Configuration.ConfigurationManager.AppSettings["ADMINCONTACT"].ToString();
+        ////[START] For Email sending          
+        // int PORTNO = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PORTNO"].ToString());
+        // string SMTPSERVER = System.Configuration.ConfigurationManager.AppSettings["SMTPSERVER"].ToString();
+        // string USERNAME = System.Configuration.ConfigurationManager.AppSettings["USERNAME"].ToString();
+        // string PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PASSWORD"].ToString();
+        // string ADMINCONTACT = System.Configuration.ConfigurationManager.AppSettings["ADMINCONTACT"].ToString();
 
         //Microsoft.AspNet.WebApi.Cors nuget package
         // EnableCorsAttribute cors = new EnableCorsAttribute("*","*");
         //[START]FOR NOTIFICATION SENDING
-        public static string serverapikey = System.Configuration.ConfigurationManager.AppSettings["serverapikey"].ToString();
+        //public static string serverapikey = System.Configuration.ConfigurationManager.AppSettings["serverapikey"].ToString();
+
+        public string SMTPSERVER = "mail.ankurpratishthan.com";
+        public string USERNAME = "Admin@ankurpratishthan.com";
+        public string PASSWORD = "Nokia@86";
+        public string ADMINCONTACT = "9869866814";
+        public int PORTNO = 25;
 
         #region Logs
 
@@ -572,16 +581,11 @@ namespace AnkurPrathisthan
             List<BookDetailsEntity> entity = new List<BookDetailsEntity>();
             DataSet ds = new DataSet();            
             clsQRCode qrc = new clsQRCode();
-            bool flag, flag1;
-            string ServerName = "mail.ankurpratishthan.com";
-            int PORTNO = 25;      
-            string Sender = "Admin@ankurpratishthan.com";
-            string PASSWORD = "Nokia@86";       
-            
-            SmtpClient smtpClient = new SmtpClient(ServerName, PORTNO);
+            bool flag, flag1;          
+            SmtpClient smtpClient = new SmtpClient(SMTPSERVER, PORTNO);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
-            smtpClient.Credentials = new NetworkCredential(Sender, PASSWORD);
+            smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
             smtpClient.EnableSsl = false;//true;            
             try
             {
@@ -591,7 +595,27 @@ namespace AnkurPrathisthan
                 {
                     for (int i = 0; i < dsgetqr.Tables[0].Rows.Count; i++)
                     {
-                        string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
+                        //string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()), dsgetqr.Tables[0].Rows[i]["BookName"].ToString());
+
+//                       PdfQRBarcode qrBarcode = new PdfQRBarcode();
+////Set Error Correction Level
+//qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
+////Set XDimension
+//qrBarcode.XDimension = 3;
+//qrBarcode.Text = "http://www.syncfusion.com";
+////Draw string
+//page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
+////Printing barcode on to the PDF
+//qrBarcode.Draw(page, new PointF(50, 200));
+//#endregion
+ 
+////Save the document
+//document.Save("Barcode.pdf");
+////Close the document
+//document.Close(true);
+////This will open the PDF file so, the result will be seen in default PDF viewer
+//Process.Start("Barcode.pdf");
+
                                               
                     }  
                  
@@ -609,20 +633,17 @@ namespace AnkurPrathisthan
                 {
                     if  (flag1 == true)                    
                     {
-                         using (MailMessage message = new MailMessage())               
-                             
-                         {  
-                            message.From = new MailAddress(Sender);
+                         using (MailMessage message = new MailMessage()) 
+                         {
+                             message.From = new MailAddress(USERNAME);
                             message.Subject = "Support Ankur Pratishthan (Donation Receipt,12AA 80G Certificate, Thank You Letter)";
                             message.IsBodyHtml = true;
                             message.Attachments.Add(new Attachment(qrcodepdf));
                             message.To.Add(EmailID);
                             smtpClient.Send(message);
-                        }                        
-
+                        }
                     }
-                    flag = true;
-                    
+                    flag = true;                    
                 }
                 catch (Exception ex)
                 {                       
