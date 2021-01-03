@@ -24,6 +24,10 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
 //using System.QRCoder;
 //using System.IO.FileStream;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Barcode;
+using Syncfusion.Pdf.Graphics;
+//using System.Drawing;
 
 
 namespace AnkurPrathisthan
@@ -586,15 +590,35 @@ namespace AnkurPrathisthan
             try
             {
                 DataSet dsgetqr = new DataSet();
+                Document document = new Document();
                 dsgetqr = qrc.GetCode(EmailID);              
                 if (dsgetqr.Tables.Count > 0 && dsgetqr.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < dsgetqr.Tables[0].Rows.Count; i++)
                     {
                         string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
-                                              
-                    }  
-                 
+
+                        //PdfQRBarcode qrBarcode = new PdfQRBarcode();
+                        //Set Error Correction Level
+                        //qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
+                        //Set XDimension
+                        //qrBarcode.XDimension = 3;
+                        //qrBarcode.Text = "http://www.syncfusion.com";
+                        //Draw string
+                        //page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
+                        //Printing barcode on to the PDF
+                        //qrBarcode.Draw(page, new PointF(50, 200));
+                        //#endregion
+
+                        //Save the document
+                        //document.Save("Barcode.pdf");
+                        //Close the document
+                        //document.Close(true);
+                        //This will open the PDF file so, the result will be seen in default PDF viewer
+                        //Process.Start("Barcode.pdf");
+
+                    }
+
 
 
                 }

@@ -80,3 +80,8 @@ F:\k_dev\AnkurPrathisthan\bin\System.Web.Cors.dll
 F:\k_dev\AnkurPrathisthan\bin\System.Web.Http.dll
 F:\k_dev\AnkurPrathisthan\bin\System.Net.Http.Formatting.xml
 F:\k_dev\AnkurPrathisthan\bin\System.Web.Http.xml
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Syncfusion.Compression.Base.dll
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Syncfusion.Licensing.dll
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Syncfusion.Pdf.Base.dll
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Syncfusion.Compression.Base.xml
+C:\Users\kundan.sakpal\Documents\IonicProjects\ankurmobileappAPI\bin\Syncfusion.Pdf.Base.xml
