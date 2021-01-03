@@ -22,6 +22,8 @@ using System.Security.AccessControl;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
+using Syncfusion.Pdf.Barcode;
+using Syncfusion.Pdf.Graphics;
 //using System.QRCoder;
 //using System.IO.FileStream;
 
@@ -583,7 +585,8 @@ namespace AnkurPrathisthan
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new NetworkCredential(USERNAME, PASSWORD);
-            smtpClient.EnableSsl = false;//true;            
+            smtpClient.EnableSsl = false;
+            var page;//true;            
             try
             {
                 DataSet dsgetqr = new DataSet();
@@ -595,24 +598,24 @@ namespace AnkurPrathisthan
                     {
                         string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
 
-                        //PdfQRBarcode qrBarcode = new PdfQRBarcode();
-                        //Set Error Correction Level
-                        //qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
-                        //Set XDimension
-                        //qrBarcode.XDimension = 3;
-                        //qrBarcode.Text = "http://www.syncfusion.com";
+                        PdfQRBarcode qrBarcode = new PdfQRBarcode();
+                       // Set Error Correction Level
+                        qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
+                       // Set XDimension
+                        qrBarcode.XDimension = 3;
+                        qrBarcode.Text = "http://www.syncfusion.com";
                         //Draw string
-                        //page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
-                        //Printing barcode on to the PDF
-                        //qrBarcode.Draw(page, new PointF(50, 200));
-                        //#endregion
+                        page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
+                       // Printing barcode on to the PDF
+                        qrBarcode.Draw(page, new PointF(50, 200));
+                        #endregion
 
                         //Save the document
-                        //document.Save("Barcode.pdf");
+                        document.Save("Barcode.pdf");
                         //Close the document
-                        //document.Close(true);
-                        //This will open the PDF file so, the result will be seen in default PDF viewer
-                        //Process.Start("Barcode.pdf");
+                        document.Close(true);
+                       // This will open the PDF file so, the result will be seen in default PDF viewer
+                        Process.Start("Barcode.pdf");
 
                     }
 
