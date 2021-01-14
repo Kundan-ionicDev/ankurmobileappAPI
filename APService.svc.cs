@@ -597,28 +597,26 @@ namespace AnkurPrathisthan
                     {
                         string qrcode = GetQRCode((dsgetqr.Tables[0].Rows[i]["BookID"].ToString()),"");
 
-                       // PdfQRBarcode qrBarcode = new PdfQRBarcode();
-                       //// Set Error Correction Level
-                       // qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
-                       //// Set XDimension
-                       // qrBarcode.XDimension = 3;
-                       // qrBarcode.Text = "http://www.syncfusion.com";
-                       // //Draw string
-                       // page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
-                       //// Printing barcode on to the PDF
-                       // qrBarcode.Draw(page, new PointF(50, 200));
-                       // #endregion
+                        //PdfQRBarcode qrBarcode = new PdfQRBarcode();
+                        //// Set Error Correction Level
+                        //qrBarcode.ErrorCorrectionLevel = PdfErrorCorrectionLevel.High;
+                        //// Set XDimension
+                        //qrBarcode.XDimension = 3;
+                        //qrBarcode.Text = "http://www.syncfusion.com";
+                        ////Draw string
+                        //page.Graphics.DrawString("QR Barcode", new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Bold), PdfBrushes.Black, new PointF(20, 180));
+                        //// Printing barcode on to the PDF
+                        //qrBarcode.Draw(page, new PointF(50, 200));
+                        //#endregion
 
-                       // //Save the document
-                       // document.Save("Barcode.pdf");
-                       // //Close the document
-                       // document.Close(true);
-                       //// This will open the PDF file so, the result will be seen in default PDF viewer
-                       // Process.Start("Barcode.pdf");
+                        ////Save the document
+                        //document.Save("Barcode.pdf");
+                        ////Close the document
+                        //document.Close(true);
+                        //// This will open the PDF file so, the result will be seen in default PDF viewer
+                        //Process.Start("Barcode.pdf");
 
                     }
-
-
 
                 }
 
@@ -2336,7 +2334,7 @@ namespace AnkurPrathisthan
                 if (cmd == 1)
                 {
                     //[start] receipt           
-                    string receipt = "FY20-" + "21/" + DonorID;//  + ran.Trim();
+                    string receipt = "FY20-" + "21-" + DonorID;//  + ran.Trim();
                     string html = "<html>";
                     html += "<html>";
                     html += "<head>";
